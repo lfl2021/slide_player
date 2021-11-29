@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Slides Player</title>
+<style>
+@font-face {
+  font-family: amiri;
+  src: url('res/amiri-regular.woff');
+  }
+
+:root {
+  --sw:100vw; /* screen width */
+  --sh:100vh; /* screen height */
+  --pd:10px; /* padding */
+  --w:calc("100% - 20px");
+  --h:calc("100% - 20px");
+  }
+
+body {
+  direction:rtl;
+  font-family: amiri;
+  margin:0;
+  padding:0;
+  border:0;
+  }
+h1 {
+  color:#f00;
+  text-shadow:1px 1px 2px rgba(0,0,0,0.5);
+  font-size:50px;
+  font-weight:400;
+  text-align:center;
+  margin:0.4em 0;
+  }
+s-t {
+  display:block;
+  color:#00f;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+  font-size:40px;
+  font-weight:400;
+  text-align:center;
+  margin:0.5em 0;
+  }
+a-u {
+  display:block;
+  color:#000;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+  font-size:40px;
+  font-weight:400;
+  text-align:center;
+  margin:0.5em 0;
+  }
+h2 {
+  color:#00f;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+  font-size:40px;
+  font-weight:400;
+  text-align:center;
+  }
+li {
+  font-size:28px;
+  }
+label {
+  font-size:24px;
+  color:#900;
+  }
+input[type=radio] {
+  transform:scale(1.4);
+  /* visibility:hidden; */
+  }
+input[type=text] {
+  font-size:32px;
+  font-family:amiri;
+  width:220px;
+  }
+s-l {
+  position: absolute;
+  display: block;
+  width:calc(100% - (2 * var(--pd)));
+  /* height:calc(100% - (2 * var(--pd))); */
+  margin:0px;
+  padding:var(--pd);
+  }
+s-l p {
+  font-size:28px;
+  margin:0px;
+  }
+#sb {
+  padding:0;
+  }
+#dimg {
+  text-align: center;
+  position: relative;
+  height:100px;
+  display: flex;
+  justify-content: center;
+  }
+#title_img {
+  height:100px;
+  text-align: center;
+  position: absolute;
+  top: 0;
+  }
+#vpb {
+  /* box-sizing: border-box; */
+  /* padding: 10px calc(50% - 50px); */
+  display: block;
+  opacity: 0.6;
+  cursor: pointer;
+  transition: opacity 150ms;
+  z-index: 99;
+  /* position: absolute; */
+  /* top: 0; */
+  }
+#vpb:hover {
+  opacity: 1;
+  }
+#time {
+  position:absolute;
+  top:0;
+  left:0;
+  font-family:Verdana;
+  }
+.h {
+  visibility:hidden;
+  opacity:0.1;
+  transition: all 0.8s ease;
+  }
+.c {
+  visibility:visible;
+  opacity:1;
+  }
+.g {
+  opacity:0.5;
+  }
+@media screen and (orientation:landscape) {
+#sb {
+  padding:0px 40px;
+  }
+  }
+</style>
+</head>
+<body>
+<div id=time></div>
+<div id=vid></div>
+<audio id=aud preload=metadata><source src="a004000.mp3" type="audio/mpeg"></audio>
+<script>
+const cnta=[`# Diabetes Nutrition Program
+## Questions and Answers
+<play_button>
+Dr. Wali Omer
+
+# Diabets Complications
+Not just elevated blood sugar
+If not treated:
+* Brain
+* Eyes
+* Heart
+* Kidney
+* Feet
+* Reproductive system
+
+# 3 Questions
+* What is the cause of diabetes?
+* Can diabetes be treated?
+* What food are bad for diabetes?
+
+# First: Cause
+What is the main cause of diabetes?
+() Genetic
+() Psychological conditions (anxiety, stress, fear, depression...)
+() Eating sweets
+() Eating fat
+() Obesity
+() Pregnancy
+() Others: ___
+
+# Second: Treatment
+Can diabetes be "treated"?
+() No
+() Yes
+
+# Third: Food
+Which of the following food is most harmful for diabetes?
+() Sugar
+() Dates
+() Honey
+() Wheat bread
+() Barely bread
+() Rice
+() Lentil
+`,`# به‌رنامه‌ى خۆراک بۆ نه‌خۆشى شه‌کره‌
+## پرسیار و وه‌ڵام
+<play_button>
+د. وه‌لى عومه‌ر
+
+# نه‌خۆشى شه‌کره‌
+ته‌نها به‌رز بوونه‌وه‌ى شه‌کر له‌ خوێن نیه‌.
+ئه‌گه‌ر چاره‌سه‌ر نه‌کرێ:
+* مێشک
+* چاو
+* دڵ
+* گورچیله‌
+* پێ
+* ئه‌ندامى زاوزێ
+
+# ٣ پرسیار
+* هۆى شه‌کره‌ چیه‌؟
+* ئایا شه‌کره‌ چاره‌سه‌رى هه‌یه‌؟
+* کامه‌ خۆراک بۆ شه‌کره‌ خراپه‌؟
+
+# یه‌که‌م: هۆکار
+هۆى سه‌ره‌کى نه‌خۆشى شه‌کره‌ چیه‌؟
+() بۆماوه‌یی (ویراسه‌)
+() بارى ده‌روونى (خه‌م، دڵه‌ڕاوکێ، ترس، تاسان...)
+() خواردنى شیرینی
+() خواردنى چه‌ورى
+() قه‌ڵه‌وى
+() دووگیانى
+() هى تر: ___
+
+# دووه‌م: چاره‌سه‌رى
+ئایا نه‌خۆشى شه‌کره‌ "چاره‌سه‌رى"ی هه‌یه‌؟
+() نه‌خێر
+() به‌ڵێ
+
+# سێیه‌م: خۆراک
+کامه‌ له‌م خۆراکانه‌ له‌ هه‌موویان خراپتره‌ بۆ نه‌خۆشى شه‌کره‌ (هه‌مان بڕ)؟
+() شه‌کر
+() خورما
+() هه‌نگوین
+() نانى گه‌نم (نانى سپی)
+() نانى جۆ (نانى سوکه‌رى)
+() برنج
+() نیسک
+`,`# البرنامج الغذائي لمرضى السكري
+## سؤال و جواب
+<play_button>
+د. ولي عمر
+
+# مضاعفات مرض السكري
+ليس فقط ارتفاع السكر في الدم
+اذا لم تعالج:
+* دماغ
+* عيون
+* قلب
+* كلية
+* قدم
+* الاعضاء التناسلية
+
+# ٣ أسئلة
+* ما هو سبب مرض السكري؟
+* هل هناك "علاج" للسكري؟
+* ما هي الاغذية الضارة للسكري؟
+
+# الاول: السبب
+ماهو السبب الرئيسي لمرض السكري؟
+() الوراثة
+() الحالة النفسية (القلق، الخوف، الصدمة)
+() الحلويات
+() الدهونيات
+() زيادة الوزن
+() الحمل
+() أخرى: ___
+
+# الثاني:  العلاج
+هل هناك "علاج" لمرض السكري؟
+() كلا
+() نعم
+
+# الثالث: الغذاء
+ماهي الاغذية الاكثر ضررا لمرضي السكري مما يلي؟
+() سكر
+() تمر
+() عسل
+() خبز الحنطة (الخبز الابيض)
+() خبز الشعير (خبز السكري)
+() رز
+() عدس
+`];
+
+var i=0;
+var dir="rtl";
+var cnt=cnta[1];
+var step=0;
+var steps;
+var aud=document.getElementById("aud");
+const PLAY_BUTTON=`<div id=dimg><img id=title_img src=dm_test.jpg><svg id="vpb" viewBox="0 0 200 200" alt="Play video">
+  <circle cx="100" cy="100" r="90" fill="none" stroke-width="15" stroke="#000"></circle>
+  <polygon points="70, 55 70, 145 145, 100" fill="#000"></polygon></svg></div>`;
+window.onload=load_first_slide;
+
+function load_first_slide(){
+  var rv="";
+  sla=cnt.split("\n\n");
+  rv=format_text(sla[0],0);
+  if(dir=="ltr") document.body.style="font-family:arial;direction:ltr;";
+  document.getElementById("vid").innerHTML=rv;
+  if(i==0) document.getElementById("vpb").addEventListener("click", start_slides)
+  aud.addEventListener("timeupdate", audio_update, false);
+  aud.addEventListener("ended", audio_ended, false);
+  steps=document.getElementsByClassName("h");
+  }
+
+function load_page(){
+  var rv="";
+  sla=cnt.split("\n\n");
+  rv=format_text(sla[i],1);
+  if(dir=="ltr") document.body.style="font-family:noto;direction:ltr;";
+//   rv+=`<audio id=aud preload=metadata><source src='a004.mp3' type='audio/mpeg'></audio>`;
+  document.getElementById("vid").innerHTML=rv;
+  aud.src=`a00400${i}.mp3`;
+  // if(i==0) document.getElementById("vpb").addEventListener("click", start_slides)
+  // var aud=document.getElementById("aud");
+  // aud.addEventListener("timeupdate", audio_update, false);
+  steps=document.getElementsByClassName("h");
+  }
+
+document.addEventListener("keydown",event=>{
+//   console.log(event.key, event.keyCode);
+  if (event.key==="ArrowRight") next_slide();
+  if (event.key==="ArrowRight" && event.key=="Control") next_slide();
+  if (event.key==="ArrowLeft") prev_slide();
+  if (event.key==="Escape") document.getElementById("ftb").style.bottom = "-50px";
+  if (event.key===" ") start_slides();
+  if (event.key==="p") start_slides();
+  
+  if (event.key==="a") {dir="rtl"; cnt=cnta[2]; load_page();}
+  if (event.key==="k") {dir="rtl"; cnt=cnta[1]; load_page();}
+  if (event.key==="e") {dir="ltr"; cnt=cnta[0]; load_page();}
+  });
+
+function next_step(){
+  console.log(i,step,steps.length,steps);
+  if(step==steps.length) next_slide();
+  steps[step].classList.add("c");
+  if(step<steps.length) step++; 
+  }
+
+function next_slide(){
+  if(i<cnt.split("\n\n").length-1) i++;
+  step=0;
+  load_page();
+  // console.log(i,step,steps.length,steps);
+  }
+
+function prev_slide(){
+  if(i>0) i--;
+  step=0;
+  load_page();
+  if(i==0) document.getElementById("vpb").style="visibility:hidden;";
+  console.log(i,steps.length,step);
+  }
+
+function format_text(t,f){
+  var rv=""; //t.replaceAll(/\n/g,"<br>");
+  t=t.replaceAll("ک","ك");
+  // console.log(sla);
+  rv+=`<s-l>`;
+  const sna=t.split("\n"); // sentence array
+  sna.forEach((s,j)=>{
+    var fcl=s.substring(0,1)=="<"?1:0; // first char less than
+    var fch=s.substring(0,2)=="# "?1:0; // first char hash
+    var fcd=s.substring(0,3)=="## "?1:0; // first 2 hash
+    var fca=s.substring(0,2)=="* "?1:0; // first char asterisk
+    var fcp=s.substring(0,3)=="() "?1:0; // first 2 char parenthesis
+    var fcf=fch+fca+fcp+fcd+fcl;
+    s=s.replaceAll("## ","");
+    s=s.replaceAll("# ","");
+    s=s.replaceAll("* ","");
+    s=s.replaceAll("()","");
+    s=s.replaceAll("___","<input type=text>");
+    var cls=f==1?" class=h":"";
+    if(fch==1){
+      if(i==0) rv+=`<h1${cls}>${s}</h1>`; else rv+=`<h2${cls}>${s}</h2><div id=sb>`;
+      } 
+    if(fcd==1){
+      if(i==0) rv+=`<s-t${cls}>${s}</s-t>`;
+      } 
+    if(fcl==1) rv+=s;
+    // add ul
+    if(j>0 && sna[j].substring(0,1)=="*"  && sna[j-1].substring(0,1)!="*") rv+="<ul>";
+    if(j>0 && sna[j].substring(0,1)!="*"  && sna[j-1].substring(0,1)=="*") rv+="</ul>";
+    if(fca==1) rv+=`<li${cls}>${s}</li>`;
+    if(fcp==1) rv+=`<label ${cls}><input type=radio id=${i}${j} name=q${i}>${s}</label><br>`;
+    if(fcf==0 && i==0){
+      rv+=`<a-u${cls}>${s}</a-u>`;
+      }
+    if(fcf==0 && i>0){
+      rv+=`<p${cls}>${s}</p>`;
+      }
+    // console.log(i,j,fch,fca,fcp,s);
+    });
+  if(i==0) {
+    rv=rv.replaceAll("<play_button>",PLAY_BUTTON);
+    }
+  rv+="</div>";
+  rv+="</s-l>";
+  return rv;
+  }
+
+function start_slides(){
+  // load_page();
+  prev_slide();
+  if(i==0) document.getElementById("vpb").style="visibility:hidden;";
+  if(aud.paused) aud.play(); else aud.pause();
+  // document.getElementById("aud").play();
+  }
+const sta=[
+  [0.6,3.6,5.7], // 9.8
+  // 11,15.1,21,23.3,25.3,26.6,35,37,52,
+  [0.2,1.2,5.3,11.2,13.5,15.5,16.8,25.2,27.2], // 42,
+  // [71,74.5,78.5,86],
+  [0.2,20,23.5,27.5,35],
+  [0.2,3,5,6,7,8,9,10,11],
+  [1,2,3,4],
+  [1,2,3,4,5,6,7,8,9]
+  ];
+// console.log(sta);
+function audio_update() {
+    var ta=sta[i];
+    // var mxv=ta[ta.length-1];
+    var k=0;
+    var t=aud.currentTime;
+    document.getElementById("time").innerHTML=t;
+    for (k in ta) {
+      if(t<ta[k]) break;
+      console.log(k,ta[k],t);
+      delete ta[k];
+      next_step();
+      }
+  }  
+function audio_ended() {
+  next_slide();
+  aud.play();
+    // i++;
+    console.log("ended");
+    // load_page();
+  }  
+class Slide extends HTMLElement{
+  constructor(){super();}
+  }
+class SubTitle extends HTMLElement{
+  constructor(){super();}
+  }
+class SlideAuthor extends HTMLElement{
+  constructor(){super();}
+  }
+class SlideBody extends HTMLElement{
+  constructor(){super();}
+  }
+window.customElements.define("s-l", Slide);
+window.customElements.define("s-t", SubTitle);
+window.customElements.define("a-u", SlideAuthor);
+window.customElements.define("s-b", SlideBody);
+</script>
+</body>
+</html>
+
+<!--
+FEATURES
+* get markdown text (or similar) and make into slideshow which moves with cues from an mp3 file
+* put slides into proper format like poster automatically
+* support for rtl and ltr
+* support introducing elements one by one and gray out
+* support a highlighter or indicator similar to a pen?
+* ask questions and record their answer in a database conntected to their profile
+* connect slide narration with slide?
+* make caption file (srt) automatically
+
+TODO
+
+
+DONE
+
+STEPS
+* Load first page with Play Button
+* On Button Click: play slide 1 audio 
+* On Audio Timer: loop through array of time for fisrt slide -> show next step
+* On Finished mp3: advance to next slide and repeat previous "step"
+-->
