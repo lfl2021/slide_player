@@ -70,9 +70,11 @@ input[type=radio] {
   /* visibility:hidden; */
   }
 input[type=text] {
-  font-size:32px;
+  font-size:24px;
   font-family:amiri;
   width:220px;
+  border:1px #ddd solid;
+  border-radius:4px;
   }
 s-l {
   position: absolute;
@@ -121,6 +123,12 @@ s-l p {
   top:0;
   left:0;
   font-family:Verdana;
+  }
+#cb {
+  margin:20px;
+  font-family:amiri;
+  font-size:24px;
+  visibility:hidden;
   }
 .h {
   visibility:hidden;
@@ -280,6 +288,7 @@ Which of the following food is most harmful for diabetes?
 () عدس
 `];
 
+const cont=["Continue","به‌رده‌وام به‌","استمر"];
 var i=0;
 var dir="rtl";
 var cnt=cnta[1];
@@ -308,19 +317,16 @@ function load_page(){
   sla=cnt.split("\n\n");
   rv=format_text(sla[i],1);
   if(dir=="ltr") document.body.style="font-family:noto;direction:ltr;";
-//   rv+=`<audio id=aud preload=metadata><source src='a004.mp3' type='audio/mpeg'></audio>`;
   document.getElementById("vid").innerHTML=rv;
   aud.src=`a00400${i}.mp3`;
-  // if(i==0) document.getElementById("vpb").addEventListener("click", start_slides)
-  // var aud=document.getElementById("aud");
-  // aud.addEventListener("timeupdate", audio_update, false);
   steps=document.getElementsByClassName("h");
   }
 
 document.addEventListener("keydown",event=>{
 //   console.log(event.key, event.keyCode);
   if (event.key==="ArrowRight") next_slide();
-  if (event.key==="ArrowRight" && event.key=="Control") next_slide();
+  if (event.ctrlKey && event.key==="ArrowRight") next_step();
+  if (event.ctrlKey && event.key==="ArrowLeft") prev_step();
   if (event.key==="ArrowLeft") prev_slide();
   if (event.key==="Escape") document.getElementById("ftb").style.bottom = "-50px";
   if (event.key===" ") start_slides();
@@ -332,7 +338,7 @@ document.addEventListener("keydown",event=>{
   });
 
 function next_step(){
-  console.log(i,step,steps.length,steps);
+  // console.log(i,step,steps.length,steps);
   if(step==steps.length) next_slide();
   steps[step].classList.add("c");
   if(step<steps.length) step++; 
@@ -354,7 +360,8 @@ function prev_slide(){
   }
 
 function format_text(t,f){
-  var rv=""; //t.replaceAll(/\n/g,"<br>");
+  var rv="";
+  var fcpp=0;
   t=t.replaceAll("ک","ك");
   // console.log(sla);
   rv+=`<s-l>`;
@@ -370,7 +377,7 @@ function format_text(t,f){
     s=s.replaceAll("# ","");
     s=s.replaceAll("* ","");
     s=s.replaceAll("()","");
-    s=s.replaceAll("___","<input type=text>");
+    s=s.replaceAll("___","<input type=text id=it>");
     var cls=f==1?" class=h":"";
     if(fch==1){
       if(i==0) rv+=`<h1${cls}>${s}</h1>`; else rv+=`<h2${cls}>${s}</h2><div id=sb>`;
@@ -383,7 +390,8 @@ function format_text(t,f){
     if(j>0 && sna[j].substring(0,1)=="*"  && sna[j-1].substring(0,1)!="*") rv+="<ul>";
     if(j>0 && sna[j].substring(0,1)!="*"  && sna[j-1].substring(0,1)=="*") rv+="</ul>";
     if(fca==1) rv+=`<li${cls}>${s}</li>`;
-    if(fcp==1) rv+=`<label ${cls}><input type=radio id=${i}${j} name=q${i}>${s}</label><br>`;
+    if(fcp==1) rv+=`<label ${cls} onclick="rc(${i}${j})"><input type=radio id=${i}${j} name=q${i}>${s}</label><br>`;
+    if(fcp==1) fcpp=1;
     if(fcf==0 && i==0){
       rv+=`<a-u${cls}>${s}</a-u>`;
       }
@@ -396,26 +404,44 @@ function format_text(t,f){
     rv=rv.replaceAll("<play_button>",PLAY_BUTTON);
     }
   rv+="</div>";
+  if(fcpp==1) rv+=`<button id=cb onclick="cont_slides()">${cont[1]}</button>`;
   rv+="</s-l>";
   return rv;
   }
 
 function start_slides(){
-  // load_page();
-  prev_slide();
+  if(i==0) prev_slide();
   if(i==0) document.getElementById("vpb").style="visibility:hidden;";
   if(aud.paused) aud.play(); else aud.pause();
   // document.getElementById("aud").play();
   }
+
+function cont_slides(){
+  next_slide();
+  if(aud.paused) aud.play();
+  // document.getElementById("aud").play();
+  }
+
+function rc(id){
+  console.log(id);
+  document.getElementById("cb").style="visibility:visible;";
+  switch (id) {
+    case 38:
+      document.getElementById("it").focus();
+      break;
+  
+    default:
+      break;
+  }
+  }
+
 const sta=[
-  [0.6,3.6,5.7], // 9.8
-  // 11,15.1,21,23.3,25.3,26.6,35,37,52,
-  [0.2,1.2,5.3,11.2,13.5,15.5,16.8,25.2,27.2], // 42,
-  // [71,74.5,78.5,86],
+  [0.6,3.6,5.7],
+  [0.2,1.2,5.3,11.2,13.5,15.5,16.8,25.2,27.2],
   [0.2,20,23.5,27.5,35],
   [0.2,3,5,6,7,8,9,10,11],
   [1,2,3,4],
-  [1,2,3,4,5,6,7,8,9]
+  [0.4,3.2,9.8,12.9,14.3,15.9,18.8,23.6,24.9]
   ];
 // console.log(sta);
 function audio_update() {
@@ -423,20 +449,23 @@ function audio_update() {
     // var mxv=ta[ta.length-1];
     var k=0;
     var t=aud.currentTime;
-    document.getElementById("time").innerHTML=t;
+    document.getElementById("time").innerHTML=i+":"+step+":"+t.toFixed(1);
     for (k in ta) {
       if(t<ta[k]) break;
-      console.log(k,ta[k],t);
+      // console.log(k,ta[k],t);
       delete ta[k];
       next_step();
       }
   }  
+
+const stopa=[3,4,5];
 function audio_ended() {
-  next_slide();
-  aud.play();
-    // i++;
-    console.log("ended");
-    // load_page();
+  if(stopa.includes(i)){
+    console.log("Continue");
+  } else {
+    next_slide();
+    aud.play();
+    }
   }  
 class Slide extends HTMLElement{
   constructor(){super();}
