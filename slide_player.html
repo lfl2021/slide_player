@@ -150,7 +150,7 @@ s-l p {
   /* visibility:hidden; */
   }
 #ft button {
-  padding:20px;
+  padding:20px 25px;
   border:none;
   background-color:#fff;
   opacity:0.6;
@@ -185,7 +185,7 @@ s-l p {
 <script>
 const cnta=[`# Diabetes Nutrition Program
 ## Questions and Answers
-<play_button>
+<BPC>
 Dr. Wali Omer
 
 # Diabets
@@ -229,7 +229,7 @@ Which of the following food is most harmful for diabetes?
 () Lentil
 `,`# به‌رنامه‌ى خۆراک بۆ نه‌خۆشى شه‌کره‌
 ## پرسیار و وه‌ڵام
-<play_button>
+<BPC>
 د. وه‌لى عومه‌ر
 
 # نه‌خۆشى شه‌کره‌
@@ -273,7 +273,7 @@ Which of the following food is most harmful for diabetes?
 () نیسک
 `,`# البرنامج الغذائي لمرضى السكري
 ## سؤال و جواب
-<play_button>
+<BPC>
 د. ولي عمر
 
 # مرض السكري
@@ -326,17 +326,17 @@ var steps;
 const aud=document.getElementById("aud");
 const vid=document.getElementById("vid");
 const ft=document.getElementById("ft");
-const bp=document.getElementById("bp");
+const bp=document.getElementById("bpl");
 
-const PLAY_BUTTON=`<div id=dimg><img id=title_img src=dm_test.jpg><svg id="vpb" viewBox="0 0 200 200" alt="Play video">
+const BPC=`<div id=dimg><img id=title_img src=dm_test.jpg><svg id="vpb" viewBox="0 0 200 200" alt="Play video">
   <circle cx="100" cy="100" r="90" fill="none" stroke-width="15" stroke="#000"></circle>
   <polygon points="70, 55 70, 145 145, 100" fill="#000"></polygon></svg></div>`;
+const BPL=`<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0z" fill="none"></path><path d="M8 5v14l11-7z"></path></svg>`;
+const BPS=`<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0z" fill="none"/><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>`;
 const FTB=`<button id=more onclick="get_more()">
   <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
 </button>
-<button id=bp onclick="start_slides()">
- <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0z" fill="none"></path><path d="M8 5v14l11-7z"></path></svg>
-</button>
+<button id=bpl onclick="start_slides()">${BPL}</button>
 <button onclick="prev_slide()">
  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
 </button>
@@ -344,28 +344,34 @@ const FTB=`<button id=more onclick="get_more()">
  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0V0z" fill="none"></path><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8-8-8z"></path></svg>
 </button>`;
 
-window.onload=load_first_slide;
+window.onload=load_page(0);
 
 function load_first_slide(){
-  var rv="";
-  sla=cnt.split("\n\n");
-  rv=format_text(sla[0],0);
-  if(dir=="ltr") document.body.style="font-family:arial;direction:ltr;";
-  document.getElementById("vid").innerHTML=rv;
-  if(i==0) document.getElementById("vpb").addEventListener("click", start_slides)
+  // var rv="";
+  // sla=cnt.split("\n\n");
+  // rv=format_text(sla[0],0);
+  // if(dir=="ltr") document.body.style="font-family:arial;direction:ltr;";
+  // document.getElementById("vid").innerHTML=rv;
+  // if(i==0) document.getElementById("vpb").addEventListener("click", start_slides)
   aud.addEventListener("timeupdate", audio_update, false);
   aud.addEventListener("ended", audio_ended, false);
   vid.addEventListener("click", vid_click, false);
   steps=document.getElementsByClassName("h");
   }
 
-function load_page(){
+function load_page(f){
   var rv="";
   sla=cnt.split("\n\n");
-  rv=format_text(sla[i],1);
+  rv=format_text(sla[i],f);
   if(dir=="ltr") document.body.style="font-family:noto;direction:ltr;";
   vid.innerHTML=rv;
   ft.innerHTML=FTB;
+  if(i==0) document.getElementById("vpb").addEventListener("click", start_slides)
+  if(f==0){
+    aud.addEventListener("timeupdate", audio_update, false);
+    aud.addEventListener("ended", audio_ended, false);
+    vid.addEventListener("click", vid_click, false);
+    }
   ft.style.bottom="-70px";
   aud.src=`a00400${i}.mp3`;
   steps=document.getElementsByClassName("h");
@@ -381,9 +387,9 @@ document.addEventListener("keydown",event=>{
   if (event.key===" ") start_slides();
   if (event.key==="p") start_slides();
   
-  if (event.key==="a") {dir="rtl"; cnt=cnta[2]; load_page();}
-  if (event.key==="k") {dir="rtl"; cnt=cnta[1]; load_page();}
-  if (event.key==="e") {dir="ltr"; cnt=cnta[0]; load_page();}
+  if (event.key==="a") {dir="rtl"; cnt=cnta[2]; load_page(1);}
+  if (event.key==="k") {dir="rtl"; cnt=cnta[1]; load_page(1);}
+  if (event.key==="e") {dir="ltr"; cnt=cnta[0]; load_page(1);}
   });
 
 function next_step(){
@@ -396,7 +402,7 @@ function next_step(){
 function next_slide(){
   if(i<cnt.split("\n\n").length-1) i++;
   step=0;
-  load_page();
+  load_page(1);
   if(aud.paused) aud.play();
   // cont_slides();
   // console.log(i,step,steps.length,steps);
@@ -405,7 +411,7 @@ function next_slide(){
 function prev_slide(){
   if(i>0) i--;
   step=0;
-  load_page();
+  load_page(1);
   if(i==0) document.getElementById("vpb").style="visibility:hidden;";
   // console.log(i,steps.length,step);
   }
@@ -452,7 +458,7 @@ function format_text(t,f){
     // console.log(i,j,fch,fca,fcp,s);
     });
   if(i==0) {
-    rv=rv.replaceAll("<play_button>",PLAY_BUTTON);
+    rv=rv.replaceAll("<BPC>",BPC);
     }
   rv+="</div>";
   if(fcpp==1) rv+=`<button id=cb onclick="cont_slides()">${cont[1]}</button>`;
@@ -464,6 +470,7 @@ function start_slides(){
   if(i==0) prev_slide();
   if(i==0) document.getElementById("vpb").style="visibility:hidden;";
   if(aud.paused) aud.play(); else aud.pause();
+  hide_menu();
   // document.getElementById("aud").play();
   }
 
@@ -488,7 +495,7 @@ function rc(id){
   }
 
 const sta=[
-  [0.6,3.6,5.7],
+  [0.2,3.6,5.1],
   [0.2,1.2,5.3,11.2,13.5,15.5,16.8,25.2,27.2],
   [0.2,20,23.5,27.5,35],
   [0.2,3,5,6,7,8,9,10,11],
@@ -521,11 +528,21 @@ function audio_ended() {
   }
 
 function vid_click(){
-  if(ft.style.bottom=="-70px") ft.style.bottom="0px"; else ft.style.bottom="-70px"; 
+  if(ft.style.bottom=="-70px") {
+    ft.style.bottom="0px";
+    setTimeout(() => {
+      hide_menu();
+    }, 2000);
+    } else hide_menu();
+  if(aud.paused) document.getElementById("bpl").innerHTML=BPL; else document.getElementById("bpl").innerHTML=BPS;
   }
 
 function get_more(){
   console.log("more");
+  }
+
+function hide_menu(){
+  ft.style.bottom="-70px";
   }
 
 class Slide extends HTMLElement{
@@ -560,6 +577,10 @@ FEATURES
 * make caption file (srt) automatically
 
 TODO
+* add pictures for food (next to line)
+* add time prgress above lower menu
+* add dob, years of dm, hb1c, htn (see dm sheet)
+* Save data first local storage then upload to server
 * Social media for DM patients? Group support?
 
 DONE
