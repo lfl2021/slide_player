@@ -65,6 +65,10 @@ label {
   font-size:24px;
   color:#900;
   }
+label img{
+  height:50px;
+  vertical-align:middle;
+  }
 input[type=radio] {
   transform:scale(1.4);
   /* visibility:hidden; */
@@ -134,7 +138,9 @@ s-l p {
   border-radius:5px;
   font-family:amiri;
   font-size:24px;
-  visibility:hidden;
+  /* visibility:hidden; */
+  opacity:0;
+  transition: opacity 0.5s;
   }
 #ft {
   direction:ltr;
@@ -264,13 +270,13 @@ Which of the following food is most harmful for diabetes?
 
 # پرسیارى سێیه‌م
 کامه‌ له‌م خۆراکانه‌ له‌ هه‌موویان خراپتره‌ بۆ نه‌خۆشى شه‌کره‌ (هه‌مان بڕ)؟
-() شه‌کر
-() خورما
-() هه‌نگوین
-() نانى گه‌نم (نانى سپی)
-() نانى جۆ (نانى سوکه‌رى)
-() برنج
-() نیسک
+() شه‌کر <img>
+() خورما <img>
+() هه‌نگوین <img>
+() نانى گه‌نم (نانى سپی) <img>
+() نانى جۆ (نانى سوکه‌رى) <img>
+() برنج <img>
+() نیسک <img>
 `,`# البرنامج الغذائي لمرضى السكري
 ## سؤال و جواب
 <BPC>
@@ -345,19 +351,6 @@ const FTB=`<button id=more onclick="get_more()">
 </button>`;
 
 window.onload=load_page(0);
-
-function load_first_slide(){
-  // var rv="";
-  // sla=cnt.split("\n\n");
-  // rv=format_text(sla[0],0);
-  // if(dir=="ltr") document.body.style="font-family:arial;direction:ltr;";
-  // document.getElementById("vid").innerHTML=rv;
-  // if(i==0) document.getElementById("vpb").addEventListener("click", start_slides)
-  aud.addEventListener("timeupdate", audio_update, false);
-  aud.addEventListener("ended", audio_ended, false);
-  vid.addEventListener("click", vid_click, false);
-  steps=document.getElementsByClassName("h");
-  }
 
 function load_page(f){
   var rv="";
@@ -434,6 +427,7 @@ function format_text(t,f){
     s=s.replaceAll("# ","");
     s=s.replaceAll("* ","");
     s=s.replaceAll("()","");
+    s=s.replaceAll("<img>",`<img src=p${i}${j}.jpg id=${i}${j}>`);
     s=s.replaceAll("___","<input type=text id=it>");
     var cls=f==1?" class=h":"";
     if(fch==1){
@@ -482,7 +476,7 @@ function cont_slides(){
 
 function rc(id){
   console.log(id);
-  document.getElementById("cb").style="visibility:visible;";
+  document.getElementById("cb").style="opacity:1;";
   switch (id) {
     case 38:
     case 43:
@@ -495,12 +489,12 @@ function rc(id){
   }
 
 const sta=[
-  [0.2,3.6,5.1],
-  [0.2,1.2,5.3,11.2,13.5,15.5,16.8,25.2,27.2],
-  [0.2,20,23.5,27.5,35],
-  [0.2,3,5,6,7,8,9,10,11],
-  [1,2,3,4],
-  [0.4,3.2,9.8,12.9,14.3,15.9,18.8,23.6,24.9]
+  [0.1,3.6,5.1],
+  [0.1,1.2,5.3,11.2,13.5,15.5,16.8,25.2,27.2],
+  [0.1,20,23.5,27.5,35],
+  [0.1,3,5,6,7,8,9,10,11],
+  [0.1,2,3,4],
+  [0.1,3.2,9.8,12.9,14.3,15.9,18.8,23.6,24.9]
   ];
 // console.log(sta);
 function audio_update() {
@@ -530,9 +524,7 @@ function audio_ended() {
 function vid_click(){
   if(ft.style.bottom=="-70px") {
     ft.style.bottom="0px";
-    setTimeout(() => {
-      hide_menu();
-    }, 2000);
+    setTimeout(()=>{hide_menu();}, 3000);
     } else hide_menu();
   if(aud.paused) document.getElementById("bpl").innerHTML=BPL; else document.getElementById("bpl").innerHTML=BPS;
   }
