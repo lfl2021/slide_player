@@ -74,13 +74,17 @@ input[type=text] {
   font-family:amiri;
   width:220px;
   border:1px #ddd solid;
-  border-radius:4px;
+  border-radius:5px;
+  }
+#vid {
+  min-height:100%;
   }
 s-l {
   position: absolute;
   display: block;
   width:calc(100% - (2 * var(--pd)));
-  /* height:calc(100% - (2 * var(--pd))); */
+  min-height:calc(100% - (2 * var(--pd)));
+  /* border:1px red solid; */
   margin:0px;
   padding:var(--pd);
   }
@@ -126,9 +130,33 @@ s-l p {
   }
 #cb {
   margin:20px;
+  border:1px #ccc solid;
+  border-radius:5px;
   font-family:amiri;
   font-size:24px;
   visibility:hidden;
+  }
+#ft {
+  direction:ltr;
+  border:1px #ccc solid;
+  display:flex;
+  justify-content: center;
+  position:fixed;
+  bottom:-70px;
+  width:100%;
+  background-color:#fff;
+  border-top:1px #ccc solid;
+  transition: bottom 0.3s;
+  /* visibility:hidden; */
+  }
+#ft button {
+  padding:20px;
+  border:none;
+  background-color:#fff;
+  opacity:0.6;
+  }
+#ft button:hover {
+  background-color:#ddd;
   }
 .h {
   visibility:hidden;
@@ -152,6 +180,7 @@ s-l p {
 <body>
 <div id=time></div>
 <div id=vid></div>
+<div id=ft></div>
 <audio id=aud preload=metadata><source src="a004000.mp3" type="audio/mpeg"></audio>
 <script>
 const cnta=[`# Diabetes Nutrition Program
@@ -159,7 +188,7 @@ const cnta=[`# Diabetes Nutrition Program
 <play_button>
 Dr. Wali Omer
 
-# Diabets Complications
+# Diabets
 Not just elevated blood sugar
 If not treated:
 * Brain
@@ -174,7 +203,7 @@ If not treated:
 * Can diabetes be treated?
 * What food are bad for diabetes?
 
-# First: Cause
+# First Question
 What is the main cause of diabetes?
 () Genetic
 () Psychological conditions (anxiety, stress, fear, depression...)
@@ -184,12 +213,12 @@ What is the main cause of diabetes?
 () Pregnancy
 () Others: ___
 
-# Second: Treatment
+# Second Question
 Can diabetes be "treated"?
 () No
-() Yes
+() Yes: ___
 
-# Third: Food
+# Third Question
 Which of the following food is most harmful for diabetes?
 () Sugar
 () Dates
@@ -218,7 +247,7 @@ Which of the following food is most harmful for diabetes?
 * ئایا شه‌کره‌ چاره‌سه‌رى هه‌یه‌؟
 * کامه‌ خۆراک بۆ شه‌کره‌ خراپه‌؟
 
-# یه‌که‌م: هۆکار
+# پرسیارى یه‌که‌م
 هۆى سه‌ره‌کى نه‌خۆشى شه‌کره‌ چیه‌؟
 () بۆماوه‌یی (ویراسه‌)
 () بارى ده‌روونى (خه‌م، دڵه‌ڕاوکێ، ترس، تاسان...)
@@ -228,12 +257,12 @@ Which of the following food is most harmful for diabetes?
 () دووگیانى
 () هى تر: ___
 
-# دووه‌م: چاره‌سه‌رى
+# پرسیارى دووه‌م
 ئایا نه‌خۆشى شه‌کره‌ "چاره‌سه‌رى"ی هه‌یه‌؟
 () نه‌خێر
-() به‌ڵێ
+() به‌ڵێ: ___
 
-# سێیه‌م: خۆراک
+# پرسیارى سێیه‌م
 کامه‌ له‌م خۆراکانه‌ له‌ هه‌موویان خراپتره‌ بۆ نه‌خۆشى شه‌کره‌ (هه‌مان بڕ)؟
 () شه‌کر
 () خورما
@@ -247,14 +276,14 @@ Which of the following food is most harmful for diabetes?
 <play_button>
 د. ولي عمر
 
-# مضاعفات مرض السكري
+# مرض السكري
 ليس فقط ارتفاع السكر في الدم
 اذا لم تعالج:
-* دماغ
-* عيون
-* قلب
-* كلية
-* قدم
+* الدماغ
+* العيون
+* القلب
+* الكلية
+* القدم
 * الاعضاء التناسلية
 
 # ٣ أسئلة
@@ -262,7 +291,7 @@ Which of the following food is most harmful for diabetes?
 * هل هناك "علاج" للسكري؟
 * ما هي الاغذية الضارة للسكري؟
 
-# الاول: السبب
+# السؤال الاول
 ماهو السبب الرئيسي لمرض السكري؟
 () الوراثة
 () الحالة النفسية (القلق، الخوف، الصدمة)
@@ -272,20 +301,20 @@ Which of the following food is most harmful for diabetes?
 () الحمل
 () أخرى: ___
 
-# الثاني:  العلاج
+# السؤال الثاني
 هل هناك "علاج" لمرض السكري؟
 () كلا
-() نعم
+() نعم: ___
 
-# الثالث: الغذاء
+# السؤال الثالث
 ماهي الاغذية الاكثر ضررا لمرضي السكري مما يلي؟
-() سكر
-() تمر
-() عسل
+() السكر
+() التمر
+() العسل
 () خبز الحنطة (الخبز الابيض)
 () خبز الشعير (خبز السكري)
-() رز
-() عدس
+() الرز
+() العدس
 `];
 
 const cont=["Continue","به‌رده‌وام به‌","استمر"];
@@ -294,10 +323,27 @@ var dir="rtl";
 var cnt=cnta[1];
 var step=0;
 var steps;
-var aud=document.getElementById("aud");
+const aud=document.getElementById("aud");
+const vid=document.getElementById("vid");
+const ft=document.getElementById("ft");
+const bp=document.getElementById("bp");
+
 const PLAY_BUTTON=`<div id=dimg><img id=title_img src=dm_test.jpg><svg id="vpb" viewBox="0 0 200 200" alt="Play video">
   <circle cx="100" cy="100" r="90" fill="none" stroke-width="15" stroke="#000"></circle>
   <polygon points="70, 55 70, 145 145, 100" fill="#000"></polygon></svg></div>`;
+const FTB=`<button id=more onclick="get_more()">
+  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+</button>
+<button id=bp onclick="start_slides()">
+ <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0z" fill="none"></path><path d="M8 5v14l11-7z"></path></svg>
+</button>
+<button onclick="prev_slide()">
+ <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+</button>
+<button onclick="next_slide()">
+ <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0V0z" fill="none"></path><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8-8-8z"></path></svg>
+</button>`;
+
 window.onload=load_first_slide;
 
 function load_first_slide(){
@@ -309,6 +355,7 @@ function load_first_slide(){
   if(i==0) document.getElementById("vpb").addEventListener("click", start_slides)
   aud.addEventListener("timeupdate", audio_update, false);
   aud.addEventListener("ended", audio_ended, false);
+  vid.addEventListener("click", vid_click, false);
   steps=document.getElementsByClassName("h");
   }
 
@@ -317,7 +364,9 @@ function load_page(){
   sla=cnt.split("\n\n");
   rv=format_text(sla[i],1);
   if(dir=="ltr") document.body.style="font-family:noto;direction:ltr;";
-  document.getElementById("vid").innerHTML=rv;
+  vid.innerHTML=rv;
+  ft.innerHTML=FTB;
+  ft.style.bottom="-70px";
   aud.src=`a00400${i}.mp3`;
   steps=document.getElementsByClassName("h");
   }
@@ -328,7 +377,7 @@ document.addEventListener("keydown",event=>{
   if (event.ctrlKey && event.key==="ArrowRight") next_step();
   if (event.ctrlKey && event.key==="ArrowLeft") prev_step();
   if (event.key==="ArrowLeft") prev_slide();
-  if (event.key==="Escape") document.getElementById("ftb").style.bottom = "-50px";
+  // if (event.key==="Escape") document.getElementById("ftb").style.bottom = "-50px";
   if (event.key===" ") start_slides();
   if (event.key==="p") start_slides();
   
@@ -348,6 +397,8 @@ function next_slide(){
   if(i<cnt.split("\n\n").length-1) i++;
   step=0;
   load_page();
+  if(aud.paused) aud.play();
+  // cont_slides();
   // console.log(i,step,steps.length,steps);
   }
 
@@ -356,7 +407,7 @@ function prev_slide(){
   step=0;
   load_page();
   if(i==0) document.getElementById("vpb").style="visibility:hidden;";
-  console.log(i,steps.length,step);
+  // console.log(i,steps.length,step);
   }
 
 function format_text(t,f){
@@ -427,6 +478,7 @@ function rc(id){
   document.getElementById("cb").style="visibility:visible;";
   switch (id) {
     case 38:
+    case 43:
       document.getElementById("it").focus();
       break;
   
@@ -466,7 +518,16 @@ function audio_ended() {
     next_slide();
     aud.play();
     }
-  }  
+  }
+
+function vid_click(){
+  if(ft.style.bottom=="-70px") ft.style.bottom="0px"; else ft.style.bottom="-70px"; 
+  }
+
+function get_more(){
+  console.log("more");
+  }
+
 class Slide extends HTMLElement{
   constructor(){super();}
   }
@@ -499,7 +560,7 @@ FEATURES
 * make caption file (srt) automatically
 
 TODO
-
+* Social media for DM patients? Group support?
 
 DONE
 
