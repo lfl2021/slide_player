@@ -200,7 +200,7 @@ Dr. Wali Omer
 
 # Diabets
 Not just elevated blood sugar
-If not treated:
+If neglected:
 * Brain
 * Eyes
 * Heart
@@ -244,7 +244,7 @@ Which of the following food is most harmful for diabetes?
 
 # نه‌خۆشى شه‌کره‌
 ته‌نها به‌رز بوونه‌وه‌ى شه‌کر له‌ خوێن نیه‌.
-ئه‌گه‌ر چاره‌سه‌ر نه‌کرێ:
+ئه‌گه‌ر پشت گوێ بخرێ:
 * مێشک
 * چاو
 * دڵ
@@ -272,8 +272,8 @@ Which of the following food is most harmful for diabetes?
 
 # پرسیارى دووه‌م
 ئایا نه‌خۆشى شه‌کره‌ "چاره‌سه‌رى"ی هه‌یه‌؟
-() نه‌خێر
-() به‌ڵێ: ___
+() تا له‌ ژیان ماوه‌ ده‌بێ حه‌ب و ده‌رمان وه‌ر بگرێ
+() چاره‌سه‌رى هه‌یه‌: ___
 
 # پرسیارى سێیه‌م
 کامه‌ له‌م خۆراکانه‌ له‌ هه‌موویان خراپتره‌ بۆ نه‌خۆشى شه‌کره‌ (هه‌مان بڕ)؟
@@ -498,18 +498,18 @@ function rc(id){
   }
 
 const sta=[
-  [0.2,3.6,5.1],
-  [0.2,1.2,5.3,11,12.7,14.9,16.4,18.5,21,25,27.2,31.7],
-  [0.2,20,23.5,27.5,35],
-  [0.2,3,5,6,7,8,9,10,11],
-  [0.2,2,3,4],
-  [0.2,3.2,9.8,12.9,14.3,15.9,18.8,23.6,24.9]
+  [0.2,3.2,4.7],
+  [0.2,1.2,5.1,11,12.7,14.4,16,17.8,20,25.4,27.5,31.7],
+  [0.2,23.8,27,30.7],
+  [0.2,1.4,4,6.6,14,15.8,17.7,19.1,26.8],
+  [0.2,1.5,37.2,41.1],
+  [0.2,2,8.6,11.2,12.5,13.7,16.3,20.5,21.6]
   ];
 // console.log(sta);
 function audio_update() {
   var ta=sta[i];
   var t=aud.currentTime;
-  document.getElementById("time").innerHTML=i+":"+step+":"+t.toFixed(1);
+  // document.getElementById("time").innerHTML=i+":"+step+":"+t.toFixed(1);
   for (k in ta) {
   // for(k=0;k<mx;k++) {
   // ta.forEach((v,k)=>{
