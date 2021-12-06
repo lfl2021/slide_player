@@ -70,6 +70,10 @@ label img{
   height:50px;
   vertical-align:middle;
   }
+p img{
+  height:30px;
+  vertical-align:middle;
+  }
 input[type=radio] {
   transform:scale(1.4);
   /* visibility:hidden; */
@@ -77,9 +81,15 @@ input[type=radio] {
 input[type=text] {
   font-size:24px;
   font-family:amiri;
-  width:220px;
+  width:200px;
   border:1px #ddd solid;
   border-radius:5px;
+  color:#00f;
+  }
+select {
+  font-family:amiri;
+  font-size:24px;
+  color:#900;
   }
 #vid {
   min-height:100%;
@@ -93,9 +103,12 @@ s-l {
   margin:0px;
   padding:var(--pd);
   }
-s-l p {
+s-l p{
   font-size:28px;
   margin:0px;
+  }
+s-l p a{
+  color:#00f;
   }
 #sb {
   padding:0;
@@ -284,6 +297,22 @@ Which of the following food is most harmful for diabetes?
 () نانى جۆ (نانى سوکه‌رى) <img>
 () برنج <img>
 () نیسک <img>
+
+# زانیارى
+ساڵى له‌دایک بوون:
+___
+ڕه‌گه‌ز:
+() نێر
+() مێ
+ماوه‌ى نه‌خۆشى شه‌کره‌:‌
+‌___ <ymd_combo>
+به‌رزترین ڕێژه‌ى شه‌کرى خوێن:
+___
+فه‌حسى سێ مانگى:
+___
+
+# وه‌ڵامى پرسیاره‌کان
+<answers>
 `,`# البرنامج الغذائي لمرضى السكري
 ## سؤال و جواب
 <BPC>
@@ -330,12 +359,22 @@ Which of the following food is most harmful for diabetes?
 () العدس <img>
 `];
 
-const cont=["Continue","به‌رده‌وام به‌","استمر"];
-var i=0;
+const dica=[
+["به‌رده‌وام به‌", "استـمـر", "Continue"],
+["ساڵ", "سنة", "Years"],
+["مانگ", "شهر", "Months"],
+["ڕۆژ", "یوم", "Days"]
+// ["", "", ""],
+];
+
+var i=0; // slide
+var lng=0; // 0 kur 1 ara 2 eng 
 var dir="rtl";
 var cnt=cnta[1];
 var step=0;
 var steps;
+var sid=0; // selected id
+var ansa=[]; //cause treatment food age gender dm duration ymd highest blood sugar hba1c
 const aud=document.getElementById("aud");
 const vid=document.getElementById("vid");
 const ft=document.getElementById("ft");
@@ -362,7 +401,7 @@ window.onload=load_page(0);
 
 function load_page(f){
   var rv="";
-  sla=cnt.split("\n\n");
+  var sla=cnt.split("\n\n");
   rv=format_text(sla[i],f);
   if(dir=="ltr") document.body.style="font-family:noto;direction:ltr;";
   vid.innerHTML=rv;
@@ -375,6 +414,7 @@ function load_page(f){
     }
   ft.style.bottom="-70px";
   aud.src=`a00400${i}.mp3`;
+  aud.playbackRate=1.0;
   steps=document.getElementsByClassName("h");
   }
 
@@ -388,9 +428,13 @@ document.addEventListener("keydown",event=>{
   if (event.key===" ") start_slides();
   if (event.key==="p") start_slides();
   
-  if (event.key==="a") {dir="rtl"; cnt=cnta[2]; load_page(1);}
-  if (event.key==="k") {dir="rtl"; cnt=cnta[1]; load_page(1);}
-  if (event.key==="e") {dir="ltr"; cnt=cnta[0]; load_page(1);}
+  if (event.key==="k") {lng=0; dir="rtl"; cnt=cnta[1]; load_page(1);}
+  if (event.key==="a") {lng=1; dir="rtl"; cnt=cnta[2]; load_page(1);}
+  if (event.key==="e") {lng=2; dir="ltr"; cnt=cnta[0]; load_page(1);}
+
+  if (event.key==="1") aud.playbackRate=1.0;
+  if (event.key==="2") aud.playbackRate=1.5;
+  if (event.key==="9") aud.playbackRate=16.0;
   });
 
 function next_step(){
@@ -406,7 +450,7 @@ function next_slide(){
   load_page(1);
   if(aud.paused) aud.play();
   // cont_slides();
-  console.log(i,step,steps.length,steps);
+  // console.log(i,step,steps.length,steps);
   }
 
 function prev_slide(){
@@ -438,6 +482,7 @@ function format_text(t,f){
     s=s.replaceAll("()","");
     s=s.replaceAll("<img>",`<img src=p${i}${j}.jpg id=${i}${j}>`);
     s=s.replaceAll("___","<input type=text id=it>");
+    s=s.replaceAll("<ymd_combo>",`<select><option>${dica[1][lng]}</option><option>${dica[2][lng]}</option><option>${dica[3][lng]}</option></select>`);
     var cls=f==1?" class=h":"";
     if(fch==1){
       if(i==0) rv+=`<h1${cls}>${s}</h1>`; else rv+=`<h2${cls}>${s}</h2><div id=sb>`;
@@ -450,7 +495,7 @@ function format_text(t,f){
     if(j>0 && sna[j].substring(0,1)=="*"  && sna[j-1].substring(0,1)!="*") rv+="<ul>";
     if(j>0 && sna[j].substring(0,1)!="*"  && sna[j-1].substring(0,1)=="*") rv+="</ul>";
     if(fca==1) rv+=`<li${cls}>${s}</li>`;
-    if(fcp==1) rv+=`<label ${cls} onclick="rc(${i}${j})"><input type=radio id=${i}${j} name=q${i}>${s}</label><br>`;
+    if(fcp==1) rv+=`<label id=${i}${j} ${cls} onclick="rc(${i}${j})"><input type=radio name=q${i}>${s}</label><br>`;
     if(fcp==1) fcpp=1;
     if(fcf==0 && i==0){
       rv+=`<a-u${cls}>${s}</a-u>`;
@@ -463,8 +508,24 @@ function format_text(t,f){
   if(i==0) {
     rv=rv.replaceAll("<BPC>",BPC);
     }
+  if(i==7){
+    var ansa=JSON.parse(localStorage.getItem("DM_DATA"));
+    // var ans=localStorage.getItem("DM_DATA");
+    var ans="";
+    var qus="";
+    var vs="";
+    var ja=[19,20,21];
+    var cntva=get_content_array(cnt);
+    ansa.forEach((v,j)=>{
+      ans=v.split("|")[1];
+      qus=cntva[ja[j]];
+      if(j<3) vs+=`<p class=h>${qus}<br><a>${ans}</a> <img src=wrong.jpg></p>`;
+      });
+    rv=rv.replaceAll("<answers>",vs);
+    console.log();
+   }
   rv+="</div>";
-  if(fcpp==1) rv+=`<button id=cb onclick="cont_slides()">${cont[1]}</button>`;
+  if(fcpp==1) rv+=`<button id=cb onclick="cont_slides()">${dica[0][lng]}</button>`;
   rv+="</s-l>";
   return rv;
   }
@@ -478,23 +539,81 @@ function start_slides(){
   }
 
 function cont_slides(){
-  next_slide();
-  if(aud.paused) aud.play();
-  // document.getElementById("aud").play();
+  var itv="";
+  // console.log(sid,itv);
+  switch (sid) {
+    case 38:
+    case 43:
+    itv=document.getElementById("it").value;
+    if(itv.length>2){
+        save_answer(sid,itv);
+        next_slide();
+        if(aud.paused) aud.play();
+        } else input_feedback(sid,itv);
+      break;
+    default:
+      save_answer(sid,itv);
+      next_slide();
+      if(aud.paused) aud.play();
+      break;
+    }
   }
 
+function save_answer(sid,itv){
+  var sidv=document.getElementById(sid).innerText.trim();
+  ansa[sid]=`${sid}|${sidv}|${itv}`;
+  ansa=ansa.filter(n => n);
+  console.log(sid,itv,sidv,ansa);
+  localStorage.setItem("DM_DATA", JSON.stringify(ansa));
+ }
+
+function input_feedback(sid,itv){
+  switch (sid) {
+    case 38:
+    var it=document.getElementById("it");
+      it.placeholder="لێره‌ هۆکار بنووسه‌";
+      ps(sid);
+      console.log(sid,itv);
+      break;
+    case 43:
+      var it=document.getElementById("it");
+      it.placeholder="لێره‌ چاره‌سه‌رى بنووسه‌";
+      ps(sid);
+      console.log(sid,itv);
+      break;
+    default:
+      break;
+    }
+ }
+  
+function ps(id){
+  document.getElementById("it").focus();
+  var audio = new Audio("f"+id+".mp3");
+  audio.play();
+	}
+
 function rc(id){
-  console.log(id);
+  sid=id;
   document.getElementById("cb").style="opacity:1;";
+  var sidv=document.getElementById(id).innerText;
+  // console.log(id,sidv);
   switch (id) {
     case 38:
     case 43:
       document.getElementById("it").focus();
-      break;
+  break;
   
     default:
       break;
   }
+  }
+
+function get_content_array(t){
+  var rv=[];
+  t=t.replaceAll("ک","ك");
+  t=t.replaceAll("* ","");
+  const sna=t.split("\n"); // sentence array
+  return sna;
   }
 
 const sta=[
@@ -503,7 +622,10 @@ const sta=[
   [0.2,23.8,27,30.7],
   [0.2,1.4,4,6.6,14,15.8,17.7,19.1,26.8],
   [0.2,1.5,37.2,41.1],
-  [0.2,2,8.6,11.2,12.5,13.7,16.3,20.5,21.6]
+  [0.2,2,8.6,11.2,12.5,13.7,16.3,20.5,21.6],
+  // [0.2,0.4,0.6,0.8,1,1.2,1.4,1.6,1.7,1.8,1.9,2],
+  [3.5,7.4,7.5,9.1,9.2,9.3,10.1,10.2,12.7,12.8,17.8,17.9],
+  [0.7,4.5,5.5,6.5]
   ];
 // console.log(sta);
 function audio_update() {
@@ -522,7 +644,7 @@ function audio_update() {
     }
   }  
 
-const stopa=[3,4,5];
+const stopa=[3,4,5,6,7];
 function audio_ended() {
   if(stopa.includes(i)){
     console.log("Continue");
@@ -533,6 +655,7 @@ function audio_ended() {
   }
 
 function vid_click(){
+  // console.log(this.id);
   if(ft.style.bottom=="-70px") {
     ft.style.bottom="0px";
     setTimeout(()=>{hide_menu();}, 3000);
@@ -583,6 +706,7 @@ TODO
 * write script for each slide
 * add audio for each slide
 * save answers
+* validate answer eg no other entered
 * give feedback based on answers
 * add time prgress above lower menu
 * add dob, years of dm, hb1c, htn (see dm sheet)
