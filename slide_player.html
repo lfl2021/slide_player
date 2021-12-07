@@ -434,7 +434,7 @@ document.addEventListener("keydown",event=>{
   if (event.key==="e") {lng=2; dir="ltr"; cnt=cnta[0]; load_page(1);}
 
   if (event.key==="1") aud.playbackRate=1.0;
-  if (event.key==="2") aud.playbackRate=1.5;
+  if (event.key==="2") aud.playbackRate=1.25;
   if (event.key==="9") aud.playbackRate=16.0;
   });
 
@@ -522,14 +522,14 @@ function format_text(t,f){
 function get_answers(){
   ansa=JSON.parse(localStorage.getItem("DM_DATA"));
   // edit answer array
-  if(ansa[1].length>6) ansa[0]+="|"+ansa[1].split("|")[1]; else ansa[0]+="|"+ansa[1].split("|")[1];
-  if(ansa[3].length>6) ansa[2]+="|"+ansa[3].split("|")[1]; else ansa[3]+="|"+ansa[2].split("|")[1];
+  if(ansa[1].length>6) ansa[0]+="|"+ansa[1].split("|")[1]; else ansa[0]+="|"+ansa[0].split("|")[1];
+  if(ansa[3].length>6) ansa[2]+="|"+ansa[3].split("|")[1]; else ansa[2]+="|"+ansa[2].split("|")[1];
   ansa[4]+="|"+ansa[4].split("|")[1];
   ansa[6]+="|"+ansa[6].split("|")[1].ArtoEn();
   ansa[7]+="|"+ansa[7].split("|")[1].ArtoEn();
   ansa[8]+="|"+ansa[8].split("|")[1].ArtoEn();
   ansa[9]+="|"+ansa[9].split("|")[1].ArtoEn();
-  console.log(ansa);
+  console.log(ansa[1].length, ansa);
 
   var ans="";
   var qus="";
