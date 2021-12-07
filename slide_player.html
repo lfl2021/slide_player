@@ -304,8 +304,8 @@ ___
 ڕه‌گه‌ز:
 () نێر
 () مێ
-ماوه‌ى نه‌خۆشى شه‌کره‌:‌
-‌___ <ymd_combo>
+ماوه‌ى نه‌خۆشى شه‌کره‌:
+___ <ymd_combo>
 به‌رزترین ڕێژه‌ى شه‌کرى خوێن:
 ___
 فه‌حسى سێ مانگى:
@@ -373,6 +373,7 @@ var dir="rtl";
 var cnt=cnta[1];
 var step=0;
 var steps;
+var qno=0;
 var sid=0; // selected id
 var ansa=[]; //cause treatment food age gender dm duration ymd highest blood sugar hba1c
 const aud=document.getElementById("aud");
@@ -438,7 +439,6 @@ document.addEventListener("keydown",event=>{
   });
 
 function next_step(){
-  // console.log(i,step,steps.length,steps);
   if(step==steps.length) next_slide();
   steps[step].classList.add("c");
   if(step<steps.length) step++; 
@@ -465,11 +465,13 @@ function prev_slide(){
 function format_text(t,f){
   var rv="";
   var fcpp=0;
+  var i0=i.toString().padStart(2,"0");
   t=t.replaceAll("ک","ك");
-  // console.log(sla);
+  console.log(i,i0);
   rv+=`<s-l>`;
   const sna=t.split("\n"); // sentence array
   sna.forEach((s,j)=>{
+    var j0=j.toString().padStart(2,"0");
     var fcl=s.substring(0,1)=="<"?1:0; // first char less than
     var fch=s.substring(0,2)=="# "?1:0; // first char hash
     var fcd=s.substring(0,3)=="## "?1:0; // first 2 hash
@@ -480,9 +482,9 @@ function format_text(t,f){
     s=s.replaceAll("# ","");
     s=s.replaceAll("* ","");
     s=s.replaceAll("()","");
-    s=s.replaceAll("<img>",`<img src=p${i}${j}.jpg id=${i}${j}>`);
-    s=s.replaceAll("___","<input type=text id=it>");
-    s=s.replaceAll("<ymd_combo>",`<select><option>${dica[1][lng]}</option><option>${dica[2][lng]}</option><option>${dica[3][lng]}</option></select>`);
+    s=s.replaceAll("<img>",`<img src=p${i0}${j0}.jpg id=1${i0}${j0}>`);
+    s=s.replaceAll("___",`<input id=2${i0}${j0} type=text>`);
+    s=s.replaceAll("<ymd_combo>",`<select id=3${i0}${j0}><option>${dica[1][lng]}</option><option>${dica[2][lng]}</option><option>${dica[3][lng]}</option></select>`);
     var cls=f==1?" class=h":"";
     if(fch==1){
       if(i==0) rv+=`<h1${cls}>${s}</h1>`; else rv+=`<h2${cls}>${s}</h2><div id=sb>`;
@@ -494,14 +496,14 @@ function format_text(t,f){
     // add ul
     if(j>0 && sna[j].substring(0,1)=="*"  && sna[j-1].substring(0,1)!="*") rv+="<ul>";
     if(j>0 && sna[j].substring(0,1)!="*"  && sna[j-1].substring(0,1)=="*") rv+="</ul>";
-    if(fca==1) rv+=`<li${cls}>${s}</li>`;
-    if(fcp==1) rv+=`<label id=${i}${j} ${cls} onclick="rc(${i}${j})"><input type=radio name=q${i}>${s}</label><br>`;
+    if(fca==1) rv+=`<li${cls} id=1${i0}${j0}>${s}</li>`;
+    if(fcp==1) rv+=`<label id=1${i0}${j0} ${cls} onclick="rc(1${i0}${j0})"><input id=2${i0}${j0} type=radio name=q${i}>${s}</label><br>`;
     if(fcp==1) fcpp=1;
     if(fcf==0 && i==0){
       rv+=`<a-u${cls}>${s}</a-u>`;
       }
     if(fcf==0 && i>0){
-      rv+=`<p${cls}>${s}</p>`;
+      rv+=`<p${cls} id=1${i0}${j0}>${s}</p>`;
       }
     // console.log(i,j,fch,fca,fcp,s);
     });
@@ -509,25 +511,59 @@ function format_text(t,f){
     rv=rv.replaceAll("<BPC>",BPC);
     }
   if(i==7){
-    var ansa=JSON.parse(localStorage.getItem("DM_DATA"));
-    // var ans=localStorage.getItem("DM_DATA");
-    var ans="";
-    var qus="";
-    var vs="";
-    var ja=[19,20,21];
-    var cntva=get_content_array(cnt);
-    ansa.forEach((v,j)=>{
-      ans=v.split("|")[1];
-      qus=cntva[ja[j]];
-      if(j<3) vs+=`<p class=h>${qus}<br><a>${ans}</a> <img src=wrong.jpg></p>`;
-      });
-    rv=rv.replaceAll("<answers>",vs);
-    console.log();
-   }
+    rv=rv.replaceAll("<answers>",get_answers);
+    }
   rv+="</div>";
   if(fcpp==1) rv+=`<button id=cb onclick="cont_slides()">${dica[0][lng]}</button>`;
   rv+="</s-l>";
   return rv;
+  }
+
+function get_answers(){
+  ansa=JSON.parse(localStorage.getItem("DM_DATA"));
+  // edit answer array
+  if(ansa[1].length>6) ansa[0]+="|"+ansa[1].split("|")[1]; else ansa[0]+="|"+ansa[1].split("|")[1];
+  if(ansa[3].length>6) ansa[2]+="|"+ansa[3].split("|")[1]; else ansa[3]+="|"+ansa[2].split("|")[1];
+  ansa[4]+="|"+ansa[4].split("|")[1];
+  ansa[6]+="|"+ansa[6].split("|")[1].ArtoEn();
+  ansa[7]+="|"+ansa[7].split("|")[1].ArtoEn();
+  ansa[8]+="|"+ansa[8].split("|")[1].ArtoEn();
+  ansa[9]+="|"+ansa[9].split("|")[1].ArtoEn();
+  console.log(ansa);
+
+  var ans="";
+  var qus="";
+  var rv="";
+  var i0=i.toString().padStart(2,"0");
+  var ja=[19,20,21];
+  var cntva=get_content_array(cnt);
+  fana=[ansa[0],ansa[2],ansa[4]];
+  fana.forEach((v,j)=>{
+    ans=v.split("|")[2];
+    qus=cntva[ja[j]];
+    var k=j+1;
+    var j0=k.toString().padStart(2,"0");
+    k=k.toString().EntoAr();
+    rv+=`<p id=1${i0}${j0} class=h onclick="check_answers()">${k}. ${qus}<br><a>${ans}</a> <img></p><br>`;
+    });
+  return rv;
+  }
+
+function check_answers(){
+  const qa=[10701,10702,10703];
+  var qu1=document.getElementById(qa[qno]).innerHTML;
+  qu1=qu1.replaceAll("<img>", "<img src=wrong.jpg>");
+  document.getElementById(qa[qno]).innerHTML=qu1;
+  qno++;
+  }
+
+String.prototype.EntoAr= function() {
+  return this.replace(/\d/g, d =>  '٠١٢٣٤٥٦٧٨٩'[d])
+  }  
+
+String.prototype.ArtoEn= function() {
+  return this.replace(/[\u0660-\u0669]/g, 
+    d => d.charCodeAt() - 1632)
   }
 
 function start_slides(){
@@ -541,29 +577,35 @@ function start_slides(){
 function cont_slides(){
   var itv="";
   // console.log(sid,itv);
-  switch (sid) {
-    case 38:
-    case 43:
-    itv=document.getElementById("it").value;
-    if(itv.length>2){
-        save_answer(sid,itv);
-        next_slide();
-        if(aud.paused) aud.play();
-        } else input_feedback(sid,itv);
-      break;
-    default:
-      save_answer(sid,itv);
+  // switch (sid) {
+  //   case 38:
+  //   case 43:
+  //   itv=document.getElementById(sid).value;
+  //   if(itv.length>2){
+  //       save_answer(sid,itv);
+  //       next_slide();
+  //       if(aud.paused) aud.play();
+  //       } else input_feedback(sid,itv);
+  //     break;
+  //   default:
+      save_answer();
       next_slide();
       if(aud.paused) aud.play();
-      break;
-    }
+    //   break;
+    // }
   }
 
-function save_answer(sid,itv){
+function save_answer(){
   var sidv=document.getElementById(sid).innerText.trim();
-  ansa[sid]=`${sid}|${sidv}|${itv}`;
-  ansa=ansa.filter(n => n);
-  console.log(sid,itv,sidv,ansa);
+  ansa.push(`${sid}|${sidv}`);
+  var inpa=document.getElementsByTagName("input");
+  Array.from(inpa).forEach((v,i)=>{
+    if(v.type!="radio") ansa.push(`${v.id}|${v.value}`);
+    });
+  inpa=document.getElementsByTagName("select");
+  Array.from(inpa).forEach((v,i)=>{
+    ansa.push(`${v.id}|${v.value}`);
+    });
   localStorage.setItem("DM_DATA", JSON.stringify(ansa));
  }
 
@@ -597,11 +639,13 @@ function rc(id){
   document.getElementById("cb").style="opacity:1;";
   var sidv=document.getElementById(id).innerText;
   // console.log(id,sidv);
-  switch (id) {
-    case 38:
-    case 43:
-      document.getElementById("it").focus();
-  break;
+  switch (sid) {
+    case '3_8':
+      document.getElementById("3_8").focus();
+      break;
+    case '4_3':
+      document.getElementById("4_3").focus();
+      break;
   
     default:
       break;
@@ -623,26 +667,28 @@ const sta=[
   [0.2,1.4,4,6.6,14,15.8,17.7,19.1,26.8],
   [0.2,1.5,37.2,41.1],
   [0.2,2,8.6,11.2,12.5,13.7,16.3,20.5,21.6],
-  // [0.2,0.4,0.6,0.8,1,1.2,1.4,1.6,1.7,1.8,1.9,2],
   [3.5,7.4,7.5,9.1,9.2,9.3,10.1,10.2,12.7,12.8,17.8,17.9],
-  [0.7,4.5,5.5,6.5]
+  [0.7,4.4,5.4,6.5,'10.2:1','10.8:1','11.4:1']
   ];
 // console.log(sta);
 function audio_update() {
   var ta=sta[i];
   var t=aud.currentTime;
   // document.getElementById("time").innerHTML=i+":"+step+":"+t.toFixed(1);
-  for (k in ta) {
-  // for(k=0;k<mx;k++) {
-  // ta.forEach((v,k)=>{
-  // var k=0;
-  // while (ta[k]<t) {
-    // console.log(k,ta[k],t,i,ta);
-    if(t<ta[k]) break;
-    delete ta[k];
-    next_step();
+  var tav=ta[0]; // time array value
+  var tat=0; // time array type
+  if(typeof ta[0]==="string"){
+    var tava=ta[0].split(":");
+    tav=parseFloat(tava[0]); 
+    tat=parseInt(tava[1]); 
     }
-  }  
+  if(t>tav){
+    ta.shift();
+    // console.log(t, tav, tat);
+    if(tat==0) next_step();
+    if(tat==1) check_answers();
+    }
+  }
 
 const stopa=[3,4,5,6,7];
 function audio_ended() {
@@ -707,6 +753,7 @@ TODO
 * add audio for each slide
 * save answers
 * validate answer eg no other entered
+*‌ select more than on choice eg worst food first sugar second worst foo honey...
 * give feedback based on answers
 * add time prgress above lower menu
 * add dob, years of dm, hb1c, htn (see dm sheet)
