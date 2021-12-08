@@ -211,15 +211,18 @@ const cnta=[`# Diabetes Nutrition Program
 <BPC>
 Dr. Wali Omer
 
-# Diabets
+# Diabetes
 Not just elevated blood sugar
 If neglected:
 * Brain
 * Eyes
 * Heart
 * Kidney
+* Hypertension
+* Wound
 * Feet
 * Reproductive system
+* ...
 
 # 3 Questions
 * What is the cause of diabetes?
@@ -250,6 +253,22 @@ Which of the following food is most harmful for diabetes?
 () Barely bread <img>
 () Rice <img>
 () Lentil <img>
+
+# Information
+Year of birth:
+___
+Gender:
+() Male
+() Female
+Duration of diabetes
+___ <ymd_combo>
+Highest blood sugar:
+___
+HbA1c
+___
+
+# Answers
+<answers>
 `,`# به‌رنامه‌ى خۆراک بۆ نه‌خۆشى شه‌کره‌
 ## پرسیار و وه‌ڵام
 <BPC>
@@ -483,7 +502,7 @@ function format_text(t,f){
     s=s.replaceAll("* ","");
     s=s.replaceAll("()","");
     s=s.replaceAll("<img>",`<img src=p${i0}${j0}.jpg id=1${i0}${j0}>`);
-    s=s.replaceAll("___",`<input id=2${i0}${j0} type=text>`);
+    s=s.replaceAll("___",`<input id=3${i0}${j0} type=text onclick="tif(2${i0}${j0})">`);
     s=s.replaceAll("<ymd_combo>",`<select id=3${i0}${j0}><option>${dica[1][lng]}</option><option>${dica[2][lng]}</option><option>${dica[3][lng]}</option></select>`);
     var cls=f==1?" class=h":"";
     if(fch==1){
@@ -497,7 +516,7 @@ function format_text(t,f){
     if(j>0 && sna[j].substring(0,1)=="*"  && sna[j-1].substring(0,1)!="*") rv+="<ul>";
     if(j>0 && sna[j].substring(0,1)!="*"  && sna[j-1].substring(0,1)=="*") rv+="</ul>";
     if(fca==1) rv+=`<li${cls} id=1${i0}${j0}>${s}</li>`;
-    if(fcp==1) rv+=`<label id=1${i0}${j0} ${cls} onclick="rc(1${i0}${j0})"><input id=2${i0}${j0} type=radio name=q${i}>${s}</label><br>`;
+    if(fcp==1) rv+=`<label id=1${i0}${j0} ${cls} onclick="rbc(1${i0}${j0})"><input id=2${i0}${j0} type=radio name=q${i}>${s}</label><br>`;
     if(fcp==1) fcpp=1;
     if(fcf==0 && i==0){
       rv+=`<a-u${cls}>${s}</a-u>`;
@@ -555,6 +574,18 @@ function check_answers(){
   qu1=qu1.replaceAll("<img>", "<img src=wrong.jpg>");
   document.getElementById(qa[qno]).innerHTML=qu1;
   qno++;
+  }
+
+function tif(id){
+  switch (id) {
+    case 20308:
+    case 20403:
+      document.getElementById(id).checked=true;    
+      break;
+  
+    default:
+      break;
+  }
   }
 
 String.prototype.EntoAr= function() {
@@ -634,17 +665,21 @@ function ps(id){
   audio.play();
 	}
 
-function rc(id){
+function rbc(id){ // radio button clicked
   sid=id;
   document.getElementById("cb").style="opacity:1;";
-  var sidv=document.getElementById(id).innerText;
+  // var rid=id.toString().replace("1","3");
+  // console.log(rid);
+  // document.getElementById(rid).focus();
+
+  // var sidv=document.getElementById(id).innerText;
   // console.log(id,sidv);
   switch (sid) {
-    case '3_8':
-      document.getElementById("3_8").focus();
+    case 10308:
+      document.getElementById(30308).focus();
       break;
-    case '4_3':
-      document.getElementById("4_3").focus();
+    case 10403:
+      document.getElementById(30403).focus();
       break;
   
     default:
