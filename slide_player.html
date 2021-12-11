@@ -728,8 +728,11 @@ function input_feedback(id){ // validate answers
   
 function ps(id){
   document.getElementById(id).focus();
-  var audio=new Audio("f"+id+".mp3");
-  audio.play();
+  // var audio=new Audio("f"+id+".mp3");
+  aud.pause();
+  aud.src=`f${id}.mp3`;
+  aud.play();
+  // audio.play();
 	}
 
 function rbc(id){ // radio button clicked
