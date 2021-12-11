@@ -455,9 +455,6 @@ function load_page(f){
     document.getElementById("vpb").addEventListener("click", play_slides);
     }
   if(f==0 && i==0){
-    // aud.addEventListener("timeupdate", audio_update, false);
-    // aud.addEventListener("ended", audio_ended, false);
-    // vid.addEventListener("click", vid_click, false);
     document.getElementById("lng").innerHTML=FLA[lng];
     }
   ft.style.bottom="-70px";
@@ -467,25 +464,26 @@ function load_page(f){
   }
 
 document.addEventListener("keydown",event=>{
-//   console.log(event.key, event.keyCode);
+  // console.log(event.key, event.keyCode);
   // console.log(event.target.type);
   if(event.target.type!=undefined) return false;
-  if (event.key==="ArrowRight") next_slide();
-  if (event.ctrlKey && event.key==="ArrowRight") next_step();
-  if (event.ctrlKey && event.key==="ArrowLeft") prev_step();
-  if (event.key==="ArrowLeft") prev_slide();
-  // if (event.key==="Escape") document.getElementById("ftb").style.bottom = "-50px";
-  if (event.key===" ") play_slides();
-  if (event.key==="p") play_slides();
-  if (event.key==="h") gohome();
+  if(event.key==="ArrowRight") next_slide();
+  if(event.ctrlKey && event.key==="ArrowRight") next_step();
+  if(event.ctrlKey && event.key==="ArrowLeft") prev_step();
+  if(event.key==="ArrowLeft") prev_slide();
+  // if(event.key==="Escape") document.getElementById("ftb").style.bottom = "-50px";
+  if(event.key===" ") play_slides();
+  if(event.key==="p") play_slides();
+  if(event.key==="h") gohome();
   
-  if (event.key==="k") clf(0);
-  if (event.key==="a") clf(1);
-  if (event.key==="e") clf(2);
+  if(event.key==="l") clf(-1);
+  if(event.key==="k") clf(0);
+  if(event.key==="a") clf(1);
+  if(event.key==="e") clf(2);
 
-  if (event.key==="1") aud.playbackRate=1.0;
-  if (event.key==="2") aud.playbackRate=1.25;
-  if (event.key==="9") aud.playbackRate=16.0;
+  if(event.key==="1") aud.playbackRate=1.0;
+  if(event.key==="2") aud.playbackRate=1.25;
+  if(event.key==="9") aud.playbackRate=16.0;
   });
 
 function clf(f){ // change lang
@@ -528,6 +526,7 @@ function prev_slide(){
   // if(i==0) load_page(0); else 
   load_page(0);
   if(i==0) document.getElementById("vpb").style="visibility:hidden;";
+  location.reload();
   // if(aud.paused) aud.play();
   }
 
@@ -552,7 +551,7 @@ function format_text(t,f){
     s=s.replaceAll("* ","");
     s=s.replaceAll("()","");
     s=s.replaceAll("<img>",`<img src=p${i0}${j0}.jpg id=1${i0}${j0}>`);
-    s=s.replaceAll("___",`<input id=3${i0}${j0} type=text onclick="tif(2${i0}${j0})">`);
+    s=s.replaceAll("___",`<input id=3${i0}${j0} type=text onclick="tbf(2${i0}${j0})">`);
     s=s.replaceAll("<ymd_combo>",`<select id=3${i0}${j0}><option>${dica[1][lng]}</option><option>${dica[2][lng]}</option><option>${dica[3][lng]}</option></select>`);
     var cls=f==1&&i>-1?" class=h":"";
     if(fch==1){
@@ -588,46 +587,7 @@ function format_text(t,f){
   return rv;
   }
 
-function get_answers(f){
-  if(localStorage.getItem("DM_DATA")=="") ansa=["|","|","|","|","|","|","|","|","|","|"]; else ansa=JSON.parse(localStorage.getItem("DM_DATA"));
-  // edit answer array
-  // console.log(ansa);
-  if(ansa[1].length>6) ansa[0]+="|"+ansa[1].split("|")[1]; else ansa[0]+="|"+ansa[0].split("|")[1];
-  if(ansa[3].length>6) ansa[2]+="|"+ansa[3].split("|")[1]; else ansa[2]+="|"+ansa[2].split("|")[1];
-  ansa[4]+="|"+ansa[4].split("|")[1];
-  ansa[6]+="|"+ArtoEn(ansa[6].split("|")[1]);
-  ansa[7]+="|"+ArtoEn(ansa[7].split("|")[1]);
-  ansa[8]+="|"+ArtoEn(ansa[8].split("|")[1]);
-  ansa[9]+="|"+ArtoEn(ansa[9].split("|")[1]);
-
-  var ans="";
-  var qus="";
-  var rv="";
-  var i0=i.toString().padStart(2,"0");
-  var ja=[19,20,21];
-  var cntva=get_content_array(cnt);
-  var cls=f==1&&i>-1?" class=h":"";
-  fana=[ansa[0],ansa[2],ansa[4]];
-  fana.forEach((v,j)=>{
-    ans=v.split("|")[2];
-    qus=cntva[ja[j]];
-    var k=j+1;
-    var j0=k.toString().padStart(2,"0");
-    if(lng<2) k=EntoAr(k);
-    rv+=`<p id=1${i0}${j0}${cls}>${k}. ${qus}<br><a>${ans}</a> <img></p><br>`;
-    });
-  return rv;
-  }
-
-function check_answers(){
-  const qa=[10701,10702,10703];
-  var qu1=document.getElementById(qa[qno]).innerHTML;
-  qu1=qu1.replaceAll("<img>", "<img src=wrong.jpg>");
-  document.getElementById(qa[qno]).innerHTML=qu1;
-  qno++;
-  }
-
-function tif(id){
+function tbf(id){ // text box focus
   switch (id) {
     case 20308:
     case 20403:
@@ -639,12 +599,12 @@ function tif(id){
   }
   }
 
-function EntoAr(n) {
-  return n.toString().replace(/\d/g, d =>  '٠١٢٣٤٥٦٧٨٩'[d])
+function en_to_ar(n) {
+  return n.toString().replace(/\d/g, d=>'٠١٢٣٤٥٦٧٨٩'[d]);
   }  
 
-function ArtoEn(n){
-  return n.toString().replace(/[\u0660-\u0669]/g, d => d.charCodeAt() - 1632);
+function ar_to_en(n){
+  return n.toString().replace(/[\u0660-\u0669]/g, d=>d.charCodeAt()-1632);
   }
 
 function play_slides(){
@@ -656,24 +616,54 @@ function play_slides(){
   }
 
 function cb(){
-  var itv="";
-  var rid=sid.toString().replace("1","3");
-  switch (sid) {
-    case 10308:
-      itv=document.getElementById(rid).value;
-      if(itv.length>2){
-          save_answer();
-          next_slide();
-          if(aud.paused) aud.play();
-          } else input_feedback(rid);
+  var tb;
+  console.log(i,sid);
+  switch (i) {
+    case "3": // dm cause
+      tb=document.getElementById(30308);
+      if(sid==10308 && tb.value.length<3){
+        input_feedback(tb.id);
+        } else {
+        save_answer();
+        next_slide();
+        if(aud.paused) aud.play();
+        }
       break;
-    case 10403:
-      itv=document.getElementById(rid).value;
-      if(itv.length>2){
-          save_answer();
-          next_slide();
-          if(aud.paused) aud.play();
-          } else input_feedback(rid);
+    case "4": // dm treatment
+      tb=document.getElementById(30403);
+      if(sid==10403 && tb.value.length<3){
+        input_feedback(tb.id);
+        } else {
+        save_answer();
+        next_slide();
+        if(aud.paused) aud.play();
+        }
+      break;
+    case "6": // personal information
+      tb=document.getElementById(30602); // YOB
+      console.log(i,tb.value.length);
+      if(tb.value.length<2){
+        input_feedback(tb.id);
+        break;
+        } 
+      tb=document.getElementById(30607); // dm duration
+      if(tb.value.length<2){
+        input_feedback(tb.id);
+        break;
+        } 
+      tb=document.getElementById(30609); // highest blood sugar
+      if(tb.value.length<2){
+        input_feedback(tb.id);
+        break;
+        } 
+      tb=document.getElementById(30611); // HbA1c
+      if(tb.value.length<2){
+        input_feedback(tb.id);
+        } else {
+        save_answer();
+        next_slide();
+        if(aud.paused) aud.play();
+        }
       break;
     default:
       save_answer();
@@ -688,7 +678,6 @@ function save_answer(){
   var sidv=document.getElementById(sid).innerText.trim();
   console.log(sid,sidv,ansa);
   ansa.push(`${sid}|${sidv}`);
-  console.log(ansa);
   var inpa=document.getElementsByTagName("input");
   Array.from(inpa).forEach((v,i)=>{
     if(v.type=="text") ansa.push(`${v.id}|${v.value}`);
@@ -700,39 +689,46 @@ function save_answer(){
   localStorage.setItem("DM_DATA", JSON.stringify(ansa));
  }
 
-function input_feedback(id){
+function input_feedback(id){ // validate answers
+  var tb=document.getElementById(id);
+  console.log(id);
   switch (id) {
     case "30308":
-      var it=document.getElementById(id);
-      it.placeholder="لێره‌ هۆکار بنووسه‌";
+      tb.placeholder="لێره‌ هۆکار بنووسه‌";
       ps(id);
-      console.log(id);
       break;
     case "30403":
-    var it=document.getElementById(id);
-      it.placeholder="لێره‌ چاره‌سه‌رى بنووسه‌";
+      tb.placeholder="لێره‌ چاره‌سه‌رى بنووسه‌";
       ps(id);
-      console.log(id);
       break;
-    default:
+    case "30602":
+      tb.placeholder="ساڵى له‌دایك بوون";
+      ps(id);
+      break;
+    case "30607":
+      tb.placeholder="ماوەی نەخۆشی";
+      ps(id);
+      break;
+    case "30609":
+      tb.placeholder="شه‌کره‌ى خوێن";
+      ps(id);
+      break;
+    case "30611":
+      tb.placeholder="فه‌حسى سێ مانگى";
+      ps(id);
       break;
     }
  }
   
 function ps(id){
   document.getElementById(id).focus();
-  var audio = new Audio("f"+id+".mp3");
+  var audio=new Audio("f"+id+".mp3");
   audio.play();
 	}
 
 function rbc(id){ // radio button clicked
   sid=id;
   document.getElementById("cb").style="opacity:1;";
-  // var rid=id.toString().replace("1","3");
-  // console.log(rid);
-  // document.getElementById(rid).focus();
-
-  // var sidv=document.getElementById(id).innerText;
   // console.log(id,sidv);
   switch (sid) {
     case 10308:
@@ -744,7 +740,7 @@ function rbc(id){ // radio button clicked
   
     default:
       break;
-  }
+    }
   }
 
 function get_content_array(t){
@@ -755,7 +751,7 @@ function get_content_array(t){
   return sna;
   }
 
-const sta=[
+const sta=[ // slide time array
   [0.2,3.2,4.7],
   [0.2,1.2,5.1,11,12.7,14.4,16,17.8,20,25.4,27.5,31.7],
   [0.2,23.8,27,30.7],
@@ -763,7 +759,7 @@ const sta=[
   [0.2,1.5,37.2,41.1],
   [0.2,2,8.6,11.2,12.5,13.7,16.3,20.5,21.6],
   [3.5,7.4,7.5,9.1,9.2,9.3,10.1,10.2,12.7,12.8,17.8,17.9],
-  [0.7,4.4,5.4,6.5,'10.2:1','10.8:1','11.4:1']
+  [0.7,4.4,5.4,6.5,'7.5:1','8.5:1','9.5:1']
   ];
 // console.log(sta);
 function audio_update() {
@@ -771,7 +767,7 @@ function audio_update() {
   var t=aud.currentTime;
   // document.getElementById("time").innerHTML=i+":"+step+":"+t.toFixed(1);
   var tav=ta[0]; // time array value
-  var tat=0; // time array type
+  var tat=0; // time array type: 0 step, 1 check answer
   if(typeof ta[0]==="string"){
     var tava=ta[0].split(":");
     tav=parseFloat(tava[0]); 
@@ -783,6 +779,72 @@ function audio_update() {
     if(tat==0) next_step();
     if(tat==1) check_answers();
     }
+  }
+
+function check_answers(){
+  const qa=[10701,10702,10703];
+  fana=[ansa[0],ansa[2],ansa[4]];
+  console.log(fana[qno],fana);
+  var qu1=document.getElementById(qa[qno]).innerHTML;
+  fa=[ansa[0],ansa[2],ansa[4]];
+  var a=get_correct_answers(fa); 
+  qu1=qu1.replaceAll("<img>", `<img src=ans${a[qno]}.jpg>`);
+  document.getElementById(qa[qno]).innerHTML=qu1;
+  qno++;
+  }
+
+function get_answers(f){
+  if(localStorage.getItem("DM_DATA")=="") ansa=["|","|","|","|","|","|","|","|","|","|"]; else ansa=JSON.parse(localStorage.getItem("DM_DATA"));
+  // edit answer array
+  if(ansa[1].length>6) ansa[0]+="|"+ansa[1].split("|")[1]; else ansa[0]+="|"+ansa[0].split("|")[1];
+  if(ansa[3].length>6) ansa[2]+="|"+ansa[3].split("|")[1]; else ansa[2]+="|"+ansa[2].split("|")[1];
+  ansa[4]+="|"+ansa[4].split("|")[1];
+  ansa[6]+="|"+ar_to_en(ansa[6].split("|")[1]);
+  ansa[7]+="|"+ar_to_en(ansa[7].split("|")[1]);
+  ansa[8]+="|"+ar_to_en(ansa[8].split("|")[1]);
+  ansa[9]+="|"+ar_to_en(ansa[9].split("|")[1]);
+
+  var ans="";
+  var qus="";
+  var rv="";
+  var i0=i.toString().padStart(2,"0");
+  var ja=[19,20,21];
+  var cntva=get_content_array(cnt);
+  var cls=f==1&&i>-1?" class=h":"";
+  fana=[ansa[0],ansa[2],ansa[4]];
+  var cana=get_correct_answers(fana); // correct answer array
+  console.log(cana,ansa);
+  fana.forEach((v,j)=>{
+    ans=v.split("|")[2];
+    qus=cntva[ja[j]];
+    var k=j+1;
+    var j0=k.toString().padStart(2,"0");
+    if(lng<2) k=en_to_ar(k);
+    rv+=`<p id=1${i0}${j0}${cls}>${k}. ${qus}<br><a>${ans}</a> <img></p><br>`;
+    });
+  return rv;
+  }
+
+function get_correct_answers(aa){ // get array of 
+  rv=[0,0,0];
+  // fana.forEach((v,j)=>{
+  //   a=v.split("|");
+  //   console.log(a[0],a[1],a[2]);
+  //   });
+  // q1
+  a=aa[0].split("|");
+  if(a[0]=="10308"){
+    if(a[2].indexOf("خۆرا")!==-1 && a[2].indexOf("نا")!==-1 && a[2].indexOf("دروست")!==-1) rv[0]=1;
+    }
+  // q2
+  a=aa[1].split("|");
+  if(a[0]=="10403"){
+    if(a[2].indexOf("خۆرا")!==-1 && a[2].indexOf("نا")===-1 && a[2].indexOf("دروست")!==-1) rv[1]=1;
+    }
+  // q3
+  a=aa[2].split("|");
+  if(a[0]=="10507" || a[0]=="10505") rv[2]=1;
+  return rv;
   }
 
 const stopa=[3,4,5,6,7];
@@ -851,19 +913,19 @@ FEATURES
 TODO
 * write script for each slide
 * add audio for each slide
-* flag for lang change
 * save answers on server
-* validate answer eg no other entered
 *‌ select more than on choice eg worst food first sugar second worst foo honey...
 * give feedback based on answers
 * add time prgress above lower menu
-* add dob, years of dm, hb1c, htn (see dm sheet)
+* add dob, years of dm, hb1c, htn, height and weight (see dm sheet)
 * Save data first local storage then upload to server
 * social media for DM patients? Group support?
 * 
 
 DONE
 * add pictures for food (next to line)
+* flag for lang change
+* validate answer eg no other entered
 
 STEPS
 * Load first page with Play Button
