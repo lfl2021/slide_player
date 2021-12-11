@@ -621,7 +621,7 @@ function play_slides(){
 
 function cb(){
   var tb;
-  console.log(i, typeof i, sid, typeof sid);
+  // console.log(i, typeof i, sid, typeof sid);
   switch (i) {
     case 3: // dm cause
       tb=document.getElementById(30308);
@@ -648,22 +648,22 @@ function cb(){
     case 6: // personal information
       tb=document.getElementById(30602); // YOB
       console.log(i,tb.value.length);
-      if(tb.value.length<2){
+      if(tb.value.length<4){
         input_feedback(tb.id);
         break;
         } 
       tb=document.getElementById(30607); // dm duration
-      if(tb.value.length<2){
+      if(tb.value.length<1){
         input_feedback(tb.id);
         break;
         } 
       tb=document.getElementById(30609); // highest blood sugar
-      if(tb.value.length<2){
+      if(tb.value.length<3){
         input_feedback(tb.id);
         break;
         } 
       tb=document.getElementById(30611); // HbA1c
-      if(tb.value.length<2){
+      if(tb.value.length<1){
         input_feedback(tb.id);
         } else {
         save_answer();
@@ -819,7 +819,7 @@ function get_answers(f){
   var cls=f==1&&i>-1?" class=h":"";
   fana=[ansa[0],ansa[2],ansa[4]];
   var cana=get_correct_answers(fana); // correct answer array
-  console.log(cana,ansa);
+  // console.log(cana,ansa);
   fana.forEach((v,j)=>{
     ans=v.split("|")[2];
     qus=cntva[ja[j]];
@@ -927,7 +927,7 @@ TODO
 * add dob, years of dm, hb1c, htn, height and weight (see dm sheet)
 * Save data first local storage then upload to server
 * social media for DM patients? Group support?
-* 
+* add validation for numbers eg YOB, blood sugar...
 
 DONE
 * add pictures for food (next to line)
