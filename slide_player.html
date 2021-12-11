@@ -823,7 +823,7 @@ function get_answers(f){
   var cls=f==1&&i>-1?" class=h":"";
   fana=[ansa[0],ansa[2],ansa[4]];
   var cana=get_correct_answers(fana); // correct answer array
-  // console.log(cana,ansa);
+  console.log(cana,ansa);
   fana.forEach((v,j)=>{
     ans=v.split("|")[2];
     qus=cntva[ja[j]];
@@ -836,16 +836,63 @@ function get_answers(f){
   }
 
 function get_correct_answers(aa){ // get array of 
-  rv=[0,0,0];
+  var rv=[0,0,0];
+  var g=[0,0,0]; // grade
+  var s=""; // string
   // q1
   a=aa[0].split("|");
   if(a[0]=="10308"){
-    if((a[2].indexOf("خۆرا")!==-1 || a[2].indexOf("خواردن")!==-1) && a[2].indexOf("نا")!==-1 && a[2].indexOf("دروست")!==-1) rv[0]=1;
+    s="خۆرا";
+    if(a[2].indexOf(s)!==-1) g[0]=1;
+    s="خؤرا";
+    if(a[2].indexOf(s)!==-1) g[0]=1;
+    s="خواردن";
+    if(a[2].indexOf(s)!==-1) g[0]=1;
+
+    s="نا";
+    if(a[2].indexOf(s)!==-1) g[1]=1;
+    s="نه‌";
+    if(a[2].indexOf(s)!==-1) g[1]=1;
+    
+    s="دروست";
+    if(a[2].indexOf(s)!==-1) g[2]=1;
+    s="شیاو";
+    if(a[2].indexOf(s)!==-1) g[2]=1;
+    s="گونجاو";
+    if(a[2].indexOf(s)!==-1) g[2]=1;
+
+    s="خراپ";
+    if(a[2].indexOf(s)!==-1) g[1]=2;
+
+    rv[0]=g.reduce(array_sum,0)==3?1:0;
     }
   // q2
   a=aa[1].split("|");
   if(a[0]=="10403"){
     if((a[2].indexOf("خۆرا")!==-1 || a[2].indexOf("خواردن")!==-1) && a[2].indexOf("نا")===-1 && a[2].indexOf("دروست")!==-1) rv[1]=1;
+    s="خۆرا";
+    if(a[2].indexOf(s)!==-1) g[0]=1;
+    s="خؤرا";
+    if(a[2].indexOf(s)!==-1) g[0]=1;
+    s="خواردن";
+    if(a[2].indexOf(s)!==-1) g[0]=1;
+
+    s="نا";
+    if(a[2].indexOf(s)===-1) g[1]=1;
+    s="نه‌";
+    if(a[2].indexOf(s)===-1) g[1]=1;
+
+    s="دروست";
+    if(a[2].indexOf(s)!==-1) g[2]=1;
+    s="شیاو";
+    if(a[2].indexOf(s)!==-1) g[2]=1;
+    s="گونجاو";
+    if(a[2].indexOf(s)!==-1) g[2]=1;
+    s="باش";
+    if(a[2].indexOf(s)!==-1) g[2]=1;
+
+    rv[1]=g.reduce(array_sum,0)==3?1:0;
+    console.log(rv,g);
     }
   // q3
   a=aa[2].split("|");
@@ -863,6 +910,10 @@ function audio_ended() {
     aud.play();
     }
   }
+
+function array_sum(a,c){
+  return a+c;
+  } // < Start with 0
 
 function vid_click(){
   // console.log(this.id);
