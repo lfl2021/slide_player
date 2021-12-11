@@ -406,6 +406,7 @@ const dica=[
 ];
 
 var i=localStorage.getItem("DM_SLD")===null?0:localStorage.getItem("DM_SLD"); // slide
+i=parseInt(i);
 if(i<0) i=0;
 var lng=localStorage.getItem("DM_LNG")===null?0:localStorage.getItem("DM_LNG") // 0 kur 1 ara 2 eng 
 var dir="rtl";
@@ -483,6 +484,9 @@ document.addEventListener("keydown",event=>{
 
   if(event.key==="1") aud.playbackRate=1.0;
   if(event.key==="2") aud.playbackRate=1.25;
+  if(event.key==="3") aud.playbackRate=1.5;
+  if(event.key==="4") aud.playbackRate=2.0;
+  if(event.key==="5") aud.playbackRate=0.75;
   if(event.key==="9") aud.playbackRate=16.0;
   });
 
@@ -617,29 +621,31 @@ function play_slides(){
 
 function cb(){
   var tb;
-  console.log(i,sid);
+  console.log(i, typeof i, sid, typeof sid);
   switch (i) {
-    case "3": // dm cause
+    case 3: // dm cause
       tb=document.getElementById(30308);
       if(sid==10308 && tb.value.length<3){
         input_feedback(tb.id);
+        break;
         } else {
         save_answer();
         next_slide();
         if(aud.paused) aud.play();
         }
       break;
-    case "4": // dm treatment
+    case 4: // dm treatment
       tb=document.getElementById(30403);
       if(sid==10403 && tb.value.length<3){
         input_feedback(tb.id);
+        break;
         } else {
         save_answer();
         next_slide();
         if(aud.paused) aud.play();
         }
       break;
-    case "6": // personal information
+    case 6: // personal information
       tb=document.getElementById(30602); // YOB
       console.log(i,tb.value.length);
       if(tb.value.length<2){
