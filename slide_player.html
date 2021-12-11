@@ -837,19 +837,15 @@ function get_answers(f){
 
 function get_correct_answers(aa){ // get array of 
   rv=[0,0,0];
-  // fana.forEach((v,j)=>{
-  //   a=v.split("|");
-  //   console.log(a[0],a[1],a[2]);
-  //   });
   // q1
   a=aa[0].split("|");
   if(a[0]=="10308"){
-    if(a[2].indexOf("خۆرا")!==-1 && a[2].indexOf("نا")!==-1 && a[2].indexOf("دروست")!==-1) rv[0]=1;
+    if((a[2].indexOf("خۆرا")!==-1 || a[2].indexOf("خواردن")!==-1) && a[2].indexOf("نا")!==-1 && a[2].indexOf("دروست")!==-1) rv[0]=1;
     }
   // q2
   a=aa[1].split("|");
   if(a[0]=="10403"){
-    if(a[2].indexOf("خۆرا")!==-1 && a[2].indexOf("نا")===-1 && a[2].indexOf("دروست")!==-1) rv[1]=1;
+    if((a[2].indexOf("خۆرا")!==-1 || a[2].indexOf("خواردن")!==-1) && a[2].indexOf("نا")===-1 && a[2].indexOf("دروست")!==-1) rv[1]=1;
     }
   // q3
   a=aa[2].split("|");
