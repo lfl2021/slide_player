@@ -222,12 +222,15 @@ svg .n{
   alignment-baseline:hanging;
   text-anchor:middle;
   }
-
+.r{
+  stroke:#f00;
+  stroke-width:2;
+  }
 line{
   stroke:#ccc;
   stroke-width:1;
   }
-rect{
+#sb rect{
   stroke:#ccc;
   stroke-width:0;
   fill:#4285f4;
@@ -747,12 +750,12 @@ function time_to_no(t){
   switch (t) {
     case "ساڵ":
     case "سنوات":
-    case "year":
+    case "Years":
       rv=3;
       break;
     case "مانگ":
     case "اشهر":
-    case "month":
+    case "Month":
       rv=3;
       break;
     }
@@ -916,9 +919,9 @@ const sta=[ // slide time array
   [0.2,1.4,4,6.6,14,15.8,17.7,19.1,26.8], // 3: q1 cause
   [0.2,1.5,37.2,41.1], // 4: q2 treatment
   [0.2,2,8.6,11.2,12.5,13.7,16.3,20.5,21.6], // 5: q3 food
-  [3.5,7.4,7.5,9.1,9.2,9.3,10.1,10.2,12.7,12.8,17.8,17.9], // 6: information
+  [3.1,6.4,6.8,8.1,8.3,8.5,9.5,9.7,12.1,12.3,16.5,16.7], // 6: information
   [0.7,4.3,5.3,6.3,'7.5:1','8.5:1','9.5:1'], // 7: answers
-  [0.2,1.8,14.5,22.4,26.7,29,30.8,40,44.2,47.3], // 8: cause
+  [0.2,1.8,14.5,22.4,26.7,29,30.8,31.8,41.1,41.7,44.2,47.3], // 8: cause
   [0.2,2,3,4], // 9: psycholigy
   [0.2,2,3,4], // 10: genetics
   [0.2,2,3], // 11: treatment
@@ -956,7 +959,7 @@ function check_answers(){
   }
 
 function get_answers(f){
-  if(localStorage.getItem("DM_DATA")=="") ansa=["|","|","|","|","|","|","|","|","|","|"]; else ansa=JSON.parse(localStorage.getItem("DM_DATA"));
+  if(localStorage.getItem("DM_DATA")=="") ansa=["|","|","|","|","|","|","|","|","|","|2","|ساڵ"]; else ansa=JSON.parse(localStorage.getItem("DM_DATA"));
   // edit answer array
   if(ansa[1].length>6) ansa[0]+="|"+ansa[1].split("|")[1]; else ansa[0]+="|"+ansa[0].split("|")[1];
   if(ansa[3].length>6) ansa[2]+="|"+ansa[3].split("|")[1]; else ansa[2]+="|"+ansa[2].split("|")[1];
@@ -1061,7 +1064,7 @@ function get_correct_answers(){ // get array of
 function audio_ended() {
   if(afn.charAt(0)=="n"||afn.charAt(0)=="t") afn=afn.charAt(0);
   // console.log(afn);
-  var l0=lng+1;
+  var l0=1;
   l0=l0<10?"0"+l0:l0;  
   // if(i==7) location.reload();
   switch (afn) {
@@ -1162,9 +1165,10 @@ function get_chart(f) {
   var rv=`<svg xmlns="http://www.w3.org/2000/svg"${cls} height=${h+50} width=${w}>`;
   const xo=80;
   const hl=34.5;
+  // rv+=`<line x1=0 y1=${h-3} x2=${w} y2=${h-3} />`;
   for(j=0;j<8;j++){
     rv+=`<line x1=${xo+(j*hl)} y1=0 x2=${xo+(j*hl)} y2=${h} />`;
-    rv+=`<text x=${xo+(j*hl)} y=${h} class=n>${j*10}</text>`;
+    rv+=`<text x=${xo+(j*hl)} y=${h+2} class=n>${j*10}</text>`;
     }
   const a=grpa[0];
   var y=hs;
@@ -1176,6 +1180,9 @@ function get_chart(f) {
     rv+=`<text x=${xo-2} y=${y+24}${cls}>${va[0]}</text>`;
     y+=bh+hs;
     });
+  cls=f==1&&i>-1?" class='h r'":" class=r";
+  rv+=`<line x1=${w} y1=0 x2=0 y2=${h}${cls} />`;
+  rv+=`<line x1=0 y1=0 x2=${w} y2=${h}${cls} />`;
   rv+="</svg>";
   return rv;
   }
