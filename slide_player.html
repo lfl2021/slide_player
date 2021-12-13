@@ -110,6 +110,16 @@ s-l p{
 s-l p a{
   color:#00f;
   }
+s-l em{
+  display: block;
+  font-size:40px;
+  font-weight:400;
+  font-style:normal;
+  text-align:center;
+  text-shadow:1px 1px 2px rgba(0,0,0,0.5);
+  color:#f00;
+  margin:0px;
+  }
 #sb {
   padding:0;
   }
@@ -220,7 +230,7 @@ rect{
   /* fill-opacity:0.1; */
   }
 @media screen and (orientation:landscape) {
-h2 {
+h2{
   margin:0.6em 0;
   }
 #sb {
@@ -303,12 +313,12 @@ ___
 # هۆى نه‌خۆشى شه‌کره‌
 <svg>
 ته‌نها یه‌ک هۆ:
-خۆراکى ناته‌ندروست
+@@ خۆراکى ناته‌ندروست
 
 # چاره‌سه‌رى نه‌خۆشى شه‌کره‌
 <svg>
 ته‌نها یه‌ک چاره‌سه‌رى:
-خۆراکى ته‌ندروست
+@@ خۆراکى ته‌ندروست
 
 # خراپترین و باشترین خۆراک
 <svg>
@@ -599,11 +609,13 @@ function format_text(t,f){
     var fcl=s.substring(0,1)=="<"?1:0; // first char less than
     var fch=s.substring(0,2)=="# "?1:0; // first char hash
     var fcd=s.substring(0,3)=="## "?1:0; // first 2 hash
+    var fce=s.substring(0,3)=="@@ "?1:0; // first 2 at sign: emphasis
     var fca=s.substring(0,2)=="* "?1:0; // first char asterisk
     var fcp=s.substring(0,3)=="() "?1:0; // first 2 char parenthesis
-    var fcf=fch+fca+fcp+fcd+fcl;
+    var fcf=fch+fca+fcp+fcd+fcl+fce;
     s=s.replaceAll("## ","");
     s=s.replaceAll("# ","");
+    s=s.replaceAll("@@ ","");
     s=s.replaceAll("* ","");
     s=s.replaceAll("()","");
     s=s.replaceAll("<img>",`<img src=p${i0}${j0}.jpg id=1${i0}${j0}>`);
@@ -617,7 +629,8 @@ function format_text(t,f){
       if(i==0) rv+=`<s-t${cls}>${s}</s-t>`;
       } 
     if(fcl==1) rv+=s;
-    // add ul
+    if(fce==1) rv+=`<em${cls} id=1${i0}${j0}>${s}</em>`;
+     // add ul
     if(j>0 && sna[j].substring(0,1)=="*"  && sna[j-1].substring(0,1)!="*") rv+="<ul>";
     if(j>0 && sna[j].substring(0,1)!="*"  && sna[j-1].substring(0,1)=="*") rv+="</ul>";
     if(fca==1) rv+=`<li${cls} id=1${i0}${j0}>${s}</li>`;
@@ -820,7 +833,6 @@ function rbc(id){ // radio button clicked
     case 10403:
       document.getElementById(30403).focus();
       break;
-  
     default:
       break;
     }
@@ -844,8 +856,8 @@ const sta=[ // slide time array
   [3.5,7.4,7.5,9.1,9.2,9.3,10.1,10.2,12.7,12.8,17.8,17.9], // 5: information
   [0.7,4.3,5.3,6.3,'7.5:1','8.5:1','9.5:1'], // 6: answers
   [0.2,1.8,14.5,22.4,26.7,29,30.8,40,44.2,47.3], // 7: cause
-  [0.2,2,4], // treatment
-  [0.2]  // food
+  [0.2,2,3,4], // treatment
+  [0.2,2,3,4]  // food
   ];
 // console.log(sta);
 function audio_update() {
