@@ -110,7 +110,7 @@ s-l p{
 s-l p a{
   color:#00f;
   }
-s-l em{
+em{
   display: block;
   font-size:40px;
   font-weight:400;
@@ -119,6 +119,10 @@ s-l em{
   text-shadow:1px 1px 2px rgba(0,0,0,0.5);
   color:#f00;
   margin:0.2em 0;
+  }
+em img{
+  height:50px;
+  vertical-align:middle;
   }
 #sb {
   padding:0;
@@ -313,12 +317,12 @@ ___
 # هۆى نه‌خۆشى شه‌کره‌
 <svg>
 ته‌نها یه‌ک هۆ:
-@@ خۆراکى ناته‌ندروست
+@@ خۆراکى ناته‌ندروست <img_ans1>
 
 # چاره‌سه‌رى نه‌خۆشى شه‌کره‌
 <svg>
 ته‌نها یه‌ک چاره‌سه‌رى:
-@@ خۆراکى ته‌ندروست
+@@ خۆراکى ته‌ندروست <img_ans1>
 
 # خراپترین و باشترین خۆراک
 <svg>
@@ -389,12 +393,12 @@ ___
 # اسباب مرض السكري
 <svg>
 سبب واحد:
-@@ الغذاء غير الصحي
+@@ الغذاء غير الصحي <img_ans1>
 
 # علاج مرض السكري
 <svg>
 علاج واحد:
-@@ الغذاء الصحي
+@@ الغذاء الصحي <img_ans1>
 
 # اسوأ واحسن غذاء
 <svg>
@@ -466,12 +470,12 @@ ___
 # Cause
 <svg>
 Only one cause:
-@@ Unhealthy Diet
+@@ Unhealthy Diet <img_ans1>
 
 # Treatment
 <svg>
 Only one treatment:
-@@ Healthy Diet
+@@ Healthy Diet <img_ans1>
 
 # Worst and Best Diet
 <svg>
@@ -647,6 +651,7 @@ function format_text(t,f){
     s=s.replaceAll("* ","");
     s=s.replaceAll("()","");
     s=s.replaceAll("<img>",`<img src=p${i0}${j0}.jpg id=1${i0}${j0}>`);
+    s=s.replaceAll("<img_ans1>",`<img src=ans1.jpg>`);
     s=s.replaceAll("___",`<input id=3${i0}${j0} type=text onclick="tbf(2${i0}${j0})">`);
     s=s.replaceAll("<ymd_combo>",`<select id=3${i0}${j0}><option>${dica[1][lng]}</option><option>${dica[2][lng]}</option><option>${dica[3][lng]}</option></select>`);
     var cls=f==1&&i>-1?" class=h":"";
@@ -1208,6 +1213,6 @@ DONE
 STEPS
 * Load first page with Play Button
 * On Button Click: play slide 1 audio 
-* On Audio Timer: loop through array of time for fisrt slide -> show next step
-* On Finished mp3: advance to next slide and repeat previous "step"
+* On Audio Timer: loop through array of time steps for fisrt slide -> show next step
+* On Finished mp3: advance to next slide or do something based on the file name (eg get dymanic audio like dm duration) and repeat previous: On Audio Timer
 -->
