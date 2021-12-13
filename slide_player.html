@@ -319,6 +319,16 @@ ___
 ته‌نها یه‌ک هۆ:
 @@ خۆراکى ناته‌ندروست <img_ans1>
 
+# بارى ده‌روونى
+* نه‌وه‌ده‌کان: کۆچڕه‌و
+* هه‌شتاکان: هێرشى فڕۆکه‌
+* شه‌سته‌کان: گونده‌کان
+
+# بۆماوه‌یی
+* باپیرت
+* کوردستان: ١٩٥٨
+* ئه‌مریکا: ١٩٥٨
+
 # چاره‌سه‌رى نه‌خۆشى شه‌کره‌
 <svg>
 ته‌نها یه‌ک چاره‌سه‌رى:
@@ -394,6 +404,16 @@ ___
 <svg>
 سبب واحد:
 @@ الغذاء غير الصحي <img_ans1>
+
+# الحالة النفسية
+* التسعينيات: الهجرة الجماعية
+* الثمانينات: قصف المدن
+* الستينيات: القرى
+
+# الوراثة
+* جدك
+* كردستان: ١٩٥٨
+* امريكا: ١٩٥٨
 
 # علاج مرض السكري
 <svg>
@@ -471,6 +491,16 @@ ___
 <svg>
 Only one cause:
 @@ Unhealthy Diet <img_ans1>
+
+# Psychological Status
+* Nineties: mass exodus
+* Eighties: air raid
+* Sixties: villages
+
+# Genetics
+* Your grandpaents
+* Kurdistan: 1958
+* USA: 1958
 
 # Treatment
 <svg>
@@ -889,8 +919,10 @@ const sta=[ // slide time array
   [3.5,7.4,7.5,9.1,9.2,9.3,10.1,10.2,12.7,12.8,17.8,17.9], // 6: information
   [0.7,4.3,5.3,6.3,'7.5:1','8.5:1','9.5:1'], // 7: answers
   [0.2,1.8,14.5,22.4,26.7,29,30.8,40,44.2,47.3], // 8: cause
-  [0.2,2,3,4], // 9: treatment
-  [0.2,2,3,4]  // 10: food
+  [0.2,2,3,4], // 9: psycholigy
+  [0.2,2,3,4], // 10: genetics
+  [0.2,2,3], // 11: treatment
+  [0.2,2] // 12: food
   ];
 // console.log(sta);
 function audio_update() {
@@ -940,7 +972,7 @@ function get_answers(f){
   var rv="";
   var i0=i.toString().padStart(2,"0");
   var ja=[19,20,21];
-  var aa=[8,9,10];
+  var aa=[8,11,12];
   var cntva=get_content_array(cnt);
   var cls=f==1&&i>-1?" class=h":"";
   fana=[ansa[0],ansa[2],ansa[4]];
@@ -1080,7 +1112,7 @@ function audio_ended() {
           });
         }
       break;  
-    case "a004010":
+    case "a004012":
       console.log("Continue");
       i=7;
       localStorage.setItem("DM_SLD", i);
