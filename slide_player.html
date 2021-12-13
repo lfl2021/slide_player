@@ -857,7 +857,7 @@ const sta=[ // slide time array
   [0.7,4.3,5.3,6.3,'7.5:1','8.5:1','9.5:1'], // 6: answers
   [0.2,1.8,14.5,22.4,26.7,29,30.8,40,44.2,47.3], // 7: cause
   [0.2,2,3,4], // treatment
-  [0.2,2,3,4]  // food
+  [0.2,2]  // food
   ];
 // console.log(sta);
 function audio_update() {
@@ -995,8 +995,9 @@ function get_correct_answers(){ // get array of
 // const stopa=[3,4,5,6,7];
 function audio_ended() {
   if(afn.charAt(0)=="n"||afn.charAt(0)=="t") afn=afn.charAt(0);
-  console.log(afn);
-  var l=lng+1;
+  // console.log(afn);
+  var l0=lng+1;
+  l0=l0<10?"0"+l0:l0;  
   // if(i==7) location.reload();
   switch (afn) {
     case "a004007":
@@ -1015,15 +1016,15 @@ function audio_ended() {
       break;
     case "a004007_4":
       var d=ansa[9].split("|")[2];
-      d=d.length==1?"0"+d:d;
-      afn="n"+d+l.toString().padStart("0",2);
+      d0=d.length==1?"0"+d:d;
+      afn="n"+d0+l0;
       aud.src=`${afn}.mp3`;
       aud.play();
       break;
     case "n":
       var d=ansa[10].split("|")[2];
-      d=d.length==1?"0"+d:d;
-      afn="t"+d+l.toString().padStart("0",2);
+      d0=d.length==1?"0"+d:d;
+      afn="t"+d0+l0;
       aud.src=`${afn}.mp3`;
       aud.play();
       break;
