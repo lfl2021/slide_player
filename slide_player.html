@@ -79,7 +79,7 @@ input[type=radio] {
   /* visibility:hidden; */
   }
 input[type=text] {
-  font-size:24px;
+  font-size:22px;
   font-family:amiri;
   width:200px;
   border:1px #ddd solid;
@@ -88,7 +88,7 @@ input[type=text] {
   }
 select {
   font-family:amiri;
-  font-size:24px;
+  font-size:22px;
   color:#900;
   }
 #vid {
@@ -278,7 +278,7 @@ const cnta=[`# به‌رنامه‌ى خۆراک بۆ نه‌خۆشى شه‌ک�
 
 # پرسیارى یه‌که‌م
 هۆى سه‌ره‌کى نه‌خۆشى شه‌کره‌ چیه‌؟
-() بۆماوه‌یی (ویراسه‌)
+() بۆماوه‌یی
 () بارى ده‌روونى (خه‌م، دڵه‌ڕاوکێ، ترس، تاسان...)
 () خواردنى شیرینی
 () خواردنى چه‌ورى
@@ -771,73 +771,90 @@ function play_slides(){
   }
 
 function cb(){
-  var tb;
-  // console.log(i, typeof i, sid, typeof sid);
-  switch (i) {
-    case 3: // dm cause
-      tb=document.getElementById(30308);
-      if(sid==10308 && tb.value.length<3){
-        input_feedback(tb.id);
-        break;
-        } else {
-        save_answer();
-        next_slide();
-        if(aud.paused) aud.play();
-        }
-      break;
-    case 4: // dm treatment
-      tb=document.getElementById(30403);
-      if(sid==10403 && tb.value.length<3){
-        input_feedback(tb.id);
-        break;
-        } else {
-        save_answer();
-        next_slide();
-        if(aud.paused) aud.play();
-        }
-      break;
-    case 6: // personal information
-      tb=document.getElementById(30602); // YOB
-      console.log(i,tb.value.length);
-      if(tb.value.length<4){
-        input_feedback(tb.id);
-        break;
-        } 
-      tb=document.getElementById(30607); // dm duration
-      if(tb.value.length<1){
-        input_feedback(tb.id);
-        break;
-        } 
-      tb=document.getElementById(30609); // highest blood sugar
-      if(tb.value.length<3){
-        input_feedback(tb.id);
-        break;
-        } 
-      tb=document.getElementById(30611); // HbA1c
-      if(tb.value.length<1){
-        input_feedback(tb.id);
-        break;
-        } else {
-        save_answer();
-        next_slide();
-        if(aud.paused) aud.play();
-        }
-      break;
-    default:
-      save_answer();
-      next_slide();
-      if(aud.paused) aud.play();
-      break;
+  var inpa=Array.from(document.getElementsByTagName("input"));
+  var slca=Array.from(document.getElementsByTagName("select"));
+  var ic=[0,0,0,slca.length];
+  for(v of inpa){
+    // console.log(v);
+    if(v.type=="radio") ic[0]++;
+    if(v.type=="text"){ 
+      ic[1]++;
+      if(input_feedback(v.id)) ic[2]++; else break;
+      }
+    }
+  // console.log(ic);
+  if(ic[1]==ic[2]){
+    save_answer();
+    next_slide();
+    if(aud.paused) aud.play();
     }
   }
 
-function save_answer(){
+function input_feedback(id){ // validate answers
+  var tb=document.getElementById(id);
+  var s=tb.value;
+  var v=s.length==0?0:parseInt(ar_to_en(s));
+  id=parseInt(id);
+  console.log(id, sid, s, v);
+  switch (id){
+    case 30308:
+      if(sid==10308 && s.length<3){
+        tb.placeholder="لێره‌ هۆکار بنووسه‌";
+        ps(id);
+        return false;
+        }
+      break;
+    case 30403:
+      if(sid==10403 && s.length<3){
+        tb.placeholder="لێره‌ چاره‌سه‌رى بنووسه‌";
+        ps(id);
+        return false;
+        }
+      break;
+    case 30602:
+      var y=new Date().getFullYear();
+      if(v==0 || v>y || v<y-100){
+        tb.placeholder="ساڵى له‌دایك بوون";
+        ps(id);
+        return false;
+        break;
+        }
+      break;
+    case 30607:
+      var y=new Date().getFullYear();
+      var age=y-parseInt(ar_to_en(document.getElementById(30602).value));
+      // console.log(y,age,s,v);
+      if(v==0 || v>age){
+        tb.placeholder="ماوەی نەخۆشی";
+        ps(id);
+        return false;
+        }
+      break;
+    case 30609:
+      if(s.length<3 || v<100 || v>1000){
+        tb.placeholder="شه‌کره‌ى خوێن";
+        ps(id);
+        return false;
+        }
+      break;
+    case 30611:
+      if(s.length<1 || v<4 || v>25){
+        tb.placeholder="فه‌حسى سێ مانگى";
+        ps(id);
+        return false;
+        }
+      break;
+    }
+    return true;
+ }
+  
+ function save_answer(){
   if(localStorage.getItem("DM_DATA")===null||localStorage.getItem("DM_DATA")=="") ansa=[]; else ansa=JSON.parse(localStorage.getItem("DM_DATA"));
   var sidv=document.getElementById(sid).innerText.trim();
   console.log(sid,sidv,ansa);
   ansa.push(`${sid}|${sidv}`);
   var inpa=document.getElementsByTagName("input");
-  Array.from(inpa).forEach((v,i)=>{
+  Array.from(inpa).forEach(v=>{
     if(v.type=="text") ansa.push(`${v.id}|${v.value}`);
     });
   inpa=document.getElementsByTagName("select");
@@ -845,39 +862,8 @@ function save_answer(){
     ansa.push(`${v.id}|${v.value}`);
     });
   localStorage.setItem("DM_DATA", JSON.stringify(ansa));
- }
+  }
 
-function input_feedback(id){ // validate answers
-  var tb=document.getElementById(id);
-  console.log(id);
-  switch (id) {
-    case "30308":
-      tb.placeholder="لێره‌ هۆکار بنووسه‌";
-      ps(id);
-      break;
-    case "30403":
-      tb.placeholder="لێره‌ چاره‌سه‌رى بنووسه‌";
-      ps(id);
-      break;
-    case "30602":
-      tb.placeholder="ساڵى له‌دایك بوون";
-      ps(id);
-      break;
-    case "30607":
-      tb.placeholder="ماوەی نەخۆشی";
-      ps(id);
-      break;
-    case "30609":
-      tb.placeholder="شه‌کره‌ى خوێن";
-      ps(id);
-      break;
-    case "30611":
-      tb.placeholder="فه‌حسى سێ مانگى";
-      ps(id);
-      break;
-    }
- }
-  
 function ps(id){
   document.getElementById(id).focus();
   // var audio=new Audio("f"+id+".mp3");
@@ -950,7 +936,7 @@ function audio_update() {
 function check_answers(){
   const qa=[10701,10702,10703];
   fana=[ansa[0],ansa[2],ansa[4]];
-  console.log(fana[qno],fana);
+  // console.log(fana[qno],fana);
   var qu1=document.getElementById(qa[qno]).innerHTML;
   var a=get_correct_answers(); 
   qu1=qu1.replaceAll("<img>", `<img src=ans${a[qno]}.jpg>`);
@@ -1119,7 +1105,7 @@ function audio_ended() {
       console.log("Continue");
       i=7;
       localStorage.setItem("DM_SLD", i);
-      goto(i,0);
+      goto(i,0); // go to answers slide
       break;  
     default:
       next_slide();
@@ -1131,7 +1117,7 @@ function audio_ended() {
 
 function audio_ended2() {
   console.log(afp);
-  if(afp<19) aud.play();
+  // if(afp<19) aud.play();
   }
 
 function goto(n,p) {
@@ -1174,7 +1160,7 @@ function get_chart(f) {
   var y=hs;
   a.forEach((v,j)=>{
     var va=v.split("|");
-    console.log(v,j,va);
+    // console.log(v,j,va);
     var x=va[1]*0.5;
     rv+=`<rect x=${xo} y=${y} width=${x} height=${bh} />`;
     rv+=`<text x=${xo-2} y=${y+24}${cls}>${va[0]}</text>`;
