@@ -236,6 +236,25 @@ line{
   fill:#4285f4;
   /* fill-opacity:0.1; */
   }
+#ov{
+  margin:0px;
+  /* fill-opacity:0.1; */
+  }
+#ov rect{
+  stroke:#ccc;
+  stroke-width:1;
+  fill:#fff;
+  /* fill-opacity:0.1; */
+  }
+#ov text{
+  font-size: 28px;
+  }
+#ov path{
+  stroke:darkgreen;
+  stroke-width:1px;
+  fill:none; 
+  }
+
 @media screen and (orientation:landscape) {
 h2{
   margin:0.6em 0;
@@ -518,7 +537,13 @@ const dica=[
 ["به‌رده‌وام به‌", "استـمـر", "Continue"],
 ["ساڵ", "سنة", "Years"],
 ["مانگ", "شهر", "Months"],
-["ڕۆژ", "یوم", "Days"]
+["ڕۆژ", "یوم", "Days"],
+["٣ پرسیار", "٣ اسئلة", "3 Questions"],
+["بزانیت", "تعرف", "Know"],
+["بوه‌سته‌", "توقف", "Stop"],
+["نه‌زانیت", "لا تعرف", "Not Know"],
+["ڕوون کردنه‌وه‌", "توضيحات", "Explanations"],
+["چ بخۆم؟", "ماذا آكل؟", "What to Eat?"]
 // ["", "", ""],
 ];
 
@@ -719,6 +744,9 @@ function format_text(t,f){
   if(i==8){
     rv=rv.replaceAll("<svg>",get_chart(f));
     }
+  if(i==12){
+    rv=rv.replaceAll("<svg>",get_overview(f));
+    }
   rv+="</div>";
   if(fcpp==1) rv+=`<button id=cb onclick="cb()">${dica[0][lng]}</button>`;
   rv+="</s-l>";
@@ -911,7 +939,7 @@ const sta=[ // slide time array
   [0.2,2,3,4], // 9: psycholigy
   [0.2,2,3,4], // 10: genetics
   [0.2,2,3], // 11: treatment
-  [0.2,2] // 12: food
+  [0.2,1,3,5,7,9,11,13] // 12: food
   ];
 // console.log(sta);
 function audio_update() {
@@ -1173,6 +1201,34 @@ function get_chart(f) {
   return rv;
   }
 
+function get_overview(f) {
+  const w=window.innerWidth>600?360:window.innerWidth-20;
+  const bw=w*0.45; // box width
+  const bh=50; // box height
+  const h=400;
+  var cls=f==1&&i>-1?" class=h":"";
+  var rv=`<svg xmlns="http://www.w3.org/2000/svg" id=ov${cls} height=${h+50} width=${w}>`;
+  const xo=80; // x offset
+  const a=[
+  [w/2-bw/2,1,''],
+  [bw+w*0.1-1,100,`M${w/2} ${bh} L${w/2} ${bh+bh/2} L${bw+w*0.1+bw/2} ${bh+bh/2} L${bw+w*0.1+bw/2} ${bh*2}`],
+  [bw+w*0.1-1,200,`M${bw+w*0.1+bw/2} ${bh*3} L${bw+w*0.1+bw/2} ${bh*4}`],
+  [1,100,`M${w/2} ${bh} L${w/2} ${bh+bh/2} L${bw/2} ${bh+bh/2} L${bw/2} ${bh*2}`],
+  [1,200,`M${bw/2} ${bh*3} L${bw/2} ${bh*4}`],
+  [1,300,`M${bw/2} ${bh*5} L${bw/2} ${bh*6}`]
+  ];
+  a.forEach((v,j)=>{
+    console.log(j,v);
+    rv+=`<g${cls}>`;
+    if(v[2].length) rv+=`<path d="${v[2]}" />`;
+    rv+=`<rect x=${v[0]} y=${v[1]} width=${bw} height=${bh} />`;
+    rv+=`<text x=${v[0]+bw/2} y=${v[1]+bh/2} dominant-baseline=middle text-anchor=middle>${dica[j+4][lng]}</text>`;
+    rv+=`</g>`;
+    });
+  rv+="</svg>";
+  return rv;
+  }
+
 function get_more(){
   aud.playbackRate=1.25;
   console.log("more");
@@ -1229,6 +1285,8 @@ TODO
 * add validation for numbers eg YOB, blood sugar...
 * add audio based on number of correct answers eg you got 1 (2 or 3) answers wrong.
 * make answer slide clickable: lead to explanation of answers 1 cause 2 treatment 3 food: worst to best
+* feedback placeholder text in 3 lang
+* chart text in 3 lang
 
 DONE
 * add pictures for food (next to line)
