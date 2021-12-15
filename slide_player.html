@@ -236,10 +236,6 @@ line{
   fill:#4285f4;
   /* fill-opacity:0.1; */
   }
-#ov{
-  margin:0px;
-  /* fill-opacity:0.1; */
-  }
 #ov rect{
   stroke:#ccc;
   stroke-width:1;
@@ -247,14 +243,13 @@ line{
   /* fill-opacity:0.1; */
   }
 #ov text{
-  font-size: 28px;
+  font-size:26px;
   }
 #ov path{
   stroke:darkgreen;
   stroke-width:1px;
   fill:none; 
   }
-
 @media screen and (orientation:landscape) {
 h2{
   margin:0.6em 0;
@@ -1098,6 +1093,7 @@ function audio_ended() {
       break;
     case "a004007_4":
       var d=ansa[7].split("|")[2];
+      if(d>20) d=20;
       d0=d.length==1?"0"+d:d;
       afn="n"+d0+l0;
       aud.src=`${afn}.mp3`;
@@ -1223,6 +1219,8 @@ function get_overview(f) {
     if(v[2].length) rv+=`<path d="${v[2]}" />`;
     rv+=`<rect x=${v[0]} y=${v[1]} width=${bw} height=${bh} />`;
     rv+=`<text x=${v[0]+bw/2} y=${v[1]+bh/2} dominant-baseline=middle text-anchor=middle>${dica[j+4][lng]}</text>`;
+    // if(j==1) rv+=`<image href=ans1.jpg height=40 x=${v[0]} y=${v[1]+5} />`;
+    // if(j==3) rv+=`<image href=ans0.jpg height=30 x=${v[0]} y=${v[1]+10} />`;
     rv+=`</g>`;
     });
   rv+="</svg>";
@@ -1287,6 +1285,7 @@ TODO
 * make answer slide clickable: lead to explanation of answers 1 cause 2 treatment 3 food: worst to best
 * feedback placeholder text in 3 lang
 * chart text in 3 lang
+* check ppt, transo, doc
 
 DONE
 * add pictures for food (next to line)
