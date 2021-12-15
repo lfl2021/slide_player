@@ -285,6 +285,9 @@ const cnta=[`# به‌رنامه‌ى خۆراک بۆ نه‌خۆشى شه‌ک�
 * ئه‌ندامى زاوزێ
 * ...
 
+# به‌کورتی
+<svg>
+
 # ٣ پرسیار
 * هۆى شه‌کره‌ چیه‌؟
 * ئایا شه‌کره‌ چاره‌سه‌رى هه‌یه‌؟
@@ -370,6 +373,9 @@ ___
 * القدم
 * الاعضاء التناسلية
 * ...
+
+# نبذة
+<svg>
 
 # ٣ أسئلة
 * ما هو سبب مرض السكري؟
@@ -457,6 +463,9 @@ If neglected:
 * Feet
 * Reproductive system
 * ...
+
+# Overview
+<svg>
 
 # 3 Questions
 * What is the cause of diabetes?
@@ -733,14 +742,14 @@ function format_text(t,f){
   if(i==0) {
     rv=rv.replaceAll("<BPC>",BPC);
     }
-  if(i==7){
-    rv=rv.replaceAll("<answers>",get_answers(f));
+  if(i==2){
+    rv=rv.replaceAll("<svg>",get_overview(f));
     }
   if(i==8){
-    rv=rv.replaceAll("<svg>",get_chart(f));
+    rv=rv.replaceAll("<answers>",get_answers(f));
     }
-  if(i==12){
-    rv=rv.replaceAll("<svg>",get_overview(f));
+  if(i==9){
+    rv=rv.replaceAll("<svg>",get_chart(f));
     }
   rv+="</div>";
   if(fcpp==1) rv+=`<button id=cb onclick="cb()">${dica[0][lng]}</button>`;
@@ -750,8 +759,8 @@ function format_text(t,f){
 
 function tbf(id){ // text box focus
   switch (id) {
-    case 20308:
-    case 20403:
+    case 20408:
+    case 20503:
       document.getElementById(id).checked=true;    
       break;
   
@@ -820,21 +829,21 @@ function input_feedback(id){ // validate answers
   id=parseInt(id);
   console.log(id, sid, s, v);
   switch (id){
-    case 30308:
-      if(sid==10308 && s.length<3){
+    case 30408:
+      if(sid==10408 && s.length<3){
         tb.placeholder="لێره‌ هۆکار بنووسه‌";
         ps(id);
         return false;
         }
       break;
-    case 30403:
-      if(sid==10403 && s.length<3){
+    case 30503:
+      if(sid==10503 && s.length<3){
         tb.placeholder="لێره‌ چاره‌سه‌رى بنووسه‌";
         ps(id);
         return false;
         }
       break;
-    case 30602:
+    case 30702:
       var y=new Date().getFullYear();
       if(v==0 || v>y || v<y-100){
         tb.placeholder="ساڵى له‌دایك بوون";
@@ -843,9 +852,9 @@ function input_feedback(id){ // validate answers
         break;
         }
       break;
-    case 30607:
+    case 30707:
       var y=new Date().getFullYear();
-      var age=y-parseInt(ar_to_en(document.getElementById(30602).value));
+      var age=y-parseInt(ar_to_en(document.getElementById(30702).value));
       // console.log(y,age,s,v);
       if(v==0 || v>age){
         tb.placeholder="ماوەی نەخۆشی";
@@ -853,14 +862,14 @@ function input_feedback(id){ // validate answers
         return false;
         }
       break;
-    case 30609:
+    case 30709:
       if(s.length<3 || v<100 || v>1000){
         tb.placeholder="شه‌کره‌ى خوێن";
         ps(id);
         return false;
         }
       break;
-    case 30611:
+    case 30711:
       if(s.length<1 || v<4 || v>25){
         tb.placeholder="فه‌حسى سێ مانگى";
         ps(id);
@@ -902,11 +911,11 @@ function rbc(id){ // radio button clicked
   document.getElementById("cb").style="opacity:1;";
   // console.log(id,sidv);
   switch (sid) {
-    case 10308:
-      document.getElementById(30308).focus();
+    case 10408:
+      document.getElementById(30408).focus();
       break;
-    case 10403:
-      document.getElementById(30403).focus();
+    case 10503:
+      document.getElementById(30503).focus();
       break;
     default:
       break;
@@ -922,19 +931,20 @@ function get_content_array(t){
   }
 
 const sta=[ // slide time array
-  [0.2,3.2,4.7],
+  [0.2,3.2,4.7], // 0: title
   [0.2,1.2,5.1,11,12.7,14.4,16,17.8,20,25.4,27.5,31.7], // 1: dm complications
-  [0.2,23.8,27,30.7], // 2: 3 questions
-  [0.2,1.4,4,6.6,14,15.8,17.7,19.1,26.8], // 3: q1 cause
-  [0.2,1.5,37.2,41.1], // 4: q2 treatment
-  [0.2,2,8.6,11.2,12.5,13.7,16.3,20.5,21.6], // 5: q3 food
-  [3.1,6.4,6.8,8.1,8.3,8.5,9.5,9.7,12.1,12.3,16.5,16.7], // 6: information
-  [0.7,4.3,5.3,6.3,'7.5:1','8.5:1','9.5:1'], // 7: answers
-  [0.2,1.8,14.5,22.4,26.7,29,30.8,31.8,41.1,41.7,44.2,47.3], // 8: cause
-  [0.2,2,3,4], // 9: psycholigy
-  [0.2,2,3,4], // 10: genetics
-  [0.2,2,3], // 11: treatment
-  [0.2,1,3,5,7,9,11,13] // 12: food
+  [2.6,5,6.3,9.5,10.2,11.8,20.2,21,30,36.8], // 2: overview
+  [0.6,3.3,6.5,10.4], // 3: 3 questions
+  [0.2,1.4,4,6.6,14,15.8,17.7,19.1,26.8], // 4: q1 cause
+  [0.2,1.5,37.2,41.1], // 5: q2 treatment
+  [0.2,2,8.6,11.2,12.5,13.7,16.3,20.5,21.6], // 6: q3 food
+  [3.1,6.4,6.8,8.1,8.3,8.5,9.5,9.7,12.1,12.3,16.5,16.7], // 7: information
+  [0.7,4.3,5.3,6.3,'7.5:1','8.5:1','9.5:1'], // 8: answers
+  [0.2,1.8,14.5,22.4,26.7,29,30.8,31.8,41.1,41.7,44.2,47.3], // 9: cause
+  [0.2,2,3,4], // 10: psycholigy
+  [0.2,2,3,4], // 11: genetics
+  [0.2,2,3], // 12: treatment
+  [0.2,1] // 13: food
   ];
 // console.log(sta);
 function audio_update() {
@@ -957,7 +967,7 @@ function audio_update() {
   }
 
 function check_answers(){
-  const qa=[10701,10702,10703];
+  const qa=[10801,10802,10803];
   fana=[ansa[0],ansa[2],ansa[4]];
   // console.log(fana[qno],fana);
   var qu1=document.getElementById(qa[qno]).innerHTML;
@@ -983,9 +993,10 @@ function get_answers(f){
   var qus="";
   var rv="";
   var i0=i.toString().padStart(2,"0");
-  var ja=[19,20,21];
-  var aa=[8,11,12];
+  var ja=[22,23,24];
+  var aa=[9,12,13];
   var cntva=get_content_array(cnt);
+  // console.log(cntva);
   var cls=f==1&&i>-1?" class=h":"";
   fana=[ansa[0],ansa[2],ansa[4]];
   fana.forEach((v,j)=>{
@@ -1008,7 +1019,7 @@ function get_correct_answers(){ // get array of
   var s=""; // string
   // q1
   a=aa[0].split("|");
-  if(a[0]=="10308"){
+  if(a[0]=="10408"){
     s="خۆرا";
     if(a[2].indexOf(s)!==-1) g[0]=1;
     s="خؤرا";
@@ -1036,7 +1047,7 @@ function get_correct_answers(){ // get array of
     }
   // q2
   a=aa[1].split("|");
-  if(a[0]=="10403"){
+  if(a[0]=="10503"){
     if((a[2].indexOf("خۆرا")!==-1 || a[2].indexOf("خواردن")!==-1) && a[2].indexOf("نا")===-1 && a[2].indexOf("دروست")!==-1) rv[1]=1;
     s="خۆرا";
     if(a[2].indexOf(s)!==-1) g[0]=1;
@@ -1065,11 +1076,10 @@ function get_correct_answers(){ // get array of
     }
   // q3
   a=aa[2].split("|");
-  if(a[0]=="10507" || a[0]=="10505") rv[2]=1;
+  if(a[0]=="10607" || a[0]=="10605") rv[2]=1;
   return rv;
   }
 
-// const stopa=[3,4,5,6,7];
 function audio_ended() {
   if(afn.charAt(0)=="n"||afn.charAt(0)=="t") afn=afn.charAt(0);
   // console.log(afn);
@@ -1077,21 +1087,21 @@ function audio_ended() {
   l0=l0<10?"0"+l0:l0;  
   // if(i==7) location.reload();
   switch (afn) {
-    case "a004007":
+    case "a004008":
       const a=get_correct_answers();
       const s=3-a.reduce(array_sum,0);
-      afn=`a004007_${s}`;
+      afn=`a004008_${s}`;
       aud.src=`${afn}.mp3`;
       aud.play();
       break;
-    case "a004007_1":
-    case "a004007_2":
-    case "a004007_3":
-      afn="a004007_4";
+    case "a004008_1":
+    case "a004008_2":
+    case "a004008_3":
+      afn="a004008_4";
       aud.src=`${afn}.mp3`;
       aud.play();
       break;
-    case "a004007_4":
+    case "a004008_4":
       var d=ansa[7].split("|")[2];
       if(d>20) d=20;
       d0=d.length==1?"0"+d:d;
@@ -1107,27 +1117,27 @@ function audio_ended() {
       aud.play();
       break;
     case "t":
-    afn="a004007_5";
+    afn="a004008_5";
       aud.src=`${afn}.mp3`;
       aud.play();
       break;
-    case "a004003":
     case "a004004":
     case "a004005":
     case "a004006":
-    case "a004007_0":
-    case "a004007_5":
+    case "a004007":
+    case "a004008_0":
+    case "a004008_5":
       console.log("Continue");
-      if(i==7){
-        const aa=[10701,10702,10703];
+      if(i==8){
+        const aa=[10801,10802,10803];
         aa.forEach(v=>{
           document.getElementById(v).style="cursor:pointer;";
           });
         }
       break;  
-    case "a004012":
+    case "a004013":
       console.log("Continue");
-      i=7;
+      i=8;
       localStorage.setItem("DM_SLD", i);
       goto(i,0); // go to answers slide
       break;  
@@ -1214,13 +1224,14 @@ function get_overview(f) {
   [1,300,`M${bw/2} ${bh*5} L${bw/2} ${bh*6}`]
   ];
   a.forEach((v,j)=>{
-    console.log(j,v);
+    // console.log(j,v);
     rv+=`<g${cls}>`;
     if(v[2].length) rv+=`<path d="${v[2]}" />`;
     rv+=`<rect x=${v[0]} y=${v[1]} width=${bw} height=${bh} />`;
     rv+=`<text x=${v[0]+bw/2} y=${v[1]+bh/2} dominant-baseline=middle text-anchor=middle>${dica[j+4][lng]}</text>`;
-    // if(j==1) rv+=`<image href=ans1.jpg height=40 x=${v[0]} y=${v[1]+5} />`;
-    // if(j==3) rv+=`<image href=ans0.jpg height=30 x=${v[0]} y=${v[1]+10} />`;
+    var ho=lng==2?4:18;
+    if(j==1) rv+=`<image${cls} href=ans1.jpg height=26 x=${v[0]+18} y=${v[1]+12} />`;
+    if(j==3) rv+=`<image${cls} href=ans0.jpg height=20 x=${v[0]+ho} y=${v[1]+15} />`;
     rv+=`</g>`;
     });
   rv+="</svg>";
