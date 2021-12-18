@@ -1,6 +1,8 @@
-var i=localStorage.getItem("DM_SLD")===null?0:localStorage.getItem("DM_SLD"); // slide
+var i=0;
+if(localStorage.getItem("DM_SLD")===null) localStorage.setItem("DM_SLD", i); else i=localStorage.getItem("DM_SLD"); // slide
 i=parseInt(i);
 if(i<0) i=0;
+console.log(i);
 var lng=localStorage.getItem("DM_LNG")===null?0:localStorage.getItem("DM_LNG") // 0 kur 1 ara 2 eng 
 lng=parseInt(lng);
 var dir="rtl";
@@ -51,7 +53,7 @@ function load_page(f){
   var rv="";
   var sla=cnt.split("\n\n");
   rv=format_text(sla[i],i,f);
-  // console.log(cnt,sla[0],rv);
+  // console.log(i, sla[i]);
   if(lng==2) document.body.style="direction:ltr;"; else document.body.style="direction:rtl;";
   // if(lng==2) document.body.style="font-family:noto;direction:ltr;"; else document.body.style="font-family:amiri;direction:rtl;";
   rt.style.setProperty('--bb', '0px');
@@ -168,10 +170,13 @@ function goto(n,p) {
     }
 
 function gohome(){
-  i=0; 
+  aud.pause();
+  aud.currentTime=0;
+  i=0;
   localStorage.setItem("DM_SLD", i);
   step=0;
   localStorage.setItem("DM_DATA", "");
+  location.reload();
   load_page(0);
   }
 
