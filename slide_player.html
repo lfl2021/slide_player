@@ -918,6 +918,8 @@ document.addEventListener("keydown",event=>{
   if(event.key==="a") clf(1);
   if(event.key==="e") clf(2);
 
+  if(event.key==="o") get_content_overview();
+
   if(event.key==="1") aud.playbackRate=1.0;
   if(event.key==="2") aud.playbackRate=1.25;
   if(event.key==="3") aud.playbackRate=1.5;
@@ -1287,6 +1289,20 @@ function get_content_array(t){
   t=t.replaceAll("* ","");
   const sna=t.split("\n"); // sentence array
   return sna;
+  }
+
+function get_content_overview(){
+  var rv="";
+  var t=cnta[lng];
+  t=t.replaceAll("ک","ك");
+  t=t.replaceAll("* ","");
+  const sna=t.split("\n"); // sentence array
+  sna.forEach((v,j)=> {
+    rv+=`<p>${v}</p>`;
+    });
+  console.log(sna);
+  vid.innerHTML=rv;
+  ft.innerHTML=FTB; 
   }
 
 const sta=[ // slide time array
