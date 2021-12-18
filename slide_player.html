@@ -101,11 +101,11 @@ select {
   min-height:100%;
   }
 s-l {
-  position: absolute;
+  /* position: absolute; */
   display: block;
   width:calc(100% - (2 * var(--pd)));
   min-height:calc(100% - (2 * var(--pd)));
-  /* border:1px red solid; */
+  /* border-bottom:1px #ccc solid; */
   margin:0px;
   padding:var(--pd);
   line-height:60px;
@@ -882,10 +882,18 @@ const FLA=[`<svg style="width: 36px; height: undefined" xmlns="http://www.w3.org
 window.onload=load_page(0);
 
 function load_page(f){
+  var qs=window.location.search;
+  qs=qs.replaceAll("?","");
+  var qsa=qs.split("=");
+  if(typeof qsa[1]!=="undefined"){
+    if(isNaN(qsa[1])) {get_content_overview(); return true;} else i=qsa[1];
+    }
+
+  console.log(isNaN(qsa[1]));
   // var f=i==0?1:0;
   var rv="";
   var sla=cnt.split("\n\n");
-  rv=format_text(sla[i],f);
+  rv=format_text(sla[i],i,f);
   if(lng==2) document.body.style="font-family:noto;direction:ltr;"; else document.body.style="font-family:amiri;direction:rtl;";
   vid.innerHTML=rv;
   ft.innerHTML=FTB;
@@ -1040,11 +1048,11 @@ function vid_click(){
     }
   }
 
-function format_text(t,f){
+function format_text(t,ii,f){
   var rv="";
   var fcpp=0;
-  var i0=i.toString().padStart(2,"0");
-  console.log(i,i0,f);
+  var i0=ii.toString().padStart(2,"0");
+  console.log(ii,i0,f);
   t=t.replaceAll("ک","ك");
   rv+=`<s-l>`;
   const sna=t.split("\n"); // sentence array
@@ -1068,11 +1076,11 @@ function format_text(t,f){
     s=s.replaceAll("<ymd_combo>",`<select id=3${i0}${j0}><option>${dica[1][lng]}</option><option>${dica[2][lng]}</option><option>${dica[3][lng]}</option></select>`);
     var cls=f==1&&i>-1?" class=h":"";
     if(fch==1){
-      if(i==0) rv+=`<h1${cls}>${s}</h1>`; else rv+=`<h2${cls}>${s}</h2><div id=sb>`;
+      if(ii==0) rv+=`<h1${cls}>${s}</h1>`; else rv+=`<h2${cls}>${s}</h2><div id=sb>`;
       } 
     if(fcd==1){
-      if(i==0) rv+=`<s-t${cls}>${s}</s-t>`;
-      } 
+      if(ii==0) rv+=`<s-t${cls}>${s}</s-t>`;
+      }
     if(fcl==1) rv+=s;
     if(fce==1) rv+=`<em${cls} id=1${i0}${j0}>${s}</em>`;
      // add ul
@@ -1081,25 +1089,25 @@ function format_text(t,f){
     if(fca==1) rv+=`<li${cls} id=1${i0}${j0}>${s}</li>`;
     if(fcp==1) rv+=`<label id=1${i0}${j0} ${cls} onclick="rbc(1${i0}${j0})"><input id=2${i0}${j0} type=radio name=q${i}>${s}</label><br>`;
     if(fcp==1) fcpp=1;
-    if(fcf==0 && i==0){
+    if(fcf==0 && ii==0){
       rv+=`<a-u${cls}>${s}</a-u>`;
       }
-    if(fcf==0 && i>0){
+    if(fcf==0 && ii>0){
       rv+=`<p${cls} id=1${i0}${j0}>${s}</p>`;
       }
     // console.log(i,j,fch,fca,fcp,s);
     });
-  if(i==0) {
+  if(ii==0) {
     rv=rv.replaceAll("<BPC>",BPC);
     }
-  if(i==2){
+  if(ii==2){
     rv=rv.replaceAll("<svg>",get_overview(f));
     fcpp=1;
     }
-  if(i==8){
+  if(ii==8){
     rv=rv.replaceAll("<answers>",get_answers(f));
     }
-  if(i==9){
+  if(ii==9){
     rv=rv.replaceAll("<svg>",get_chart(f));
     }
   rv+="</div>";
@@ -1293,14 +1301,15 @@ function get_content_array(t){
 
 function get_content_overview(){
   var rv="";
-  var t=cnta[lng];
-  t=t.replaceAll("ک","ك");
-  t=t.replaceAll("* ","");
-  const sna=t.split("\n"); // sentence array
-  sna.forEach((v,j)=> {
-    rv+=`<p>${v}</p>`;
+  var cnt=cnta[lng];
+  var sla=cnt.split("\n\n");
+  // const sna=t.split("\n"); // sentence array
+  sla.forEach((v,j)=> {
+    var ft=format_text(v,j,0);
+    // console.log(ft);
+    rv+=ft;
     });
-  console.log(sna);
+  // console.log(sna);
   vid.innerHTML=rv;
   ft.innerHTML=FTB; 
   }
