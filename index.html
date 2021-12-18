@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diabetes Nutrition Program</title>
+<link rel="stylesheet" href="index.css">
+</head>
+<body>
+<div id=lng onclick="clf(-1)"></div>
+<div id=vid onclick="vid_click()"></div>
+<div id=ft></div>
+<audio id=aud preload=metadata ontimeupdate="audio_update()" onended="audio_ended()"><source src="" type="audio/mpeg"></audio>
+<audio id=aud2 preload=metadata onended="audio_ended2()"><source src="" type="audio/mpeg"></audio>
+<script src="data.js"></script>
+<script src="index.js"></script>
+</body>
+</html>
+
+<!--
+FEATURES
+* interactive vector video slides
+* get markdown text (or similar) and make into slideshow which moves with cues from an mp3 file
+* put slides into proper format like poster automatically
+* support for rtl and ltr
+* support introducing elements one by one and gray out
+* support a highlighter or indicator similar to a pen?
+* ask questions and record their answer in a database conntected to their profile
+* connect slide narration with slide?
+* make caption file (srt) automatically
+* after asking questions, offer what to watch next: questions 1, 2 or 3?
+* other courses: parenting, marriage, english course intro...
+* add reference eg occult diabetes...
+
+TODO
+* write script for each slide
+* add audio for each slide
+*‌ select more than on choice eg worst food first sugar second worst foo honey...
+* add time prgress above lower menu
+* add dob, years of dm, hb1c, htn, height and weight, medications, referred by (see dm sheet)
+* Save data first local storage then upload to server
+* save data on server
+* social media for DM patients? Group support?
+* add validation for numbers eg YOB, blood sugar...
+* add audio based on number of correct answers eg you got 1 (2 or 3) answers wrong.
+* make answer slide clickable: lead to explanation of answers 1 cause 2 treatment 3 food: worst to best
+* feedback placeholder text in 3 lang
+* chart text in 3 lang
+* check ppt, transo, doc
+* add languages: Erbil, Badini, Iraqi Arabic, Persian, Turkish...
+
+meer came at 9:30 and went home before 1 pm: missed book finishing ceremony
+
+DONE
+* add pictures for food (next to line)
+* flag for lang change
+* validate answer eg no text entered when other selected
+
+STEPS
+* Load first page with Play Button
+* On Button Click: play slide 1 audio 
+* On Audio Timer: loop through array of time steps for fisrt slide -> show next step
+* On Finished mp3: advance to next slide or do something based on the file name (eg get dymanic audio like dm duration) and repeat previous: On Audio Timer
+-->
