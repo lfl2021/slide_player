@@ -2,7 +2,6 @@ var i=0;
 if(localStorage.getItem("DM_SLD")===null) localStorage.setItem("DM_SLD", i); else i=localStorage.getItem("DM_SLD"); // slide
 i=parseInt(i);
 if(i<0) i=0;
-console.log(i);
 var lng=localStorage.getItem("DM_LNG")===null?0:localStorage.getItem("DM_LNG") // 0 kur 1 ara 2 eng 
 lng=parseInt(lng);
 var dir="rtl";
@@ -25,6 +24,7 @@ const BPC=`<div id=dimg><img id=title_img src=dm_test.jpg><svg id="vpb" viewBox=
   <circle cx="100" cy="100" r="90" fill="none" stroke-width="15" stroke="#000"></circle>
   <polygon points="70, 55 70, 145 145, 100" fill="#000"></polygon></svg></div>`;
 const BPL=`<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0z" fill="none"></path><path d="M8 5v14l11-7z"></path></svg>`;
+const BPR=`<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0z" fill="none"></path><path d="M16 5v14l-11-7z"></path></svg>`;
 const BPS=`<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0z" fill="none"/><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>`;
 const FTB=`<button id=more onclick="get_more()">
   <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
@@ -48,11 +48,11 @@ function load_page(f){
   qs=qs.replaceAll("?","");
   var qsa=qs.split("=");
   if(typeof qsa[1]!=="undefined"){
-    if(isNaN(qsa[1])) {get_content_overview(); return true;} else i=qsa[1];
+    if(isNaN(qsa[1])) {get_content_overview(0); return true;} else i=qsa[1];
     }
   var rv="";
   var sla=cnt.split("\n\n");
-  rv=format_text(sla[i],i,f);
+  rv=format_text(sla[i],i,f,0,0);
   // console.log(i, sla[i]);
   if(lng==2) document.body.style="direction:ltr;"; else document.body.style="direction:rtl;";
   // if(lng==2) document.body.style="font-family:noto;direction:ltr;"; else document.body.style="font-family:amiri;direction:rtl;";
@@ -89,7 +89,9 @@ document.addEventListener("keydown",event=>{
   if(event.key==="a") clf(1);
   if(event.key==="e") clf(2);
 
-  if(event.key==="o") get_content_overview();
+  if(event.key==="o") get_content_overview(0);
+  if(event.key==="c") get_content_overview(1);
+  if(event.key==="m") get_mind_map();
 
   if(event.key==="1") aud.playbackRate=1.0;
   if(event.key==="2") aud.playbackRate=1.25;
@@ -157,6 +159,7 @@ function prev_slide(){
 function goto(n,p) {
     console.log(n);
     i=n;
+    if(p==0) localStorage.setItem("DM_SLD", i);
     step=0;
     load_page(1);
     if(p==0) location.reload();
@@ -214,13 +217,15 @@ function vid_click(){
     }
   }
 
-function format_text(t,ii,f){
+function format_text(t,ii,f,l,m){ // text, slide no, flag: play or show text, link, mode: slide or mindmap
   var rv="";
+  var hd="";
   var fcpp=0;
   var i0=ii.toString().padStart(2,"0");
-  console.log(ii,i0,f);
+  // console.log(ii,i0,f);
   t=t.replaceAll("ک","ك");
-  rv+=`<s-l>`;
+  var lnk=l==1?` onclick="goto(${ii},0)"`:"";
+  if(m==0) rv+=`<s-l>`;
   const sna=t.split("\n"); // sentence array
   sna.forEach((s,j)=>{
     var j0=j.toString().padStart(2,"0");
@@ -242,7 +247,11 @@ function format_text(t,ii,f){
     s=s.replaceAll("<ymd_combo>",`<select id=3${i0}${j0}><option>${dica[1][lng]}</option><option>${dica[2][lng]}</option><option>${dica[3][lng]}</option></select>`);
     var cls=f==1&&i>-1?" class=h":"";
     if(fch==1){
-      if(ii==0) rv+=`<h1${cls}>${s}</h1>`; else rv+=`<h2${cls}>${s}</h2><div id=sb>`;
+      if(ii==0) hd=`<h1${cls}>${s}</h1>`; else hd=`<h2${cls}${lnk}>${s}</h2><div id=sb>`;
+      var bpm=lng==2?BPL:BPR;
+      if(m==1) hd=`<m-m id=${i0}${j0}>${bpm} ${s}</m-m>`;
+      if(m==2) hd=`<m-m id=${i0}${j0}>&nbsp;&nbsp;&nbsp;${bpm} ${s}</m-m>`;
+      rv+=hd;
       } 
     if(fcd==1){
       if(ii==0) rv+=`<s-t${cls}>${s}</s-t>`;
@@ -276,9 +285,9 @@ function format_text(t,ii,f){
   if(ii==9){
     rv=rv.replaceAll("<svg>",get_chart(f));
     }
-  rv+="</div>";
-  if(fcpp==1) rv+=`<button id=cb onclick="cb()">${dica[0][lng]}</button>`;
-  rv+="</s-l>";
+  if(m==0) rv+="</div>";
+  if(m==0) if(fcpp==1) rv+=`<button id=cb onclick="cb()">${dica[0][lng]}</button>`;
+  if(m==0) rv+=`</s-l>`;
   return rv;
   }
 
@@ -465,25 +474,82 @@ function get_content_array(t){
   return sna;
   }
 
-function get_content_overview(){
+function get_content_overview(l){
+  aud.pause();
+  aud.currentTime=0;
   var rv="";
   var cnt=cnta[lng];
   var sla=cnt.split("\n\n");
   // const sna=t.split("\n"); // sentence array
   sla.forEach((v,j)=> {
-    var ft=format_text(v,j,0);
-    // console.log(ft);
+    if(l==1){
+      var va=v.split("\n");
+      v=va[0];
+      console.log(j,v);
+    }
+    var ft=format_text(v,j,0,1,0,0);
     rv+=ft;
     });
   // console.log(sna);
   if(lng==2) document.body.style="direction:ltr;"; else document.body.style="direction:rtl;";
   rt.style.setProperty('--bb', '1px');
   rt.style.setProperty('--ps', 'none');
+  rt.style.setProperty('--cr', 'pointer');
   vid.innerHTML=rv;
   ft.innerHTML=FTB; 
   document.getElementById("lng").innerHTML=FLA[lng];
   }
 
+function get_mind_map(){
+    aud.pause();
+    aud.currentTime=0;
+    var rv="";
+    var ft="";
+    var cnt=cnta[lng];
+    var sla=cnt.split("\n\n");
+    // const sna=t.split("\n"); // sentence array
+    mmpa.filter(e=>e[0]==0).forEach((n,j)=> {
+      var so=n[0]; // sub_of
+      var av=n[1]; // array value 
+      v=sla[av];
+      var va=v.split("\n");
+      v=va[0];
+      tf=j==0?0:1;
+      ft=format_text(v,j,0,1,tf);
+      rv+=ft;
+      mmpa.filter(e=>e[0]==av)
+      sa=mmpa.filter(e=>e[0]==j && j>0);
+      console.log(j,so,av,n,v,sa);
+      if(sa.length>0){
+        sa.forEach((n,j)=> {
+          var so=n[0]; // sub_of
+          var av=n[1]; // array value 
+          v=sla[av];
+          var va=v.split("\n");
+          v=va[0];
+          ft=format_text(v,j,0,1,2);
+          rv+=ft;
+        });    
+      }
+      // mmpa[n].forEach((nn,jj)=> {
+      //   v=sla[nn];
+      //   var va=v.split("\n");
+      //   v=va[0];
+      //   // console.log(j,v,nn);
+      //   ft=format_text(v,j,0,1,2);
+      //   if(nn) rv+=ft;
+      //   });
+      });
+    // console.log(sna);
+    if(lng==2) document.body.style="direction:ltr;"; else document.body.style="direction:rtl;";
+    rt.style.setProperty('--bb', '0px');
+    rt.style.setProperty('--ps', 'none');
+    rt.style.setProperty('--cr', 'pointer');
+    vid.innerHTML=rv;
+    ft.innerHTML=FTB; 
+    document.getElementById("lng").innerHTML=FLA[lng];
+    }
+  
 const sta=[ // slide time array
   [0.2,3.2,4.7], // 0: title
   [0.2,1.2,5.1,11,12.7,14.4,16,17.8,20,25.4,27.5,31.7], // 1: dm complications
@@ -576,7 +642,7 @@ function get_answers(f){
   }
 
 function get_correct_answers(){ // get array of 
-  const aa=[ansa[0],ansa[2],ansa[4]];
+  const aa=[ansa[0].toLowerCase(),ansa[2].toLowerCase(),ansa[4]];
   var rv=[0,0,0];
   var g=[0,0,0]; // grade
   var s=""; // string
@@ -588,6 +654,12 @@ function get_correct_answers(){ // get array of
     s="خؤرا";
     if(a[2].indexOf(s)!==-1) g[0]=1;
     s="خواردن";
+    if(a[2].indexOf(s)!==-1) g[0]=1;
+    s="food";
+    if(a[2].indexOf(s)!==-1) g[0]=1;
+    s="eating";
+    if(a[2].indexOf(s)!==-1) g[0]=1;
+    s="diet";
     if(a[2].indexOf(s)!==-1) g[0]=1;
 
     s="نا";
@@ -604,6 +676,10 @@ function get_correct_answers(){ // get array of
 
     s="خراپ";
     if(a[2].indexOf(s)!==-1) g[1]=2;
+    s="unhealthy";
+    if(a[2].indexOf(s)!==-1) g[1]=2;
+    s="bad";
+    if(a[2].indexOf(s)!==-1) g[1]=2;
 
     var as=g.reduce(array_sum,0);
     rv[0]=as==3?1:0;
@@ -618,10 +694,20 @@ function get_correct_answers(){ // get array of
     if(a[2].indexOf(s)!==-1) g[0]=1;
     s="خواردن";
     if(a[2].indexOf(s)!==-1) g[0]=1;
+    s="eating";
+    if(a[2].indexOf(s)!==-1) g[0]=1;
+    s="food";
+    if(a[2].indexOf(s)!==-1) g[0]=1;
+    s="diet";
+    if(a[2].indexOf(s)!==-1) g[0]=1;
 
     s="نا";
     if(a[2].indexOf(s)===-1) g[1]=1;
     s="نه‌";
+    if(a[2].indexOf(s)===-1) g[1]=1;
+    s=" un";
+    if(a[2].indexOf(s)===-1) g[1]=1;
+    s=" non";
     if(a[2].indexOf(s)===-1) g[1]=1;
 
     s="دروست";
@@ -631,6 +717,10 @@ function get_correct_answers(){ // get array of
     s="گونجاو";
     if(a[2].indexOf(s)!==-1) g[2]=1;
     s="باش";
+    if(a[2].indexOf(s)!==-1) g[2]=1;
+    s="healthy";
+    if(a[2].indexOf(s)!==-1) g[2]=1;
+    s="good";
     if(a[2].indexOf(s)!==-1) g[2]=1;
   
     var as=g.reduce(array_sum,0);
@@ -812,7 +902,11 @@ class SlideAuthor extends HTMLElement{
 class SlideBody extends HTMLElement{
   constructor(){super();}
   }
+class MindMap extends HTMLElement{
+  constructor(){super();}
+  }  
 window.customElements.define("s-l", Slide);
 window.customElements.define("s-t", SubTitle);
 window.customElements.define("a-u", SlideAuthor);
 window.customElements.define("s-b", SlideBody);
+window.customElements.define("m-m", MindMap);
