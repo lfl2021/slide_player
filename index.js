@@ -217,14 +217,14 @@ function vid_click(){
     }
   }
 
-function format_text(t,ii,f,l,m){ // text, slide no, flag: play or show text, link, mode: slide or mindmap
+function format_text(t,ii,f,ll,m){ // text, slide no, flag: play or show text, link, mode: slide or mindmap
   var rv="";
   var hd="";
   var fcpp=0;
   var i0=ii.toString().padStart(2,"0");
   // console.log(ii,i0,f);
   t=t.replaceAll("ک","ك");
-  var lnk=l==1?` onclick="goto(${ii},0)"`:"";
+  var lnk=ll==1?` onclick="goto(${ii},0)"`:"";
   if(m==0) rv+=`<s-l>`;
   const sna=t.split("\n"); // sentence array
   sna.forEach((s,j)=>{
@@ -249,8 +249,10 @@ function format_text(t,ii,f,l,m){ // text, slide no, flag: play or show text, li
     if(fch==1){
       if(ii==0) hd=`<h1${cls}>${s}</h1>`; else hd=`<h2${cls}${lnk}>${s}</h2><div id=sb>`;
       var bpm=lng==2?BPL:BPR;
-      if(m==1) hd=`<m-m id=${i0}${j0}>${bpm} ${s}</m-m>`;
-      if(m==2) hd=`<m-m id=${i0}${j0}>&nbsp;&nbsp;&nbsp;${bpm} ${s}</m-m>`;
+      if(m>0) {
+        var sp="&nbsp;&nbsp;&nbsp;".repeat(m-1);
+        hd=`<m-m id=${i0}${j0}>${sp}${bpm} ${s}</m-m>`;
+        }
       rv+=hd;
       } 
     if(fcd==1){
@@ -500,37 +502,62 @@ function get_content_overview(l){
   document.getElementById("lng").innerHTML=FLA[lng];
   }
 
+var rv="";
+var lv=-1;
+function get_recursive(a,p){
+  var cnt=cnta[lng];
+  var sla=cnt.split("\n\n");
+  lv++;
+  a
+  .filter(a=>a[1]==p)
+  .forEach(e=>{
+    var av=e[2];
+    v=sla[av];
+    var va=v.split("\n");
+    v=va[0];
+    console.log(lv,e);
+    rv+=format_text(v,0,0,0,lv);
+    get_recursive(a,e[0]);
+    lv--;
+    });
+    return rv;
+  }
+
 function get_mind_map(){
     aud.pause();
     aud.currentTime=0;
-    var rv="";
-    var ft="";
-    var cnt=cnta[lng];
-    var sla=cnt.split("\n\n");
+    rv="";
+    lv=-1;
+    // var ft="";
+    // var cnt=cnta[lng];
+    // var sla=cnt.split("\n\n");
     // const sna=t.split("\n"); // sentence array
-    mmpa.filter(e=>e[0]==0).forEach((n,j)=> {
-      var so=n[0]; // sub_of
-      var av=n[1]; // array value 
-      v=sla[av];
-      var va=v.split("\n");
-      v=va[0];
-      tf=j==0?0:1;
-      ft=format_text(v,j,0,1,tf);
-      rv+=ft;
-      mmpa.filter(e=>e[0]==av)
-      sa=mmpa.filter(e=>e[0]==j && j>0);
-      console.log(j,so,av,n,v,sa);
-      if(sa.length>0){
-        sa.forEach((n,j)=> {
-          var so=n[0]; // sub_of
-          var av=n[1]; // array value 
-          v=sla[av];
-          var va=v.split("\n");
-          v=va[0];
-          ft=format_text(v,j,0,1,2);
-          rv+=ft;
-        });    
-      }
+    rv=get_recursive(mmpa,0);
+    // mmpa.filter(e=>e[0]==0).forEach((n,j)=> {
+    //   var so=n[0]; // sub_of
+    //   var av=n[1]; // array value 
+    //   v=sla[av];
+    //   var va=v.split("\n");
+    //   v=va[0];
+    //   tf=j==0?0:1;
+    //   ft=format_text(v,j,0,1,tf);
+    //   rv+=ft;
+    //   // mmpa.filter(e=>e[0]==av);
+    //   sa=mmpa.filter(e=>e[0]==j && j>0);
+    //   // console.log(j,so,av,n,v,sa);
+    //   if(sa.length>0){
+    //     sa.forEach((n,jj)=> {
+    //       var so=n[0]; // sub_of
+    //       var av=n[1]; // array value 
+    //       v=sla[av];
+    //       var va=v.split("\n");
+    //       v=va[0];
+    //       ft=format_text(v,j,0,1,2);
+    //       rv+=ft;
+    //       ssa=mmpa.filter(e=>e[0]==so && j>0);
+    //       console.log(jj,j,so,av,n,v,ssa);
+    //     });    
+    //   }
       // mmpa[n].forEach((nn,jj)=> {
       //   v=sla[nn];
       //   var va=v.split("\n");
@@ -539,7 +566,7 @@ function get_mind_map(){
       //   ft=format_text(v,j,0,1,2);
       //   if(nn) rv+=ft;
       //   });
-      });
+      // });
     // console.log(sna);
     if(lng==2) document.body.style="direction:ltr;"; else document.body.style="direction:rtl;";
     rt.style.setProperty('--bb', '0px');

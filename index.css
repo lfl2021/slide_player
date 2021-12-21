@@ -118,7 +118,8 @@ color:#00f;
 m-m {
 display:block;
 padding:0 10px;
-font-size:26px;
+font-size:24px;
+line-height:32px;
 }
 m-m svg{
 /* border:1px red solid; */

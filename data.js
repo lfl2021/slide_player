@@ -66,7 +66,7 @@ ___
 # وه‌ڵامى پرسیاره‌کان
 <answers>
 
-# هۆى نه‌خۆشى شه‌کره‌
+# هۆکار
 <svg>
 ته‌نها یه‌ک هۆ:
 @@ خۆراکى ناته‌ندروست <img_ans1>
@@ -81,12 +81,12 @@ ___
 * کوردستان: ١٩٥٨
 * ئه‌مریکا: ١٩٥٨
 
-# چاره‌سه‌رى نه‌خۆشى شه‌کره‌
+# چاره‌سه‌رى
 <svg>
 ته‌نها یه‌ک چاره‌سه‌رى:
 @@ خۆراکى ته‌ندروست <img_ans1>
 
-# خراپترین و باشترین خۆراک
+# خۆراک
 <svg>
 * شه‌کر خراپترین نیه‌
 
@@ -448,7 +448,7 @@ Only one cause:
 Only one treatment:
 @@ Healthy Diet <img_ans1>
 
-# Worst and Best Diet
+# Food
 <svg>
 * Sugar not the worst
 
@@ -591,18 +591,20 @@ const mmpa3=[
 ];
 
 const mmpa=[
-[0,0], //   0: title
-[0,1], //   1: if neglected
-[0,2], //   2: overview
-[0,3], //   3: 3 questions
-[0,8], //   8: answers
-[0,15], // 15: what should i eat?
-[3,4], //   4: Q1
-[3,5], //   5: Q2 
-[3,6], //   6: Q3
-[4,9], //   9: cause 
-[4,12], // 12: treatmen 
-[4,13], // 13: food
-[9,10],
-[9,11]
+[1,0,0], //   title
+[2,1,1], //   if neglected
+[3,1,2], //   overview
+[4,1,3], //   3 questions
+[5,1,8], //   answers
+[6,1,15], //  what should i eat?
+[7,4,4], //   Q1
+[8,4,5], //   Q2 
+[9,4,6], //   Q3
+[10,5,9], //  cause 
+[11,5,12], // treatmen 
+[12,5,13], // food
+[13,10,10], // psych status
+[14,10,11] //  genetics
+// [9,12] //  treatment
+// [9,10], // 15:
 ];
