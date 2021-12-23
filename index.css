@@ -18,7 +18,6 @@ src:url('res/noto.ttf');
 --w:calc("100% - 20px");
 --h:calc("100% - 20px");
 }
-
 body{
 direction:rtl;
 font-family:amiri;
@@ -126,6 +125,9 @@ m-m svg{
 margin:auto;
 display:inline;
 }
+m-m a{
+cursor:pointer;
+}
 em{
 display:block;
 font-size:40px;
@@ -185,9 +187,23 @@ font-size:var(--tf);
 opacity:0;
 transition:opacity 0.5s;
 }
-#ft {
+#txt{
+/* direction:ltr; */
+border-top:1px #ccc solid;
+position:fixed;
+right:0;
+bottom:-180px;
+/* width:100%; */
+padding:4px;
+font-size:12px;
+line-height:30px;
+height:180px;
+overflow-y:scroll;
+background-color:#fff;
+transition:bottom 0.3s;
+}
+#ftr{
 direction:ltr;
-border:1px #ccc solid;
 display:flex;
 justify-content:center;
 position:fixed;
@@ -198,13 +214,13 @@ border-top:1px #ccc solid;
 transition:bottom 0.3s;
 /* visibility:hidden; */
 }
-#ft button {
+#ftr button{
 padding:20px 25px;
 border:none;
 background-color:#fff;
 opacity:0.6;
 }
-#ft button:hover {
+#ftr button:hover {
 background-color:#ddd;
 }
 .h {
@@ -272,7 +288,12 @@ fill:none;
 h2{
 margin:0.6em 0;
 }
-#sb {
+#sb{
 padding:0px 40px;
+}
+#txt{
+font-size:20px;
+line-height:30px;
+height:180px;
 }
 }

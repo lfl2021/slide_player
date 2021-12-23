@@ -16,7 +16,8 @@ var ansa=[];//localStorage.getItem("DM_DATA")===null?[]:JSON.parse(localStorage.
 const aud=document.getElementById("aud");
 const aud2=document.getElementById("aud2");
 const vid=document.getElementById("vid");
-const ft=document.getElementById("ft");
+const ftr=document.getElementById("ftr");
+const stt=document.getElementById("txt");
 const bp=document.getElementById("bpl");
 var rt=document.querySelector(':root');
 
@@ -48,7 +49,12 @@ function load_page(f){
   qs=qs.replaceAll("?","");
   var qsa=qs.split("=");
   if(typeof qsa[1]!=="undefined"){
-    if(isNaN(qsa[1])) {get_content_overview(0); return true;} else i=qsa[1];
+    if(isNaN(qsa[1])) {
+      if(qsa[1]=="o") get_content_overview(0); 
+      if(qsa[1]=="c") get_content_overview(1);
+      if(qsa[1]=="m") get_mind_map(); 
+      if(qsa[1]!="t") return true;
+      } else i=qsa[1];
     }
   var rv="";
   var sla=cnt.split("\n\n");
@@ -59,7 +65,7 @@ function load_page(f){
   rt.style.setProperty('--bb', '0px');
   rt.style.setProperty('--ps', 'absolute');
   vid.innerHTML=rv;
-  ft.innerHTML=FTB;
+  ftr.innerHTML=FTB;
   document.getElementById("lng").innerHTML="";
   if(i==0){
     document.getElementById("vpb").addEventListener("click", play_slides);
@@ -67,8 +73,13 @@ function load_page(f){
   if(f==0 && i==0){
     document.getElementById("lng").innerHTML=FLA[lng];
     }
-  ft.style.bottom="-70px";
+  ftr.style.bottom="-70px";
   steps=document.getElementsByClassName("h");
+  if(typeof qsa[1]!=="undefined"){
+    if(isNaN(qsa[1])) {
+      if(qsa[1]=="t") get_subtitles(); 
+      }
+    }
   }
 
 document.addEventListener("keydown",event=>{
@@ -92,6 +103,7 @@ document.addEventListener("keydown",event=>{
   if(event.key==="o") get_content_overview(0);
   if(event.key==="c") get_content_overview(1);
   if(event.key==="m") get_mind_map();
+  if(event.key==="t") get_subtitles();
 
   if(event.key==="1") aud.playbackRate=1.0;
   if(event.key==="2") aud.playbackRate=1.25;
@@ -134,6 +146,7 @@ function next_slide(){
   if(i<cnt.split("\n\n").length-1) {i++; localStorage.setItem("DM_SLD", i);}
   step=0;
   load_page(1);
+  get_subtitles();
   var i0=i.toString().padStart(2,"0");
   afn=`a0040${i0}.mp3`;
   // var f=afn+".mp3";
@@ -185,8 +198,8 @@ function gohome(){
 
 function vid_click(){
   // console.log(this.id);
-  if(ft.style.bottom=="-70px") {
-    ft.style.bottom="0px";
+  if(ftr.style.bottom=="-70px") {
+    ftr.style.bottom="0px";
     setTimeout(()=>{hide_menu();}, 3000);
     } else hide_menu();
   if(aud.paused) document.getElementById("bpl").innerHTML=BPL; else document.getElementById("bpl").innerHTML=BPS;
@@ -251,7 +264,7 @@ function format_text(t,ii,f,ll,m){ // text, slide no, flag: play or show text, l
       var bpm=lng==2?BPL:BPR;
       if(m>0) {
         var sp="&nbsp;&nbsp;&nbsp;".repeat(m-1);
-        hd=`<m-m id=${i0}${j0}>${sp}${bpm} ${s}</m-m>`;
+        hd=`<m-m id=${i0}${j0}>${sp}${bpm} <a ${lnk}>${s}</a></m-m>`;
         }
       rv+=hd;
       } 
@@ -288,9 +301,20 @@ function format_text(t,ii,f,ll,m){ // text, slide no, flag: play or show text, l
     rv=rv.replaceAll("<svg>",get_chart(f));
     }
   if(m==0) rv+="</div>";
-  if(m==0) if(fcpp==1) rv+=`<button id=cb onclick="cb()">${dica[0][lng]}</button>`;
+  if(ll==0) if(fcpp==1) rv+=`<button id=cb onclick="cb()">${dica[0][lng]}</button>`;
   if(m==0) rv+=`</s-l>`;
   return rv;
+  }
+
+function get_subtitles(){
+  var rv="";
+  var txt=txta[lng];
+  var sta=txt.split("\n\n");
+  // rv=format_text(sla[i],i,0,0,0);
+  rv=sta[i];
+  rv=rv.replaceAll("ک","ك");
+  stt.innerHTML=rv;
+  stt.style.bottom="0px";
   }
 
 function tbf(id){ // text box focus
@@ -476,20 +500,20 @@ function get_content_array(t){
   return sna;
   }
 
-function get_content_overview(l){
+function get_content_overview(ll){
   aud.pause();
   aud.currentTime=0;
   var rv="";
-  var cnt=cnta[lng];
+  cnt=cnta[lng];
   var sla=cnt.split("\n\n");
   // const sna=t.split("\n"); // sentence array
   sla.forEach((v,j)=> {
-    if(l==1){
+    if(ll==1){
       var va=v.split("\n");
       v=va[0];
       console.log(j,v);
     }
-    var ft=format_text(v,j,0,1,0,0);
+    var ft=format_text(v,j,0,1,0);
     rv+=ft;
     });
   // console.log(sna);
@@ -498,14 +522,13 @@ function get_content_overview(l){
   rt.style.setProperty('--ps', 'none');
   rt.style.setProperty('--cr', 'pointer');
   vid.innerHTML=rv;
-  ft.innerHTML=FTB; 
+  ftr.innerHTML=FTB; 
   document.getElementById("lng").innerHTML=FLA[lng];
   }
-
 var rv="";
 var lv=-1;
 function get_recursive(a,p){
-  var cnt=cnta[lng];
+  cnt=cnta[lng];
   var sla=cnt.split("\n\n");
   lv++;
   a
@@ -516,7 +539,7 @@ function get_recursive(a,p){
     var va=v.split("\n");
     v=va[0];
     console.log(lv,e);
-    rv+=format_text(v,0,0,0,lv);
+    rv+=format_text(v,av,0,1,lv);
     get_recursive(a,e[0]);
     lv--;
     });
@@ -528,52 +551,13 @@ function get_mind_map(){
     aud.currentTime=0;
     rv="";
     lv=-1;
-    // var ft="";
-    // var cnt=cnta[lng];
-    // var sla=cnt.split("\n\n");
-    // const sna=t.split("\n"); // sentence array
     rv=get_recursive(mmpa,0);
-    // mmpa.filter(e=>e[0]==0).forEach((n,j)=> {
-    //   var so=n[0]; // sub_of
-    //   var av=n[1]; // array value 
-    //   v=sla[av];
-    //   var va=v.split("\n");
-    //   v=va[0];
-    //   tf=j==0?0:1;
-    //   ft=format_text(v,j,0,1,tf);
-    //   rv+=ft;
-    //   // mmpa.filter(e=>e[0]==av);
-    //   sa=mmpa.filter(e=>e[0]==j && j>0);
-    //   // console.log(j,so,av,n,v,sa);
-    //   if(sa.length>0){
-    //     sa.forEach((n,jj)=> {
-    //       var so=n[0]; // sub_of
-    //       var av=n[1]; // array value 
-    //       v=sla[av];
-    //       var va=v.split("\n");
-    //       v=va[0];
-    //       ft=format_text(v,j,0,1,2);
-    //       rv+=ft;
-    //       ssa=mmpa.filter(e=>e[0]==so && j>0);
-    //       console.log(jj,j,so,av,n,v,ssa);
-    //     });    
-    //   }
-      // mmpa[n].forEach((nn,jj)=> {
-      //   v=sla[nn];
-      //   var va=v.split("\n");
-      //   v=va[0];
-      //   // console.log(j,v,nn);
-      //   ft=format_text(v,j,0,1,2);
-      //   if(nn) rv+=ft;
-      //   });
-      // });
-    // console.log(sna);
     if(lng==2) document.body.style="direction:ltr;"; else document.body.style="direction:rtl;";
     rt.style.setProperty('--bb', '0px');
     rt.style.setProperty('--ps', 'none');
     rt.style.setProperty('--cr', 'pointer');
     vid.innerHTML=rv;
-    ft.innerHTML=FTB; 
+    ftr.innerHTML=FTB; 
     document.getElementById("lng").innerHTML=FLA[lng];
     }
   
@@ -914,7 +898,7 @@ function get_more(){
   }
 
 function hide_menu(){
-  ft.style.bottom="-70px";
+  ftr.style.bottom="-70px";
   }
 
 class Slide extends HTMLElement{
