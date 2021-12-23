@@ -12,6 +12,7 @@ var qno=0;
 var sid=0;  // selected id
 var afn=""; // audio file name
 var afp=0;  // audio file poistion
+var qsa=[0,0];
 var ansa=[];//localStorage.getItem("DM_DATA")===null?[]:JSON.parse(localStorage.getItem("DM_DATA")); //cause treatment food age gender dm duration ymd highest blood sugar hba1c
 const aud=document.getElementById("aud");
 const aud2=document.getElementById("aud2");
@@ -47,7 +48,7 @@ window.onload=load_page(0);
 function load_page(f){
   var qs=window.location.search;
   qs=qs.replaceAll("?","");
-  var qsa=qs.split("=");
+  qsa=qs.split("=");
   if(typeof qsa[1]!=="undefined"){
     if(isNaN(qsa[1])) {
       if(qsa[1]=="o") get_content_overview(0); 
@@ -75,11 +76,7 @@ function load_page(f){
     }
   ftr.style.bottom="-70px";
   steps=document.getElementsByClassName("h");
-  if(typeof qsa[1]!=="undefined"){
-    if(isNaN(qsa[1])) {
-      if(qsa[1]=="t") get_subtitles(); 
-      }
-    }
+  if(qsa[1]=="t") get_subtitles(); 
   }
 
 document.addEventListener("keydown",event=>{
@@ -132,12 +129,7 @@ function play_slides(){
   load_page(1);
   var i0=i.toString().padStart(2,"0");
   afn=`a0040${i0}.mp3`;
-  // var f=afn+".mp3";
-  // if(i>13) afn="0.mp3"; 
-  // aud.src=f;
   if(i==0) document.getElementById("vpb").style="visibility:hidden;";
-  // aud.playbackRate=1.0;
-  // if(aud.paused) aud.play();
   ps();
   hide_menu();
   }
@@ -146,16 +138,10 @@ function next_slide(){
   if(i<cnt.split("\n\n").length-1) {i++; localStorage.setItem("DM_SLD", i);}
   step=0;
   load_page(1);
-  get_subtitles();
+  if(qsa[1]=="t") get_subtitles(); else   stt.style.bottom="-190px";
   var i0=i.toString().padStart(2,"0");
   afn=`a0040${i0}.mp3`;
-  // var f=afn+".mp3";
-  // if(i>13) afn="0.mp3"; 
-  // aud.src=f;
-  // if(aud.paused) aud.play();
   ps();
-  // cb();
-  // console.log(i,step,steps.length,steps);
   }
 
 function prev_slide(){
