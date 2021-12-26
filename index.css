@@ -208,27 +208,46 @@ overflow-y:scroll;
 background-color:#fff;
 transition:bottom 0.3s;
 }
+#ftb{
+text-align:center;
+background-color:#fff;
+}    
 #ftr{
 direction:ltr;
-display:flex;
 justify-content:center;
 position:fixed;
-bottom:-70px;
+bottom:-80px;
 width:100%;
-background-color:#fff;
-border-top:1px #ccc solid;
+background-color:transparent;
 transition:bottom 0.3s;
-/* visibility:hidden; */
 }
-#ftr button{
+#ftb button{
 padding:20px 25px;
 border:none;
 background-color:#fff;
 opacity:0.6;
 }
-#ftr button:hover {
+#ftb button:hover {
 background-color:#ddd;
 }
+p-b{
+display:block;
+}
+#pbw{
+background-color:#ddd;
+}        
+#pbr{
+height:1.5px;
+width:0;
+display:block;
+background-color:#f00;
+}    
+#pbt{
+font-family:arial;
+color:#888;
+background-color:#fff;
+padding:0 2px;
+} 
 .h{
 opacity:0;
 transition:all 0.8s ease;
@@ -304,10 +323,11 @@ position:relative;
 .b{
 float:left;
 width:40%;
-left:0;
+left:40px;
 top:0;
 display: block;
 position: absolute;
+z-index:-1;
 }    
 #txt{
 font-size:20px;

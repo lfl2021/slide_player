@@ -28,13 +28,13 @@ const BPC=`<div id=dimg><img id=title_img src=dm_test.jpg><svg id="vpb" viewBox=
 const BPL=`<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0z" fill="none"></path><path d="M8 5v14l11-7z"></path></svg>`;
 const BPR=`<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0z" fill="none"></path><path d="M16 5v14l-11-7z"></path></svg>`;
 const BPS=`<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0z" fill="none"/><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>`;
-const FTB=`<button id=more onclick="get_more()">
+const FTB=`<div id=ftb><button id=more onclick="get_more()">
   <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
 </button>
 <button onclick="gohome()">
  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0V0z" fill="none"></path><path d="M8 16h8v2H8zm0-4h8v2H8zm6-10H6c-1.1 0-2 .9-2 2v16c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"></path></svg>
 </button>
-<button id=bpl onclick="play_slides()">${BPL}</button>`;
+<button id=bpl onclick="play_slides()">${BPL}</button></div>`;
 // <button onclick="cs()">
 //   <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0z" fill="none"/><path d="M4 18l8.5-6L4 6v12zm9-12v12l8.5-6L13 6z"/></svg>
 // </button>
@@ -66,7 +66,7 @@ function load_page(f){
   rt.style.setProperty('--bb', '0px');
   rt.style.setProperty('--ps', 'absolute');
   vid.innerHTML=rv;
-  ftr.innerHTML=FTB;
+  ftr.innerHTML="<p-b><div id=pbt></div><div id=pbw><a id=pbr></a></div></p-b>"+FTB;
   document.getElementById("lng").innerHTML="";
   if(i==0){
     document.getElementById("vpb").addEventListener("click", play_slides);
@@ -75,7 +75,7 @@ function load_page(f){
   if(f==0 && i==0){
     document.getElementById("lng").innerHTML=FLA[lng];
     }
-  ftr.style.bottom="-70px";
+  ftr.style.bottom="-80px";
   steps=document.getElementsByClassName("h");
   if(qsa[1]=="t") get_subtitles(); 
   }
@@ -122,7 +122,6 @@ function clf(f){ // change lang
 
 function next_step(t){
   if(step==steps.length) next_slide();
-  console.log(t,step,steps)
   steps[step].classList.add("c");
   if(t==2) steps[step-1].classList.remove("c"); 
   if(t!=2) if(step<steps.length) step++; 
@@ -135,6 +134,7 @@ function play_slides(){
   afn=`a0040${i0}.mp3`;
   if(i==0) document.getElementById("vpb").style="visibility:hidden;";
   ps();
+  // document.getElementById("pbr").style.height="4px";
   hide_menu();
   }
   
@@ -188,7 +188,7 @@ function gohome(){
 
 function vid_click(){
   // console.log(this.id);
-  if(ftr.style.bottom=="-70px") {
+  if(ftr.style.bottom=="-80px") {
     ftr.style.bottom="0px";
     setTimeout(()=>{hide_menu();}, 3000);
     } else hide_menu();
@@ -560,6 +560,11 @@ function get_mind_map(){
 function audio_update() {
   var ta=sta[i];
   var t=aud.currentTime;
+  const d=aud.duration;
+  var tt=new Date(t * 1000).toISOString().substr(15,4);
+  var dd=isNaN(d)?"0:00":new Date(d * 1000).toISOString().substr(15,4);
+  document.getElementById("pbr").style.width=t/d*100+"%";
+  document.getElementById("pbt").innerHTML=tt+" / "+dd;
   // document.getElementById("time").innerHTML=i+":"+step+":"+t.toFixed(1);
   var tav=ta[0]; // time array value
   var tat=0; // time array type: 0 step, 1 check answer
@@ -869,7 +874,7 @@ function get_more(){
   }
 
 function hide_menu(){
-  ftr.style.bottom="-70px";
+  ftr.style.bottom="-80px";
   }
 
 function edit_subtitles(){
@@ -894,9 +899,13 @@ class MindMap extends HTMLElement{
 class ImageBig extends HTMLElement{
   constructor(){super();}
   }
+class ProgressBar extends HTMLElement{
+  constructor(){super();}
+  }
 window.customElements.define("s-l", Slide);
 window.customElements.define("s-t", SubTitle);
 window.customElements.define("a-u", SlideAuthor);
 window.customElements.define("s-b", SlideBody);
 window.customElements.define("m-m", MindMap);
 window.customElements.define("i-b", ImageBig);
+window.customElements.define("p-b", ProgressBar);
