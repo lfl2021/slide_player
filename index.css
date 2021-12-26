@@ -199,11 +199,11 @@ border-top:1px #ccc solid;
 position:fixed;
 right:0;
 bottom:-180px;
-/* width:100%; */
 padding:4px;
 font-size:12px;
 line-height:30px;
-height:180px;
+max-height:180px;
+/* width:100%; */
 overflow-y:scroll;
 background-color:#fff;
 transition:bottom 0.3s;
@@ -328,10 +328,11 @@ top:0;
 display: block;
 position: absolute;
 z-index:-1;
-}    
+}
 #txt{
 font-size:20px;
 line-height:30px;
-height:360px;
+max-height:360px;
+width:100%;
 }
 }

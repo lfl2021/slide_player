@@ -142,7 +142,7 @@ function next_slide(){
   if(i<cnt.split("\n\n").length-1) {i++; localStorage.setItem("DM_SLD", i);}
   step=0;
   load_page(1);
-  if(qsa[1]=="t") get_subtitles(); else   stt.style.bottom="-190px";
+  if(qsa[1]=="t") get_subtitles(); else stt.style.bottom="-360px";
   var i0=i.toString().padStart(2,"0");
   afn=`a0040${i0}.mp3`;
   ps();
