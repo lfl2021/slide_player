@@ -505,7 +505,7 @@ function get_content_overview(ll){
     if(ll==1){
       var va=v.split("\n");
       v=va[0];
-      console.log(j,v);
+      // console.log(j,v);
     }
     var ft=format_text(v,j,0,1,0);
     rv+=ft;
@@ -560,9 +560,17 @@ function get_mind_map(){
 function audio_update() {
   var ta=sta[i];
   var t=aud.currentTime;
-  const d=aud.duration;
-  var tt=new Date(t * 1000).toISOString().substr(15,4);
-  var dd=isNaN(d)?"0:00":new Date(d * 1000).toISOString().substr(15,4);
+  let d=aud.duration;
+  let da=[9,6,3,1,1,42];
+  if(i==8) d=da.reduce(array_sum,0);
+  if(afn=="a004008_1.mp3"||afn=="a004008_2.mp3"||afn=="a004008_3.mp3") t=t+da[0];
+  if(afn=="a004008_4.mp3") t=t+da[0]+da[1];
+  if(afn.charAt(0)=="n") t=t+da[0]+da[1]+da[2];
+  if(afn.charAt(0)=="t") t=t+da[0]+da[1]+da[2]+da[3];
+  if(afn=="a004008_5.mp3") t=t+da[0]+da[1]+da[2]+da[3]+da[4];
+  console.log(afn);
+  let tt=new Date(t * 1000).toISOString().substr(15,4);
+  let dd=isNaN(d)?"0:00":new Date(d * 1000).toISOString().substr(15,4);
   document.getElementById("pbr").style.width=t/d*100+"%";
   document.getElementById("pbt").innerHTML=tt+" / "+dd;
   // document.getElementById("time").innerHTML=i+":"+step+":"+t.toFixed(1);
