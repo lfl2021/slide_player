@@ -114,6 +114,9 @@ margin:0px;
 s-l p a{
 color:#00f;
 }
+s-l s{
+text-decoration:none;
+}
 m-m {
 display:block;
 padding:0 10px;
@@ -294,6 +297,6 @@ padding:0px 40px;
 #txt{
 font-size:20px;
 line-height:30px;
-height:180px;
+height:360px;
 }
 }

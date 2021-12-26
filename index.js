@@ -60,7 +60,7 @@ function load_page(f){
   var rv="";
   var sla=cnt.split("\n\n");
   rv=format_text(sla[i],i,f,0,0);
-  // console.log(i, sla[i]);
+  console.log(i);
   if(lng==2) document.body.style="direction:ltr;"; else document.body.style="direction:rtl;";
   // if(lng==2) document.body.style="font-family:noto;direction:ltr;"; else document.body.style="font-family:amiri;direction:rtl;";
   rt.style.setProperty('--bb', '0px');
@@ -71,6 +71,7 @@ function load_page(f){
   if(i==0){
     document.getElementById("vpb").addEventListener("click", play_slides);
     }
+  stt.addEventListener("dblclick", edit_subtitles);
   if(f==0 && i==0){
     document.getElementById("lng").innerHTML=FLA[lng];
     }
@@ -81,7 +82,8 @@ function load_page(f){
 
 document.addEventListener("keydown",event=>{
   // console.log(event.key, event.keyCode);
-  // console.log(event.target.type);
+  // console.log(event.target.id, event.target.type);
+  if(event.target.id!="") return false;
   if(event.target.type!=undefined) return false;
   if(event.key==="ArrowRight") next_slide();
   if(event.ctrlKey && event.key==="ArrowRight") next_step();
@@ -245,6 +247,8 @@ function format_text(t,ii,f,ll,m){ // text, slide no, flag: play or show text, l
     s=s.replaceAll("___",`<input id=3${i0}${j0} type=text onclick="tbf(2${i0}${j0})">`);
     s=s.replaceAll("<ymd_combo>",`<select id=3${i0}${j0}><option>${dica[1][lng]}</option><option>${dica[2][lng]}</option><option>${dica[3][lng]}</option></select>`);
     var cls=f==1&&i>-1?" class=h":"";
+    s=s.replaceAll(" @",` <s${cls}>`);
+    s=s.replaceAll("@ ",`</s>`);
     if(fch==1){
       if(ii==0) hd=`<h1${cls}>${s}</h1>`; else hd=`<h2${cls}${lnk}>${s}</h2><div id=sb>`;
       var bpm=lng==2?BPL:BPR;
@@ -295,10 +299,11 @@ function format_text(t,ii,f,ll,m){ // text, slide no, flag: play or show text, l
 function get_subtitles(){
   var rv="";
   var txt=txta[lng];
-  var sta=txt.split("\n\n");
+  var ssa=txt.split("\n\n");
   // rv=format_text(sla[i],i,0,0,0);
-  rv=sta[i];
+  rv=ssa[i];
   rv=rv.replaceAll("ک","ك");
+  rv=rv.replaceAll("\n","<p>");
   stt.innerHTML=rv;
   stt.style.bottom="0px";
   }
@@ -316,7 +321,7 @@ function tbf(id){ // text box focus
 
 function array_sum(a,c){
   return a+c;
-  } // < Start with 0
+  }
 
 function en_to_ar(n) {
   return n.toString().replace(/\d/g, d=>'٠١٢٣٤٥٦٧٨٩'[d]);
@@ -511,7 +516,8 @@ function get_content_overview(ll){
   ftr.innerHTML=FTB; 
   document.getElementById("lng").innerHTML=FLA[lng];
   }
-var rv="";
+
+var rvr="";
 var lv=-1;
 function get_recursive(a,p){
   cnt=cnta[lng];
@@ -524,12 +530,12 @@ function get_recursive(a,p){
     v=sla[av];
     var va=v.split("\n");
     v=va[0];
-    console.log(lv,e);
-    rv+=format_text(v,av,0,1,lv);
+    // console.log(lv,e);
+    rvr+=format_text(v,av,0,1,lv);
     get_recursive(a,e[0]);
     lv--;
     });
-    return rv;
+    return rvr;
   }
 
 function get_mind_map(){
@@ -546,32 +552,7 @@ function get_mind_map(){
     ftr.innerHTML=FTB; 
     document.getElementById("lng").innerHTML=FLA[lng];
     }
-  
-const sta=[ // slide time array
-  [0.2,3.2,4.7], // 0: title
-  [0.2,1.2,5.1,11,12.7,14.4,16,17.8,20,25.4,27.5,31.7], // 1: dm complications
-  [2.6,5,6.3,9.5,10.2,11.8,20.2,21,30,36.8], // 2: overview
-  [0.6,3.3,6.5,10.4], // 3: 3 questions
-  [0.2,1.4,4,6.6,14,15.8,17.7,19.1,26.8], // 4: q1 cause
-  [0.2,1.5,37.2,41.1], // 5: q2 treatment
-  [0.2,2,8.6,11.2,12.5,13.7,16.3,20.5,21.6], // 6: q3 food
-  [3.1,6.4,6.8,8.1,8.3,8.5,9.5,9.7,12.1,12.3,16.5,16.7], // 7: information
-  [0.7,4.3,5.3,6.3,'7.5:1','8.5:1','9.5:1'], // 8: answers
-  [0.2,1.8,14.5,22.4,26.7,29,30.8,31.8,41.1,41.7,44.2,47.3], // 9: cause
-  [0.2,2,3,4], // 10: psychology
-  [0.2,2,3,4], // 11: genetics
-  [0.2,2,3], // 12: treatment
-  [0.2,1], // 13: food
-  [0.2,1,2,3,4,5], // 14: 
-  [0.2,1,2,3,4,5], // 15: 
-  [0.2,1,2,3,4,5], // 16: 
-  [0.2,1,2,3,4,5], // 17: 
-  [0.2,1,2,3,4,5], // 18: 
-  [0.2,1,2,3,4,5], // 19: 
-  [0.2,1,2,3,4,5], // 20: 
-  [0.2,1,2,3,4,5], // 20: 
-  [0.2,1,2,3]  // 21: 
-  ];
+
 // console.log(sta);
 function audio_update() {
   var ta=sta[i];
@@ -851,7 +832,7 @@ function get_overview(f) {
   const w=window.innerWidth>600?360:window.innerWidth-20;
   const bw=w*0.45; // box width
   const bh=50; // box height
-  const h=320;
+  const h=420;
   var cls=f==1&&i>-1?" class=h":"";
   var rv=`<svg xmlns="http://www.w3.org/2000/svg" id=ov${cls} height=${h+50} width=${w}>`;
   const xo=80; // x offset
@@ -861,7 +842,8 @@ function get_overview(f) {
   [bw+w*0.1-1,200,`M${bw+w*0.1+bw/2} ${bh*3} L${bw+w*0.1+bw/2} ${bh*4}`],
   [1,100,`M${w/2} ${bh} L${w/2} ${bh+bh/2} L${bw/2} ${bh+bh/2} L${bw/2} ${bh*2}`],
   [1,200,`M${bw/2} ${bh*3} L${bw/2} ${bh*4}`],
-  [1,300,`M${bw/2} ${bh*5} L${bw/2} ${bh*6}`]
+  [1,300,`M${bw/2} ${bh*5} L${bw/2} ${bh*6}`],
+  [1,400,`M${bw/2} ${bh*7} L${bw/2} ${bh*8}`]
   ];
   a.forEach((v,j)=>{
     // console.log(j,v);
@@ -887,6 +869,10 @@ function hide_menu(){
   ftr.style.bottom="-70px";
   }
 
+function edit_subtitles(){
+  stt.contentEditable=true;
+  }
+  
 class Slide extends HTMLElement{
   constructor(){super();}
   }
