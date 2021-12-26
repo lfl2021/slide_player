@@ -261,6 +261,7 @@ ___
 <img_bg>
 * الثمانينات: @الحرب العراقیة الایرانیة@ 
 <img_bg>
+<img_bg>
 * الستينيات: @القرى@ 
 <img_bg>
 
@@ -444,6 +445,7 @@ Only one cause:
 * Nineties: @mass exodus@ 
 <img_bg>
 * Eighties: @Iraq-Iran War@ 
+<img_bg>
 <img_bg>
 * Sixties: @villages@ 
 <img_bg>
