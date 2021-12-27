@@ -515,7 +515,7 @@ function get_content_overview(ll){
     var ft=format_text(v,j,0,1,0);
     rv+=ft;
     });
-  // console.log(sna);
+  console.log(sla);
   if(lng==2) document.body.style="direction:ltr;"; else document.body.style="direction:rtl;";
   rt.style.setProperty('--bb', '1px');
   rt.style.setProperty('--ps', 'none');
