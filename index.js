@@ -120,11 +120,16 @@ function clf(f){ // change lang
   load_page(0)
   }
 
-function next_step(t){
+function next_step(ta){
+  if(isNaN(ta[2])) ta[2]=step-1;
+  // console.log(ta);
   if(step==steps.length) next_slide();
   steps[step].classList.add("c");
-  if(t==2) steps[step-1].classList.remove("c"); 
-  if(t!=2) if(step<steps.length) step++; 
+  if(ta[1]==2) {
+    steps[ta[2]].classList.remove("c");
+    steps[ta[2]].classList.add("n");
+    }
+  if(ta[1]!=2) if(step<steps.length) step++; 
   }
 
 function play_slides(){
@@ -134,8 +139,6 @@ function play_slides(){
   afn=`a0040${i0}.mp3`;
   if(i==0) document.getElementById("vpb").style="visibility:hidden;";
   ps();
-  // document.getElementById("pbr").style.height="4px";
-  hide_menu();
   }
   
 function next_slide(){
@@ -244,12 +247,14 @@ function format_text(t,ii,f,ll,m){ // text, slide no, flag: play or show text, l
     s=s.replaceAll("@@ ","");
     s=s.replaceAll("* ","");
     s=s.replaceAll("()","");
+    var cls=f==1&&i>-1?" h":"";
     s=s.replaceAll("<img>",`<img src=p${i0}${j0}.jpg id=1${i0}${j0}>`);
-    s=s.replaceAll("<img_bg>",`<img class="b h" src=p${i0}${j0}.jpg id=1${i0}${j0}>`);
+    s=s.replaceAll("<img_40>",`<img class="w40 ${cls}" src=p${i0}${j0}.jpg id=1${i0}${j0}>`);
+    s=s.replaceAll("<img_60>",`<img class="w60 ${cls}" src=p${i0}${j0}.jpg id=1${i0}${j0}>`);
     s=s.replaceAll("<img_ans1>",`<img src=ans1.jpg>`);
     s=s.replaceAll("___",`<input id=3${i0}${j0} type=text onclick="tbf(2${i0}${j0})">`);
     s=s.replaceAll("<ymd_combo>",`<select id=3${i0}${j0}><option>${dica[1][lng]}</option><option>${dica[2][lng]}</option><option>${dica[3][lng]}</option></select>`);
-    var cls=f==1&&i>-1?" class=h":"";
+    cls=f==1&&i>-1?" class=h":"";
     s=s.replaceAll(" @",` <s${cls}>`);
     s=s.replaceAll("@ ",`</s>`);
     if(fch==1){
@@ -267,9 +272,9 @@ function format_text(t,ii,f,ll,m){ // text, slide no, flag: play or show text, l
     if(fcl==1) rv+=s;
     if(fce==1) rv+=`<em${cls} id=1${i0}${j0}>${s}</em>`;
      // add ul
-    if(j>0 && sna[j].substring(0,1)=="*"  && sna[j-1].substring(0,1)!="*") rv+="<ul>";
-    if(j>0 && sna[j].substring(0,1)!="*"  && sna[j-1].substring(0,1)=="*") rv+="</ul>";
-    if(fca==1) rv+=`<li${cls} id=1${i0}${j0}>${s}</li>`;
+    // if(j>0 && sna[j].substring(0,1)=="*"  && sna[j-1].substring(0,1)!="*") rv+="<ul>";
+    // if(j>0 && sna[j].substring(0,1)!="*"  && sna[j-1].substring(0,1)=="*") rv+="</ul>";
+    if(fca==1) rv+=`<ul><li${cls} id=1${i0}${j0}>${s}</li></ul>`;
     if(fcp==1) rv+=`<label id=1${i0}${j0} ${cls} onclick="rbc(1${i0}${j0})"><input id=2${i0}${j0} type=radio name=q${i}>${s}</label><br>`;
     if(fcp==1) fcpp=1;
     if(fcf==0 && ii==0){
@@ -290,8 +295,8 @@ function format_text(t,ii,f,ll,m){ // text, slide no, flag: play or show text, l
   if(ii==8){
     rv=rv.replaceAll("<answers>",get_answers(f));
     }
-  if(ii==9){
-    rv=rv.replaceAll("<svg>",get_chart(f));
+  if(ii==9||ii==11){
+    rv=rv.replaceAll("<svg>",get_chart(f,ii));
     }
   if(m==0) rv+="</div>";
   if(ll==0) if(fcpp==1) rv+=`<button id=cb onclick="cb()">${dica[0][lng]}</button>`;
@@ -568,24 +573,25 @@ function audio_update() {
   if(afn.charAt(0)=="n") t=t+da[0]+da[1]+da[2];
   if(afn.charAt(0)=="t") t=t+da[0]+da[1]+da[2]+da[3];
   if(afn=="a004008_5.mp3") t=t+da[0]+da[1]+da[2]+da[3]+da[4];
-  console.log(afn);
   let tt=new Date(t * 1000).toISOString().substr(15,4);
   let dd=isNaN(d)?"0:00":new Date(d * 1000).toISOString().substr(15,4);
   document.getElementById("pbr").style.width=t/d*100+"%";
   document.getElementById("pbt").innerHTML=tt+" / "+dd;
   // document.getElementById("time").innerHTML=i+":"+step+":"+t.toFixed(1);
-  var tav=ta[0]; // time array value
-  var tat=0; // time array type: 0 step, 1 check answer
-  if(typeof ta[0]==="string"){
+  // var tav=ta[0]; // time array value
+  var tava=[ta[0],0,0]; // time array type: 0 step, 1 check answer
+  if(typeof ta[0]=="string"){
     var tava=ta[0].split(":");
-    tav=parseFloat(tava[0]); 
-    tat=parseInt(tava[1]); 
+    tava[0]=parseFloat(tava[0]); 
+    tava[1]=parseInt(tava[1]); 
+    tava[2]=parseInt(tava[2]); 
     }
-  if(t>tav){
+  // console.log(t,ta[0],tava);
+  if(t>tava[0]){
     ta.shift();
     // console.log(t, tav, tat);
-    if(tat!=1) next_step(tat);
-    if(tat==1) check_answers();
+    if(tava[1]!=1) next_step(tava);
+    if(tava[1]==1) check_answers();
     }
   }
 
@@ -735,7 +741,7 @@ function audio_ended() {
   // if(i==7) location.reload();
   switch (afn) {
     case "a004002.mp3":
-      document.getElementById("cb").style="opacity:1;";
+        document.getElementById("cb").style="opacity:1;";
       break;
     case "a004004.mp3": // cause
     case "a004005.mp3": // treatment
@@ -812,34 +818,50 @@ function audio_ended2() {
   // if(afp<19) aud.play();
   }
 
-function get_chart(f) {
+function get_chart(f,ii) {
   const w=window.innerWidth>600?360:window.innerWidth-20;
-  const bh=40;
-  const hs=10;
-  const h=(bh+hs)*6+hs;
-  const ta=lng==2?"end":"start";
-  var cls=f==1&&i>-1?" class=h":"";
-  var rv=`<svg xmlns="http://www.w3.org/2000/svg"${cls} height=${h+50} width=${w}>`;
+  const bh=35; // bar width
+  const hs=6; // h space
   const xo=80;
-  const hl=34.5;
+  let a,b=[];
+  var lvm, vlc;
+  if(ii==9) {a=dmca[lng]; lvm=70; vlc=7;};
+  if(ii==11) {a=dmpa[lng]; lvm=25; vlc=5;};
+  a.forEach(v=>{
+    let va=v.split("|");
+    b.push(va[1]);
+    });
+  var vm=Math.max(...b);
+  
+  const mp=(w-xo-36)/vm;
+  const hl=(w-xo-18)/vlc;
+  // console.log(vm,w,w/vm,mp,b);
+  const h=(bh+hs)*a.length+hs;
+  const ta=lng==2?"end":"start";
+  var clss=f==1&&i>-1?" class='w60 h'":"";
+  var cls=f==1&&i>-1?" class=h":"";
+  var rv=`<svg xmlns="http://www.w3.org/2000/svg"${clss} height=${h+50} width=${w}>`;
   // rv+=`<line x1=0 y1=${h-3} x2=${w} y2=${h-3} />`;
-  for(j=0;j<8;j++){
+  for(j=0;j<vlc+1;j++){
     rv+=`<line x1=${xo+(j*hl)} y1=0 x2=${xo+(j*hl)} y2=${h} />`;
-    rv+=`<text x=${xo+(j*hl)} y=${h+2} class=n>${j*10}</text>`;
+    rv+=`<text x=${xo+(j*hl)} y=${h+2} class=n>${j*lvm/vlc}</text>`;
     }
-  const a=grpa[lng];
   var y=hs;
   a.forEach((v,j)=>{
-    var va=v.split("|");
+    let va=v.split("|");
     // console.log(v,j,va);
-    var x=va[1]*0.5;
+    let x=va[1]*mp;
+    let lxo=va[1]<10?24:34;
     rv+=`<rect x=${xo} y=${y} width=${x} height=${bh} />`;
     rv+=`<text text-anchor=${ta} x=${xo-2} y=${y+24}${cls}>${va[0]}</text>`;
+    rv+=`<text text-anchor=${ta} x=${xo+x+lxo} y=${y+24}${cls}>${va[1]}</text>`;
     y+=bh+hs;
     });
-  cls=f==1&&i>-1?" class='h r'":" class=r";
-  rv+=`<line x1=${w} y1=0 x2=0 y2=${h}${cls} />`;
-  rv+=`<line x1=0 y1=0 x2=${w} y2=${h}${cls} />`;
+  if(i==9){
+    cls=f==1&&i>-1?" class='h r'":" class=r";
+    rv+=`<line x1=${w} y1=0 x2=0 y2=${h}${cls} />`;
+    rv+=`<line x1=0 y1=0 x2=${w} y2=${h}${cls} />`;
+    }
   rv+="</svg>";
   return rv;
   }
