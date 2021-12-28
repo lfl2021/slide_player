@@ -120,16 +120,28 @@ color:#00f;
 s-l s{
 text-decoration:none;
 }
+i{
+display:inline-block;
+width:25px;
+height: 36px;
+font-size:24px;
+/* line-height:36px; */
+text-decoration:none;
+background: linear-gradient(#888, #888) no-repeat center/1px 100%;
+}
+u{
+display:inline-block;
+width:25px;
+font-size:16px;
+color:#888;
+text-align:center;
+text-decoration:none;
+}
 m-m {
 display:block;
 padding:0 10px;
 font-size:24px;
 line-height:36px;
-}
-m-m svg{
-/* border:1px red solid; */
-margin:auto;
-display:inline;
 }
 m-m a{
 cursor:pointer;

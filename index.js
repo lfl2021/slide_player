@@ -229,6 +229,7 @@ function format_text(t,ii,f,ll,m){ // text, slide no, flag: play or show text, l
   var fcpp=0;
   var i0=ii.toString().padStart(2,"0");
   // console.log(ii,i0,f);
+  t=t.split("<notes>")[0];
   t=t.replaceAll("ک","ك");
   var lnk=ll==1?` onclick="goto(${ii},0)"`:"";
   if(m==0) rv+=`<s-l>`;
@@ -259,9 +260,9 @@ function format_text(t,ii,f,ll,m){ // text, slide no, flag: play or show text, l
     s=s.replaceAll("@ ",`</s>`);
     if(fch==1){
       if(ii==0) hd=`<h1${cls}>${s}</h1>`; else hd=`<h2${cls}${lnk}>${s}</h2><div id=sb>`;
-      var bpm=lng==2?BPL:BPR;
+      var bpm=`<u>&#9679;</u>`;lng==2?BPL:BPR;
       if(m>0) {
-        var sp="&nbsp;&nbsp;&nbsp;".repeat(m-1);
+        var sp="<i>&nbsp;</i>".repeat(m-1);
         hd=`<m-m id=${i0}${j0}>${sp}${bpm} <a ${lnk}>${s}</a></m-m>`;
         }
       rv+=hd;
@@ -305,11 +306,9 @@ function format_text(t,ii,f,ll,m){ // text, slide no, flag: play or show text, l
   }
 
 function get_subtitles(){
-  var rv="";
-  var txt=txta[lng];
-  var ssa=txt.split("\n\n");
-  // rv=format_text(sla[i],i,0,0,0);
-  rv=ssa[i];
+  var rv=cnt.split("\n\n")[i];
+  if(rv.indexOf("<notes>")==-1) return false;
+  rv=rv.split("<notes>")[1];
   rv=rv.replaceAll("ک","ك");
   rv=rv.replaceAll("\n","<p>");
   stt.innerHTML=rv;
@@ -491,12 +490,16 @@ function rbc(id){ // radio button clicked
     }
   }
 
-function get_content_array(t){
-  var rv=[];
-  t=t.replaceAll("ک","ك");
-  t=t.replaceAll("* ","");
-  const sna=t.split("\n"); // sentence array
-  return sna;
+function get_content_array(){
+  let t=cnt.replaceAll("* ","");
+  let a=t.split("\n\n"); // sentence array
+  let rv=[];
+  a.forEach(v=>{
+    rv.push(v.split("<notes>")[0]);
+    });
+  a=rv.join("\n");
+  rv=a.split("\n");
+  return rv;
   }
 
 function get_content_overview(ll){
@@ -549,7 +552,7 @@ function get_recursive(a,p){
 function get_mind_map(){
     aud.pause();
     aud.currentTime=0;
-    rv="";
+    rvr="";
     lv=-1;
     rv=get_recursive(mmpa,0);
     if(lng==2) document.body.style="direction:ltr;"; else document.body.style="direction:rtl;";
@@ -559,6 +562,7 @@ function get_mind_map(){
     vid.innerHTML=rv;
     ftr.innerHTML=FTB; 
     document.getElementById("lng").innerHTML=FLA[lng];
+    stt.style.bottom="-360px";
     }
 
 // console.log(sta);
@@ -624,10 +628,10 @@ function get_answers(f){
   var i0=i.toString().padStart(2,"0");
   var ja=[22,23,24];
   var aa=[9,12,13];
-  var cntva=get_content_array(cnt);
-  // console.log(cntva);
+  var cntva=get_content_array();
   var cls=f==1&&i>-1?" class=h":"";
   fana=[ansa[0],ansa[2],ansa[4]];
+  // console.log(fana,cntva);
   fana.forEach((v,j)=>{
     ans=v.split("|")[2];
     qus=cntva[ja[j]];
