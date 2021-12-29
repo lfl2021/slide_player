@@ -296,9 +296,9 @@ https://www.youtube.com/watch?v=9zNRcgsagrs
 # نموونه‌ى خۆراک
 * ژه‌مى سه‌ره‌کى
 * زه‌لاته‌
-* ژه‌مى سووک
 * خۆراکى منداڵان
 <notes>
+ژه‌مى سووک: ژه‌مى لابه‌لا
 
 # ژه‌مى سه‌ره‌کى
 * نیسک
@@ -372,10 +372,6 @@ https://www.youtube.com/watch?v=9zNRcgsagrs
 # زه‌لاته‌ى پاروو
 که‌له‌م
 <notes>
-
-# ژه‌مى سووک
-<notes>
-ژه‌مى لابه‌لا
 
 # خۆراکى منداڵان
 * نۆتێلا
@@ -538,8 +534,9 @@ ___
 # نماذج وصفات
 * طبق كامل
 * السلطة
-* طبق جانبي
 * وصفات الاطفال
+<notes>
+* طبق جانبي
 
 # طبق كامل
 * عدس
@@ -594,8 +591,6 @@ ___
 # السلطة الكاملة
 
 # سلطة الملفوف
-
-# طبق جانبي
 
 # وصفات للاطفال
 * نوتيلا
@@ -747,8 +742,9 @@ Salad with:
 # Recipe Examples
 * Main dish
 * Salad
-* Side dish
 * Children recipes
+<notes>
+* Side dish
 
 # Main Dish
 * Lentil soup
@@ -805,8 +801,6 @@ At least 12 ingredients:
 # Quick Salad
 
 # Wrap Salad
-
-# Side Dish
 
 # Children Recipes
 * Notella
@@ -908,6 +902,6 @@ const mmpa=[
 [28,28], //      - proper salad
 [28,29], //      - quick salad
 [28,30], //      - wrap salad
-[26,31], //    - side dish
-[26,32], //    - children recipes
+// [26,31], //    - side dish
+[26,31], //    - children recipes
 ];
