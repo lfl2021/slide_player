@@ -72,6 +72,10 @@ label{
 font-size:var(--lf);
 color:#900;
 }
+li img{
+height:50px;
+vertical-align:middle;
+}
 label img{
 height:50px;
 vertical-align:middle;
@@ -319,7 +323,7 @@ stroke:darkgreen;
 stroke-width:1px;
 fill:none; 
 }
-.w40,.w60{
+.w40,.w50,.w60{
 width:100%;
 /* display:none; */
 }
@@ -344,7 +348,15 @@ display:block;
 position:absolute;
 z-index:-1;
 }
-.w60{
+.w50{
+float:left;
+width:50%;
+left:40px;
+top:0;
+display:block;
+position:absolute;
+z-index:-1;
+}.w60{
 float:left;
 width:60%;
 left:40px;

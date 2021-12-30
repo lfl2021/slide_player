@@ -239,23 +239,32 @@ function format_text(t,ii,f,ll,m){ // text, slide no, flag: play or show text, l
     var fcd=s.substring(0,3)=="## "?1:0; // first 2 hash
     var fce=s.substring(0,3)=="@@ "?1:0; // first 2 at sign: emphasis
     var fca=s.substring(0,2)=="* "?1:0; // first char asterisk
+    var fcs=s.substring(0,3)=="** "?1:0; // first char asterisk
     var fcp=s.substring(0,3)=="() "?1:0; // first 2 char parenthesis
-    var fcf=fch+fca+fcp+fcd+fcl+fce;
+    var fcf=fch+fca+fcp+fcd+fcl+fce+fcs;
     s=s.replaceAll("## ","");
     s=s.replaceAll("# ","");
     s=s.replaceAll("@@ ","");
+    s=s.replaceAll("** ","");
     s=s.replaceAll("* ","");
     s=s.replaceAll("()","");
     var cls=f==1&&i>-1?" h":"";
-    s=s.replaceAll("<img>",`<img src=p${i0}${j0}.jpg id=1${i0}${j0}>`);
-    s=s.replaceAll("<img_40>",`<img class="w40 ${cls}" src=p${i0}${j0}.jpg id=1${i0}${j0}>`);
-    s=s.replaceAll("<img_60>",`<img class="w60 ${cls}" src=p${i0}${j0}.jpg id=1${i0}${j0}>`);
     s=s.replaceAll("<img_ans1>",`<img src=ans1.jpg>`);
+    let img="";
+    if(s.includes("<img")){
+      img=get_file_name(j);
+      // console.log(s,img);
+      }
+    s=s.replaceAll("<img_40>",`<img class="w40 ${cls}" src=${img} id=1${i0}${j0}>`);
+    s=s.replaceAll("<img_50>",`<img class="w50 ${cls}" src=${img} id=1${i0}${j0}>`);
+    s=s.replaceAll("<img_60>",`<img class="w60 ${cls}" src=${img} id=1${i0}${j0}>`);
+    s=s.replaceAll("<img>",`<img src=${img} id=1${i0}${j0}>`);
     s=s.replaceAll("___",`<input id=3${i0}${j0} type=text onclick="tbf(2${i0}${j0})">`);
     s=s.replaceAll("<ymd_combo>",`<select id=3${i0}${j0}><option>${dica[1][lng]}</option><option>${dica[2][lng]}</option><option>${dica[3][lng]}</option></select>`);
     cls=f==1&&i>-1?" class=h":"";
     s=s.replaceAll(" @",` <s${cls}>`);
     s=s.replaceAll("@ ",`</s>`);
+    // s=s.replaceAll("_"," ");
     if(fch==1){
       if(ii==0) hd=`<h1${cls}>${s}</h1>`; else hd=`<h2${cls}${lnk}>${s}</h2><div id=sb>`;
       var bpm=`<u>&#9679;</u>`;lng==2?BPL:BPR;
@@ -274,6 +283,7 @@ function format_text(t,ii,f,ll,m){ // text, slide no, flag: play or show text, l
     // if(j>0 && sna[j].substring(0,1)=="*"  && sna[j-1].substring(0,1)!="*") rv+="<ul>";
     // if(j>0 && sna[j].substring(0,1)!="*"  && sna[j-1].substring(0,1)=="*") rv+="</ul>";
     if(fca==1) rv+=`<ul><li${cls} id=1${i0}${j0}>${s}</li></ul>`;
+    if(fcs==1) rv+=`<ul><ul><li${cls} id=1${i0}${j0}>${s}</li></ul></ul>`;
     if(fcp==1) rv+=`<label id=1${i0}${j0} ${cls} onclick="rbc(1${i0}${j0})"><input id=2${i0}${j0} type=radio name=q${i}>${s}</label><br>`;
     if(fcp==1) fcpp=1;
     if(fcf==0 && ii==0){
@@ -294,7 +304,7 @@ function format_text(t,ii,f,ll,m){ // text, slide no, flag: play or show text, l
   if(ii==8){
     rv=rv.replaceAll("<answers>",get_answers(f));
     }
-  if(ii==9||ii==11){
+  if(ii==9||ii==11||ii==12||ii==13){
     rv=rv.replaceAll("<svg>",get_chart(f,ii));
     }
   if(m==0) rv+="</div>";
@@ -311,6 +321,39 @@ function get_subtitles(){
   rv=rv.replaceAll("\n","<p>");
   stt.innerHTML=rv;
   stt.style.bottom="0px";
+  }
+
+function get_file_name(j){
+  var rv=j;
+  let a=cnta[2].split("\n\n")[i].split("\n");
+  // if(a[j].indexOf("<img_ans0")!=-1) return "ans0.jpg";
+  // if(a[j].indexOf("<img_ans1")!=-1) return "ans1.jpg";
+  let b=a[j].split(" ");
+  imgi=a[j].indexOf("<img");
+  if(imgi==0) rv=get_prev_word(a[j-1]);
+  if(imgi>0) rv=get_prev_word(a[j]);
+  // console.log(imgi,a[j],a);
+  return rv;
+  }
+
+function get_prev_word(t){
+  var rv="";
+  rv=t.toLowerCase(t);
+  // rv=rv.replaceAll("# ","");
+  rv=rv.replaceAll("-","_");
+  rv=rv.replaceAll("() ","");
+  rv=rv.replaceAll("** ","");
+  rv=rv.replaceAll("* ","");
+  rv=rv.replaceAll("# ","");
+  rv=rv.replaceAll(":","");
+  rv=rv.replaceAll("@","");
+  rv=rv.replaceAll("&","and");
+  rv=rv.replaceAll(" <img>","");
+  rv=rv.replaceAll("  "," ");
+  rv=rv.trim();
+  rv=rv.replaceAll(" ","_");
+  rv=rv+".jpg";
+  return rv;
   }
 
 function tbf(id){ // text box focus
@@ -641,7 +684,7 @@ function get_answers(f){
     var j0=k.toString().padStart(2,"0");
     if(lng<2) k=en_to_ar(k);
     var a=get_correct_answers();
-    var img=f==1?"<img>":`<img src=ans${a[j]}.jpg>`;
+    let img=f==1?"<img>":`<img src=ans${a[j]}.jpg>`;
     rv+=`<p id=1${i0}${j0}${cls} onclick="goto(${aa[j]},1)" class=p>${k}. ${qus}<br><a>${ans}</a> ${img}</p><br>`;
     });
   return rv;
@@ -833,6 +876,8 @@ function get_chart(f,ii) {
   var lvm, vlc;
   if(ii==9) {a=dmca[lng]; lvm=70; vlc=7;};
   if(ii==11) {a=dmpa[lng]; lvm=25; vlc=5;};
+  if(ii==12) {a=dmta[lng]; lvm=100; vlc=10;};
+  if(ii==13) {a=dmfa[lng]; lvm=100; vlc=10;};
   a.forEach(v=>{
     let va=v.split("|");
     b.push(va[1]);
@@ -863,7 +908,7 @@ function get_chart(f,ii) {
     rv+=`<text text-anchor=${ta} x=${xo+x+lxo} y=${y+24}${cls}>${va[1]}</text>`;
     y+=bh+hs;
     });
-  if(i==9){
+  if(ii==9||ii==12||ii==13){
     cls=f==1&&i>-1?" class='h r'":" class=r";
     rv+=`<line x1=${w} y1=0 x2=0 y2=${h}${cls} />`;
     rv+=`<line x1=0 y1=0 x2=${w} y2=${h}${cls} />`;
