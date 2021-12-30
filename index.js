@@ -61,7 +61,28 @@ function load_page(f){
   var sla=cnt.split("\n\n");
   rv=format_text(sla[i],i,f,0,0);
   console.log(i);
-  if(lng==2) document.body.style="direction:ltr;"; else document.body.style="direction:rtl;";
+  if(lng==2){
+    // document.body.style="direction:ltr;";
+    rt.style.setProperty('--bd', 'ltr');
+    var a=document.getElementsByClassName("lt");
+    Array.from(a).forEach(v=>{
+      v.classList.remove("lt");
+      v.classList.add("rt");
+      });
+      // rt.style.setProperty('--lt', window.innerWidth-window.innerWidth*0.5-60+'px');
+    // rt.style.removeProperty('--lt');
+    
+    }else{
+    rt.style.setProperty('--bd', 'rtl');
+    var a=document.getElementsByClassName("rt");
+    Array.from(a).forEach(v=>{
+      console.log(v);
+      v.classList.remove("rt");
+      v.classList.add("lt");
+      });
+    // rt.style.setProperty('--lt', '40px');
+    }
+    // else document.body.style="direction:rtl;";
   // if(lng==2) document.body.style="font-family:noto;direction:ltr;"; else document.body.style="font-family:amiri;direction:rtl;";
   rt.style.setProperty('--bb', '0px');
   rt.style.setProperty('--ps', 'absolute');
@@ -224,6 +245,7 @@ function vid_click(){
 function format_text(t,ii,f,ll,m){ // text, slide no, flag: play or show text, link, mode: slide or mindmap
   var rv="";
   var hd="";
+  var rl=lng==2?"rt":"lt";
   var fcpp=0;
   var i0=ii.toString().padStart(2,"0");
   // console.log(ii,i0,f);
@@ -255,9 +277,9 @@ function format_text(t,ii,f,ll,m){ // text, slide no, flag: play or show text, l
       img=get_file_name(j);
       // console.log(s,img);
       }
-    s=s.replaceAll("<img_40>",`<img class="w40 ${cls}" src=${img} id=1${i0}${j0}>`);
-    s=s.replaceAll("<img_50>",`<img class="w50 ${cls}" src=${img} id=1${i0}${j0}>`);
-    s=s.replaceAll("<img_60>",`<img class="w60 ${cls}" src=${img} id=1${i0}${j0}>`);
+    s=s.replaceAll("<img_40>",`<img class="w40 ${rl} ${cls}" src=${img} id=1${i0}${j0}>`);
+    s=s.replaceAll("<img_50>",`<img class="w50 ${rl} ${cls}" src=${img} id=1${i0}${j0}>`);
+    s=s.replaceAll("<img_60>",`<img class="w60 ${rl} ${cls}" src=${img} id=1${i0}${j0}>`);
     s=s.replaceAll("<img>",`<img src=${img} id=1${i0}${j0}>`);
     s=s.replaceAll("___",`<input id=3${i0}${j0} type=text onclick="tbf(2${i0}${j0})">`);
     s=s.replaceAll("<ymd_combo>",`<select id=3${i0}${j0}><option>${dica[1][lng]}</option><option>${dica[2][lng]}</option><option>${dica[3][lng]}</option></select>`);
@@ -573,6 +595,7 @@ function get_content_overview(ll){
 var rvr="";
 var lv=-1;
 var jj=0;
+
 function get_recursive(a,p){
   cnt=cnta[lng];
   var sla=cnt.split("\n\n");
@@ -585,7 +608,7 @@ function get_recursive(a,p){
     v=sla[av];
     var va=v.split("\n");
     v=va[0];
-    // console.log(lv,jj,v,e);
+    console.log(lv,jj,v,e);
     rvr+=format_text(v,av,0,1,lv);
     get_recursive(a,jj);
     lv--;
@@ -846,7 +869,7 @@ function audio_ended() {
       // aud.play();
       break;
     case "a000000.mp3":
-      if(i>21){
+      if(i>cnt.split("\n\n").length-2){
         console.log("Continue");
         i=8;
         localStorage.setItem("DM_SLD", i);

@@ -17,9 +17,12 @@ src:url('res/noto.ttf');
 --ps:absolute;
 --w:calc("100% - 20px");
 --h:calc("100% - 20px");
+--lt:40px;
+--rt:40px;
+--bd:rtl;
 }
 body{
-direction:rtl;
+direction:var(--bd);
 font-family:amiri;
 margin:0;
 padding:0;
@@ -67,6 +70,9 @@ margin:0;
 }
 li{
 font-size:var(--tf);
+}
+ul ul li{
+list-style-type:disc;
 }
 label{
 font-size:var(--lf);
@@ -331,6 +337,12 @@ width:100%;
 /* width:100%; */
 display:none;
 }
+.rt{
+right:40px;
+}
+.lt{
+left:40px;
+}
 @media screen and (orientation:landscape) {
 h2{
 margin:0.6em 0;
@@ -340,28 +352,28 @@ padding:0px 40px;
 position:relative;
 }
 .w40{
-float:left;
+/* float:left; */
 width:40%;
-left:40px;
+/* left:var(--lt); */
 top:0;
-display:block;
+/* display:block; */
 position:absolute;
 z-index:-1;
 }
 .w50{
-float:left;
+/* float:left; */
 width:50%;
-left:40px;
+/* left:var(--lt); */
 top:0;
-display:block;
+/* display:block; */
 position:absolute;
 z-index:-1;
 }.w60{
-float:left;
+/* float:left; */
 width:60%;
-left:40px;
+/* left:var(--lt); */
 top:0;
-display:block;
+/* display:block; */
 position:absolute;
 z-index:-1;
 }
