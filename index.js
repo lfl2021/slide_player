@@ -145,7 +145,7 @@ function clf(f){ // change lang
 
 function next_step(ta){
   if(isNaN(ta[2])) ta[2]=step-1;
-  console.log(ta,step,steps);
+  // console.log(ta,step,steps);
   if(step==steps.length) next_slide(1);
   steps[step].classList.add("c");
   if(ta[1]==2) {
@@ -250,7 +250,7 @@ function format_text(t,ii,f,ll,m){ // text, slide no, flag: play or show text, l
   var fcpp=0;
   var i0=ii.toString().padStart(2,"0");
   // console.log(ii,i0,f);
-  t=t.split("<notes>")[0];
+  t=t.split("<notes>")[0].trim();
   t=t.replaceAll("ک","ك");
   var lnk=ll==1?` onclick="goto(${ii},0)"`:"";
   if(m==0) rv+=`<s-l>`;
@@ -347,34 +347,29 @@ function get_subtitles(){
   }
 
 function get_slide_contents(){
-  var a=cnt.split("\n\n")[i];
-  a=a.split("<notes>")[0].trim();
-  a=a.replaceAll("ک","ك");
-  a=a.replaceAll("\n<BPC>\n","\n");
-  a=a.replaceAll(" @","\n");
-  a=a.split("\n");
-  console.log(a,sta[i]);
+  var rv="";
   load_page(1);
+  var a=[];
+  Array.from(steps).forEach(v=> {
+    let vv=v.textContent;
+    if(v.tagName=="svg") vv="[graph]";
+    if(v.tagName=="image") vv="[image]";
+    if(v.tagName=="IMG") vv="[image]";
+    a.push(vv);
+    });
+  // console.log(a,sta[i],steps);
   var b=sta[i];
   var ta=[];
   b.forEach(v=> {
     if(!isNaN(v)) ta.push(v);
-    // ta.push(v);
     });
-  var rv="";
   a.forEach((v,j)=> {
-    let f=1;
-    v=clean_text(v);
     let ts=ta[j];
-    console.log(j,v,ts);
-    if(isNaN(ts)) ts=parseFloat(ts.split(":")[0]);
-    if(v.indexOf("___")==0) f=0;
-    if(v.indexOf("<img_")!=-1) v="[image]";
-    if(v.indexOf("<svg")!=-1) v="[graph]";
+    // console.log(j,v,ts);
+    // if(isNaN(ts)) ts=parseFloat(ts.split(":")[0]);
     let tt=new Date(ts*1000).toISOString().substr(15,4);
-    if(f==1) rv+=`<div onclick="ps(1,${ts})">${tt} ${v}</div>`;
+    rv+=`<c-t onclick="ps(1,${ts})">${tt} ${v}</c-t>`;
     });
-  // rv=rv.replaceAll("\n","<br>");
   stt.innerHTML=rv;
   stt.style.bottom="0px";
   }
@@ -479,7 +474,7 @@ function ps(f,t){
   // aud.src=f;
   aud.src=afn;
   // aud.currentTime=t;
-  console.log(i,t,f,afn,aud.currentTime);
+  // console.log(i,t,f,afn,aud.currentTime);
   // if(aud.paused) aud.play();
   var playPromise = aud.play();
   if (playPromise !== undefined) {
@@ -1045,6 +1040,9 @@ class ImageBig extends HTMLElement{
 class ProgressBar extends HTMLElement{
   constructor(){super();}
   }
+class ContentsTable extends HTMLElement{
+  constructor(){super();}
+  }
 window.customElements.define("s-l", Slide);
 window.customElements.define("s-t", SubTitle);
 window.customElements.define("a-u", SlideAuthor);
@@ -1052,3 +1050,4 @@ window.customElements.define("s-b", SlideBody);
 window.customElements.define("m-m", MindMap);
 window.customElements.define("i-b", ImageBig);
 window.customElements.define("p-b", ProgressBar);
+window.customElements.define("c-t", ContentsTable);
