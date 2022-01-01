@@ -13,6 +13,7 @@ var sid=0;  // selected id
 var afn=""; // audio file name
 var afp=0;  // audio file poistion
 var qsa=[0,0];
+var stai=[]; // sta[i]
 var ansa=[];//localStorage.getItem("DM_DATA")===null?[]:JSON.parse(localStorage.getItem("DM_DATA")); //cause treatment food age gender dm duration ymd highest blood sugar hba1c
 const aud=document.getElementById("aud");
 const aud2=document.getElementById("aud2");
@@ -31,7 +32,7 @@ const BPS=`<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24
 const FTB=`<div id=ftb><button id=more onclick="get_more()">
   <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
 </button>
-<button onclick="gohome()">
+<button onclick="get_mind_map()">
  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0V0z" fill="none"></path><path d="M8 16h8v2H8zm0-4h8v2H8zm6-10H6c-1.1 0-2 .9-2 2v16c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"></path></svg>
 </button>
 <button id=bpl onclick="play_slides()">${BPL}</button></div>`;
@@ -98,7 +99,11 @@ function load_page(f){
     }
   ftr.style.bottom="-80px";
   steps=document.getElementsByClassName("h");
-  if(qsa[1]=="t") get_subtitles(); 
+  if(qsa[1]=="t") get_subtitles();
+  // let taa=sta[i];
+  // console.log(i,taa,stai);
+  stai=Array.from(sta[i]);
+  // console.log(i,taa,stai);
   }
 
 document.addEventListener("keydown",event=>{
@@ -204,7 +209,7 @@ function gohome(){
   i=0;
   localStorage.setItem("DM_SLD", i);
   step=0;
-  localStorage.setItem("DM_DATA", "");
+  // localStorage.setItem("DM_DATA", "");
   location.reload();
   load_page(0);
   }
@@ -289,7 +294,7 @@ function format_text(t,ii,f,ll,m){ // text, slide no, flag: play or show text, l
     s=s.replaceAll("@ ",`</s>`);
     // s=s.replaceAll("_"," ");
     if(fch==1){
-      if(ii==0) hd=`<h1${cls}>${s}</h1>`; else hd=`<h2${cls}${lnk}>${s}</h2><div id=sb>`;
+      if(ii==0) hd=`<h1${cls}${lnk}>${s}</h1>`; else hd=`<h2${cls}${lnk}>${s}</h2><div id=sb>`;
       var bpm=`<u>&#9679;</u>`;lng==2?BPL:BPR;
       if(m>0) {
         var sp="<i>&nbsp;</i>".repeat(m-1);
@@ -348,23 +353,25 @@ function get_subtitles(){
 
 function get_slide_contents(){
   var rv="";
-  load_page(1);
+  if(aud.paused) load_page(1);
+  // stai=sta[i];
   var a=[];
   Array.from(steps).forEach(v=> {
+    // v.classList.remove("c");
     let vv=v.textContent;
     if(v.tagName=="svg") vv="[graph]";
     if(v.tagName=="image") vv="[image]";
     if(v.tagName=="IMG") vv="[image]";
     a.push(vv);
     });
-  // console.log(a,sta[i],steps);
-  var b=sta[i];
-  var ta=[];
-  b.forEach(v=> {
-    if(!isNaN(v)) ta.push(v);
+  // var b=sta[i];
+  var b=[];
+  Array.from(sta[i]).forEach(v=> {
+    if(!isNaN(v)) b.push(v);
     });
+  // console.log(a,b);
   a.forEach((v,j)=> {
-    let ts=ta[j];
+    let ts=b[j];
     // console.log(j,v,ts);
     // if(isNaN(ts)) ts=parseFloat(ts.split(":")[0]);
     let tt=new Date(ts*1000).toISOString().substr(15,4);
@@ -464,18 +471,31 @@ function file_exists(url){
 
 function ps(f,t){
   if(f==0) {aud.pause(); aud.currentTime=0; return false;}
-  // var f=`${afn}.mp3`;
   if(i>13) afn="a000000.mp3";
   if(t>0){
+    var j=0;
+    a=Array.from(sta[i]);
+    while(t>a[j]){
+      j++;
+      }
+    // stai=Array.from(sta[i]).filter((a,k)=>k>j);
+    // stai=Array.from(sta[i]).splice(j);
+    // console.log(t,j,stai);
     var i0=i.toString().padStart(2,"0");
     afn=`a0040${i0}.mp3#t=${t}`;  
-    // load_page(1);
+    // load_page(i);
+    var b=[];
+    Array.from(sta[i]).forEach(v=> {
+      if(!isNaN(v)) b.push(v);
+      });
+    Array.from(steps).forEach((v,j)=> {
+      if(b[j]>t) v.classList.remove("c"); else v.classList.add("c")
+      });
     }
   // aud.src=f;
   aud.src=afn;
   // aud.currentTime=t;
   // console.log(i,t,f,afn,aud.currentTime);
-  // if(aud.paused) aud.play();
   var playPromise = aud.play();
   if (playPromise !== undefined) {
     playPromise.then(_ => {
@@ -666,11 +686,10 @@ function get_mind_map(){
     stt.style.bottom="-360px";
     }
 
-// console.log(sta);
 function audio_update() {
-  var ta=sta[i];
   var t=aud.currentTime;
   let d=aud.duration;
+  // console.log(t,stai);
   let da=[9,6,3,1,1,42];
   if(i==8) d=da.reduce(array_sum,0);
   if(afn=="a004008_1.mp3"||afn=="a004008_2.mp3"||afn=="a004008_3.mp3") t=t+da[0];
@@ -684,17 +703,17 @@ function audio_update() {
   document.getElementById("pbt").innerHTML=tt+" / "+dd;
   // document.getElementById("time").innerHTML=i+":"+step+":"+t.toFixed(1);
   // var tav=ta[0]; // time array value
-  var tava=[ta[0],0,0]; // time array (time,type: 0 step, 1 check answer,hide step by id)
-  if(typeof ta[0]=="string"){
-    var tava=ta[0].split(":");
+  var tava=[stai[0],0,0]; // time array (time,type: 0 step, 1 check answer,hide step by id)
+  if(typeof stai[0]=="string"){
+    var tava=stai[0].split(":");
     tava[0]=parseFloat(tava[0]); 
     tava[1]=parseInt(tava[1]); 
     tava[2]=parseInt(tava[2]); 
     }
   // console.log(t,ta[0],tava);
   if(t>tava[0]){
-    ta.shift();
-    // console.log(t, tava, ta);
+    stai.shift();
+    // console.log(t, tava, stai, sta[i]);
     if(tava[1]!=1) next_step(tava);
     if(tava[1]==1) check_answers();
     }
@@ -840,6 +859,7 @@ function get_correct_answers(){ // get array of
 
 function audio_ended() {
   if(afn.charAt(0)=="n"||afn.charAt(0)=="t") afn=afn.charAt(0);
+  console.log(i,afn,cnt.split("\n\n").length);
   // console.log(afn);
   var l0=1;
   l0=l0<10?"0"+l0:l0;  
