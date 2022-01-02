@@ -152,13 +152,14 @@ function clf(f){ // change lang
 function next_step(ta){
   if(isNaN(ta[2])) ta[2]=step-1;
   // console.log(ta,step,steps);
-  if(step==steps.length) next_slide(1);
-  steps[step].classList.add("c");
   if(ta[1]==2) {
     steps[ta[2]].classList.remove("c");
     steps[ta[2]].classList.add("n");
+    } else{
+      if(step==steps.length) next_slide(1);
+      steps[step].classList.add("c");
+      if(step<steps.length) step++; 
     }
-  if(ta[1]!=2) if(step<steps.length) step++; 
   }
 
 function play_slides(){
@@ -278,6 +279,7 @@ function format_text(t,ii,f,ll,m){ // text, slide no, flag: play or show text, l
     s=s.replaceAll("* ","");
     s=s.replaceAll("()","");
     var cls=f==1&&i>-1?" h":"";
+    s=s.replaceAll("<img_ans0>",`<img src=ans0.jpg>`);
     s=s.replaceAll("<img_ans1>",`<img src=ans1.jpg>`);
     let img="";
     if(s.includes("<img")){
@@ -474,7 +476,7 @@ function file_exists(url){
 
 function ps(f,t){
   if(f==0) {aud.pause(); aud.currentTime=0; return false;}
-  if(i>13) afn="a000000.mp3";
+  if(i>14) afn="a000000.mp3";
   if(t>0){
     var j=0;
     a=Array.from(sta[i]);
@@ -964,7 +966,7 @@ function get_chart(f,ii,j) {
   if(ii==11) {a=dmpa[lng]; lvm=25; vlc=5;};
   if(ii==12) {a=dmta[lng]; lvm=100; vlc=10;};
   if(ii==13 && j==3) {a=dmfa[lng]; lvm=100; vlc=10;};
-  if(ii==13 && j==5) {a=dmba[lng]; lvm=100; vlc=10;};
+  if(ii==13 && j==6) {a=dmba[lng]; lvm=100; vlc=10;};
   a.forEach(v=>{
     let va=v.split("|");
     b.push(va[1]);
