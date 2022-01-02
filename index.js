@@ -1,5 +1,7 @@
 var i=0;
 if(localStorage.getItem("DM_SLD")===null) localStorage.setItem("DM_SLD", i); else i=localStorage.getItem("DM_SLD"); // slide
+var ansa=["||","||","||","||","||","|","|","|","|","|","|"];
+if(localStorage.getItem("DM_DATA")===null) localStorage.setItem("DM_DATA", JSON.stringify(ansa)); else ansa=JSON.parse(localStorage.getItem("DM_DATA")); // data
 i=parseInt(i);
 if(i<0) i=0;
 var lng=localStorage.getItem("DM_LNG")===null?0:localStorage.getItem("DM_LNG") // 0 kur 1 ara 2 eng 
@@ -14,7 +16,7 @@ var afn=""; // audio file name
 var afp=0;  // audio file poistion
 var qsa=[0,0];
 var stai=[]; // sta[i]
-var ansa=[];//localStorage.getItem("DM_DATA")===null?[]:JSON.parse(localStorage.getItem("DM_DATA")); //cause treatment food age gender dm duration ymd highest blood sugar hba1c
+// var ansa=[];//localStorage.getItem("DM_DATA")===null?[]:JSON.parse(localStorage.getItem("DM_DATA")); //cause treatment food age gender dm duration ymd highest blood sugar hba1c
 const aud=document.getElementById("aud");
 const aud2=document.getElementById("aud2");
 const vid=document.getElementById("vid");
@@ -397,7 +399,7 @@ function get_file_name(j){
   imgi=a[j].indexOf("<img");
   if(imgi==0) rv=get_prev_word(a[j-1]);
   if(imgi>0) rv=get_prev_word(a[j]);
-  // console.log(imgi,a[j],a);
+  // console.log(rv,imgi,a[j],a);
   return rv;
   }
 
@@ -411,6 +413,8 @@ function get_prev_word(t){
   rv=rv.replaceAll("&","and");
   rv=clean_text(rv);
   rv=rv.replaceAll(" <img>","");
+  rv=rv.replaceAll("<img_ans0>","");
+  rv=rv.replaceAll("<img_ans1>","");
   rv=rv.replaceAll("  "," ");
   rv=rv.trim();
   rv=rv.replaceAll(" ","_");
@@ -782,8 +786,9 @@ function check_answers(){
   }
 
 function get_answers(f){
-  if(localStorage.getItem("DM_DATA")=="") ansa=["|","|","|","|","|","|","|","|","|","|2","|ساڵ"]; else ansa=JSON.parse(localStorage.getItem("DM_DATA"));
+  // if(localStorage.getItem("DM_DATA")=="") ansa=["|","|","|","|","|","|","|","|","|","|2","|ساڵ"]; else ansa=JSON.parse(localStorage.getItem("DM_DATA"));
   // edit answer array
+  // console.log(ansa);
   if(ansa[1].length>6) ansa[0]+="|"+ansa[1].split("|")[1]; else ansa[0]+="|"+ansa[0].split("|")[1];
   if(ansa[3].length>6) ansa[2]+="|"+ansa[3].split("|")[1]; else ansa[2]+="|"+ansa[2].split("|")[1];
   if(ansa[4].length>6) ansa[4]+="|"+ansa[4].split("|")[1];
