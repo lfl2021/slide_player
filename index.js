@@ -29,6 +29,8 @@ const BPC=`<div id=dimg><img id=title_img src=dm_test.jpg><svg id="vpb" viewBox=
 const BPL=`<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0z" fill="none"></path><path d="M8 5v14l11-7z"></path></svg>`;
 const BPR=`<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0z" fill="none"></path><path d="M16 5v14l-11-7z"></path></svg>`;
 const BPS=`<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0z" fill="none"/><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>`;
+const CK1=`<svg xmlns="http://www.w3.org/2000/svg" height="34px" viewBox="0 0 24 24" width="34px" fill="#090"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>`;
+const CK0=`<svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 0 20 20" width="28px" fill="#f00"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>`;
 const FTB=`<div id=ftb><button id=more onclick="get_more()">
   <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
 </button>
@@ -226,12 +228,12 @@ function vid_click(){
   }
 
   function cb(){
-  if(stsa.includes(i)){
+  var inpa=Array.from(document.getElementsByTagName("input"));
+  if(inpa.length==0){
     next_slide(1);
     if(aud.paused) aud.play();
     return true;
     }
-  var inpa=Array.from(document.getElementsByTagName("input"));
   var slca=Array.from(document.getElementsByTagName("select"));
   var ic=[0,0,0,slca.length];
   for(v of inpa){
@@ -279,8 +281,8 @@ function format_text(t,ii,f,ll,m){ // text, slide no, flag: play or show text, l
     s=s.replaceAll("* ","");
     s=s.replaceAll("()","");
     var cls=f==1&&i>-1?" h":"";
-    s=s.replaceAll("<img_ans0>",`<img src=ans0.jpg>`);
-    s=s.replaceAll("<img_ans1>",`<img src=ans1.jpg>`);
+    s=s.replaceAll("<img_ans0>",CK0);
+    s=s.replaceAll("<img_ans1>",CK1);
     let img="";
     if(s.includes("<img")){
       img=get_file_name(j);
@@ -291,7 +293,7 @@ function format_text(t,ii,f,ll,m){ // text, slide no, flag: play or show text, l
     s=s.replaceAll("<img_60>",`<img class="w60 ${rl} ${cls}" src=${img} id=1${i0}${j0}>`);
     s=s.replaceAll("<img>",`<img src=${img} id=1${i0}${j0}>`);
     s=s.replaceAll("___",`<input id=3${i0}${j0} type=text onclick="tbf(2${i0}${j0})">`);
-    s=s.replaceAll("<ymd_combo>",`<select id=3${i0}${j0}><option>${dica[1][lng]}</option><option>${dica[2][lng]}</option><option>${dica[3][lng]}</option></select>`);
+    s=s.replaceAll("<ymd_combo>",`<select id=4${i0}${j0}><option>${dica[1][lng]}</option><option>${dica[2][lng]}</option><option>${dica[3][lng]}</option></select>`);
     cls=f==1&&i>-1?" class=h":"";
     s=s.replaceAll(" @",` <s${cls}>`);
     s=s.replaceAll("@ ",`</s>`);
@@ -573,16 +575,58 @@ function input_feedback(id){ // validate answers
  function save_answer(){
   if(localStorage.getItem("DM_DATA")===null||localStorage.getItem("DM_DATA")=="") ansa=[]; else ansa=JSON.parse(localStorage.getItem("DM_DATA"));
   var sidv=document.getElementById(sid).innerText.trim();
-  // console.log(sid,sidv,ansa);
-  ansa.push(`${sid}|${sidv}`);
-  var inpa=document.getElementsByTagName("input");
-  Array.from(inpa).forEach(v=>{
-    if(v.type=="text") ansa.push(`${v.id}|${v.value}`);
-    });
-  inpa=document.getElementsByTagName("select");
-  Array.from(inpa).forEach((v,i)=>{
-    ansa.push(`${v.id}|${v.value}`);
-    });
+  // console.log(sid,typeof sid, sidv,ansa);
+  switch (sid) {
+    case 10402:
+    case 10403:
+    case 10404:
+    case 10405:
+    case 10406:
+    case 10407:
+      ansa[0]=`${sid}|${sidv}`;
+      ansa[1]=`${10408}|`;
+      break;
+    case 10408:
+      ansa[0]=`${sid}|${sidv}`;
+      v=document.getElementById(30408)
+      ansa[1]=`${v.id}|${v.value}`;
+      break;
+    case 10502:
+      ansa[2]=`${sid}|${sidv}`;
+      ansa[3]=`${10503}|`;
+      break;
+    case 10503:
+      ansa[2]=`${sid}|${sidv}`;
+      v=document.getElementById(30503)
+      ansa[3]=`${v.id}|${v.value}`;
+      break;
+    case 10602:
+    case 10603:
+    case 10604:
+    case 10605:
+    case 10606:
+    case 10607:
+    case 10608:
+      ansa[4]=`${sid}|${sidv}`;
+      break;  
+    case 10704:
+    case 10705:
+      ansa[5]=`${sid}|${sidv}`;
+    case 10702:
+      v=document.getElementById(30702)
+      ansa[6]=`${v.id}|${v.value}`;
+    case 10707:
+      v=document.getElementById(30707)
+      ansa[7]=`${v.id}|${v.value}`;
+      v=document.getElementById(40707)
+      ansa[10]=`${v.id}|${v.value}`;
+    case 10709:
+      v=document.getElementById(30709)
+      ansa[8]=`${v.id}|${v.value}`;
+    case 10711:
+      v=document.getElementById(30711)
+      ansa[9]=`${v.id}|${v.value}`;
+    }
   localStorage.setItem("DM_DATA", JSON.stringify(ansa));
   }
 
@@ -730,7 +774,9 @@ function check_answers(){
   // console.log(fana[qno],fana);
   var qu1=document.getElementById(qa[qno]).innerHTML;
   var a=get_correct_answers(); 
-  qu1=qu1.replaceAll("<img>", `<img src=ans${a[qno]}.jpg>`);
+  // qu1=qu1.replaceAll("<img>", `<img src=ans${a[qno]}.jpg>`);
+  var img=a[qno]==1?CK1:CK0;
+  qu1=qu1.replaceAll("<img>", img);
   document.getElementById(qa[qno]).innerHTML=qu1;
   qno++;
   }
@@ -740,12 +786,12 @@ function get_answers(f){
   // edit answer array
   if(ansa[1].length>6) ansa[0]+="|"+ansa[1].split("|")[1]; else ansa[0]+="|"+ansa[0].split("|")[1];
   if(ansa[3].length>6) ansa[2]+="|"+ansa[3].split("|")[1]; else ansa[2]+="|"+ansa[2].split("|")[1];
-  ansa[4]+="|"+ansa[4].split("|")[1];
-  ansa[6]+="|"+ar_to_en(ansa[6].split("|")[1]);
-  ansa[7]+="|"+ar_to_en(ansa[7].split("|")[1]);
-  ansa[8]+="|"+ar_to_en(ansa[8].split("|")[1]);
-  ansa[9]+="|"+ar_to_en(ansa[9].split("|")[1]);
-  ansa[10]+="|"+time_to_no(ansa[10].split("|")[1]);
+  if(ansa[4].length>6) ansa[4]+="|"+ansa[4].split("|")[1];
+  if(typeof ansa[6]!=='undefined') ansa[6]+="|"+ar_to_en(ansa[6].split("|")[1]);
+  if(typeof ansa[7]!=='undefined') ansa[7]+="|"+ar_to_en(ansa[7].split("|")[1]);
+  if(typeof ansa[8]!=='undefined') ansa[8]+="|"+ar_to_en(ansa[8].split("|")[1]);
+  if(typeof ansa[9]!=='undefined') ansa[9]+="|"+ar_to_en(ansa[9].split("|")[1]);
+  if(typeof ansa[10]!=='undefined') ansa[10]+="|"+time_to_no(ansa[10].split("|")[1]);
 
   var ans="";
   var qus="";
@@ -764,7 +810,9 @@ function get_answers(f){
     var j0=k.toString().padStart(2,"0");
     if(lng<2) k=en_to_ar(k);
     var a=get_correct_answers();
-    let img=f==1?"<img>":`<img src=ans${a[j]}.jpg>`;
+    // let img=f==1?"<img>":`<img src=ans${a[j]}.jpg>`;
+    let img="<img>";
+    if(f==0) img=a[j]==1?CK1:CK0;
     rv+=`<p id=1${i0}${j0}${cls} onclick="goto(${aa[j]},1)" class=p>${k}. ${qus}<br><a>${ans}</a> ${img}</p><br>`;
     });
   return rv;
@@ -950,7 +998,7 @@ function audio_ended() {
   }
 
 function audio_ended2() {
-  console.log(afp);
+  // console.log(afp);
   // if(afp<19) aud.play();
   }
 
@@ -1029,9 +1077,11 @@ function get_overview(f) {
     if(v[2].length) rv+=`<path d="${v[2]}" />`;
     rv+=`<rect x=${v[0]} y=${v[1]} width=${bw} height=${bh} />`;
     rv+=`<text x=${v[0]+bw/2} y=${v[1]+bh/2} dominant-baseline=middle text-anchor=middle>${dica[j+4][lng]}</text>`;
-    var ho=lng==2?4:18;
-    if(j==1) rv+=`<image${cls} href=ans1.jpg height=26 x=${v[0]+18} y=${v[1]+12} />`;
-    if(j==3) rv+=`<image${cls} href=ans0.jpg height=20 x=${v[0]+ho} y=${v[1]+15} />`;
+    rv=rv.replaceAll("<img_ans0>","<a class=r>&#x2715;</a>");
+    rv=rv.replaceAll("<img_ans1>","<a class=g>&#x2713;</a>");
+    // var ho=lng==2?4:18;
+    // if(j==1) rv+=`<image${cls} href=ans1.jpg height=26 x=${v[0]+18} y=${v[1]+12} />`;
+    // if(j==3) rv+=`<image${cls} href=ans0.jpg height=20 x=${v[0]+ho} y=${v[1]+15} />`;
     rv+=`</g>`;
     });
   rv+="</svg>";

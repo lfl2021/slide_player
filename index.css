@@ -172,9 +172,10 @@ font-style:normal;
 color:#f00;
 /* margin:0.2em 0; */
 }
-em img{
+#sb p svg, em svg,li svg{
 height:50px;
 vertical-align:middle;
+display: inline;
 }
 #sb {
 padding:0;
@@ -313,7 +314,12 @@ text-anchor:middle;
 }
 .r{
 stroke:#f00;
-stroke-width:2;
+stroke-width:3;
+font-size:22px;
+}
+.g{
+stroke:#080;
+stroke-width:3;
 }
 line{
 stroke:#ccc;
