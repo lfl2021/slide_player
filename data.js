@@ -1135,7 +1135,7 @@ const sta=[ // slide time array
 [0.2,1,2,3,4,4.8]  //
 ];
 
-const stsa=[2,4,5,6,12,13];
+const stsa=[2,4,5,6,7,12,13];
 
 const dica=[
 ["به‌رده‌وام به‌", "استـمـر", "Continue"],
