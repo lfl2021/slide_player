@@ -1,15 +1,16 @@
 var i=0;
 if(localStorage.getItem("DM_SLD")===null) localStorage.setItem("DM_SLD", i); else i=localStorage.getItem("DM_SLD"); // slide
-var ansa=["||","||","||","||","||","|","|","|","|","|","|"];
+var ansa=["||","||","||","||","||","||","|","|","|","|","|","|"];
 if(localStorage.getItem("DM_DATA")===null) localStorage.setItem("DM_DATA", JSON.stringify(ansa)); else ansa=JSON.parse(localStorage.getItem("DM_DATA")); // data
 i=parseInt(i);
 if(i<0) i=0;
 var lng=localStorage.getItem("DM_LNG")===null?0:localStorage.getItem("DM_LNG") // 0 kur 1 ara 2 eng 
 lng=parseInt(lng);
 var dir="rtl";
-var cnt=cnta[lng];
+// var cnt=cnta[lng];
 var step=0;
 var steps;
+var subs=0; // subslide eg select worst then best food or more than once cause...
 var qno=0;
 var sid=0;  // selected id
 var afn=""; // audio file name
@@ -63,9 +64,23 @@ function load_page(f){
       } else i=qsa[1];
     }
   var rv="";
-  var sla=cnt.split("\n\n");
+  var i0=i.toString().padStart(2,"0");
+  afn=`a0040${i0}.mp3`;
+  var sla=cnta[lng].split("\n\n");
+  if(subs==1){
+    sla=cnta1[lng].split("\n\n");
+    sta[4]=[0,2.6,4,4.2,4.4,4.6,6.6]
+    sta[6]=[0,2.8,4,4.1,4.2,4.3,4.4,4.5,4.6]
+    afn=`a0040${i0}_${subs}.mp3`;
+    }
+  if(subs==2){
+    sla=cnta2[lng].split("\n\n");
+    sta[4]=[0,0.2,0.5,0.8,1.1,1.4]
+    afn=`a0040${i0}_${subs}.mp3`;
+    }
+  // console.log(i,subs,cnta1[lng].split("\n\n")[i]);
+  console.log(i,subs);
   rv=format_text(sla[i],i,f,0,0);
-  console.log(i);
   if(lng==2){
     // document.body.style="direction:ltr;";
     rt.style.setProperty('--bd', 'ltr');
@@ -109,6 +124,39 @@ function load_page(f){
   // console.log(i,taa,stai);
   stai=Array.from(sta[i]);
   // console.log(i,taa,stai);
+  // console.log(id,ansa);
+  let id=0;
+  switch (i) {
+    case 4:
+      if(subs==1){
+        id=ansa[0].split("|")[0];
+        console.log(ansa);
+        document.getElementById(id).className="d";
+        id="2"+id.substr(1);
+        document.getElementById(id).disabled=true;
+        }
+      if(subs==2){
+        id=ansa[0].split("|")[0];
+        document.getElementById(id).className="d";
+        id="2"+id.substr(1);
+        document.getElementById(id).disabled=true;
+        id=ansa[1].split("|")[0];
+        document.getElementById(id).className="d";
+        id="2"+id.substr(1);
+        document.getElementById(id).disabled=true;
+        }
+      break;
+    case 6:
+      if(subs==1){
+        id=ansa[4].split("|")[0];
+        document.getElementById(id).className="d";
+        id="2"+id.substr(1);
+        document.getElementById(id).disabled=true;
+        }
+      break;
+    default:
+      break;
+  }
   }
 
 document.addEventListener("keydown",event=>{
@@ -149,7 +197,7 @@ function clf(f){ // change lang
   if(f<0) lng++; else lng=f;
   if(lng>2) lng=0;
   localStorage.setItem("DM_LNG", lng);
-  cnt=cnta[lng];
+  // cnt=cnta[lng];
   load_page(0)
   }
 
@@ -176,17 +224,40 @@ function play_slides(){
   }
   
 function next_slide(f){
-  if(i<cnt.split("\n\n").length-1) {i++; localStorage.setItem("DM_SLD", i);}
+  console.log(i,subs,ansa);
+  if(i<cnta[0].split("\n\n").length-1) {
+    switch (i) {
+      case 4:
+        console.log("select best food");
+        if(subs==2 && i==4) {subs=0;i++;}
+        if(subs==1 && i==4) subs++;
+        if(subs==0 && i==4) {
+          if(ansa[0].split("|")[0]=="10407") {i++;break;}
+          if(ansa[0].split("|")[0]=="10408") {i++;break;}
+          subs++;
+          }
+        break;
+      case 6:
+        console.log("select best food");
+        if(subs==1 && i==6) {subs=0;i++;}
+        if(subs==0 && i==6) subs++;
+        break;
+      default:
+        i++;
+        break;
+      }
+    }
+  localStorage.setItem("DM_SLD", i);
   step=0;
   load_page(f);
   if(qsa[1]=="t") get_subtitles(); else stt.style.bottom="-360px";
-  var i0=i.toString().padStart(2,"0");
-  afn=`a0040${i0}.mp3`;
+  // var i0=i.toString().padStart(2,"0");
+  // afn=`a0040${i0}.mp3`;
   ps(f,0);
   }
 
 function prev_slide(f){
-  if(i>0) {i--; localStorage.setItem("DM_SLD", i);}
+  if(i>0) {subs=0; i--; localStorage.setItem("DM_SLD", i);}
   step=0;
   load_page(f);
   if(i==0) document.getElementById("vpb").style="visibility:hidden;";
@@ -202,10 +273,6 @@ function goto(n,p) {
     if(p==0) location.reload();
     var i0=i.toString().padStart(2,"0");
     afn=`a0040${i0}.mp3`;
-    // var f=afn+".mp3";
-    // if(i>13) afn="0.mp3"; 
-    // aud.src=f;
-    // if(p==1 && aud.paused) aud.play();
     if(p==1) ps(1,0);
     }
 
@@ -351,7 +418,10 @@ function format_text(t,ii,f,ll,m){ // text, slide no, flag: play or show text, l
   }
 
 function get_subtitles(){
-  var rv=cnt.split("\n\n")[i];
+  var rv=cnta[lng].split("\n\n")[i];
+  if(subs==1){
+    rv=cnta1[lng].split("\n\n")[i];
+  }
   if(rv.indexOf("<notes>")==-1) return false;
   rv=rv.split("<notes>")[1];
   rv=rv.replaceAll("ک","ك");
@@ -393,6 +463,7 @@ function get_slide_contents(){
 function get_file_name(j){
   var rv=j;
   let a=cnta[2].split("\n\n")[i].split("\n");
+  // console.log(a);
   // if(a[j].indexOf("<img_ans0")!=-1) return "ans0.jpg";
   // if(a[j].indexOf("<img_ans1")!=-1) return "ans1.jpg";
   let b=a[j].split(" ");
@@ -587,22 +658,22 @@ function input_feedback(id){ // validate answers
     case 10405:
     case 10406:
     case 10407:
-      ansa[0]=`${sid}|${sidv}`;
-      ansa[1]=`${10408}|`;
+      ansa[subs]=`${sid}|${sidv}`;
+      // ansa[1]=`${10408}|`;
       break;
     case 10408:
-      ansa[0]=`${sid}|${sidv}`;
+      // ansa[0]=`${sid}|${sidv}`;
       v=document.getElementById(30408)
-      ansa[1]=`${v.id}|${v.value}`;
+      ansa[subs]=`${sid}|${v.value}`;
       break;
     case 10502:
-      ansa[2]=`${sid}|${sidv}`;
-      ansa[3]=`${10503}|`;
+      ansa[3]=`${sid}|${sidv}`;
+      // ansa[3]=`${10503}|`;
       break;
     case 10503:
-      ansa[2]=`${sid}|${sidv}`;
+      // ansa[2]=`${sid}|${sidv}`;
       v=document.getElementById(30503)
-      ansa[3]=`${v.id}|${v.value}`;
+      ansa[3]=`${sid}|${v.value}`;
       break;
     case 10602:
     case 10603:
@@ -611,25 +682,25 @@ function input_feedback(id){ // validate answers
     case 10606:
     case 10607:
     case 10608:
-      ansa[4]=`${sid}|${sidv}`;
+      ansa[4+subs]=`${sid}|${sidv}`;
       break;  
     case 10704:
     case 10705:
-      ansa[5]=`${sid}|${sidv}`;
+      ansa[6]=`${sid}|${sidv}`;
     case 10702:
       v=document.getElementById(30702)
-      ansa[6]=`${v.id}|${v.value}`;
+      ansa[7]=`${v.id}|${v.value}`;
     case 10707:
       v=document.getElementById(30707)
-      ansa[7]=`${v.id}|${v.value}`;
+      ansa[8]=`${v.id}|${v.value}`;
       v=document.getElementById(40707)
-      ansa[10]=`${v.id}|${v.value}`;
+      ansa[11]=`${v.id}|${v.value}`;
     case 10709:
       v=document.getElementById(30709)
-      ansa[8]=`${v.id}|${v.value}`;
+      ansa[9]=`${v.id}|${v.value}`;
     case 10711:
       v=document.getElementById(30711)
-      ansa[9]=`${v.id}|${v.value}`;
+      ansa[10]=`${v.id}|${v.value}`;
     }
   localStorage.setItem("DM_DATA", JSON.stringify(ansa));
   }
@@ -661,7 +732,7 @@ function rbc(id){ // radio button clicked
   }
 
 function get_content_array(){
-  let t=cnt.replaceAll("* ","");
+  let t=cnta[lng].replaceAll("* ","");
   let a=t.split("\n\n"); // sentence array
   let rv=[];
   a.forEach(v=>{
@@ -676,8 +747,8 @@ function get_content_overview(ll){
   aud.pause();
   aud.currentTime=0;
   var rv="";
-  cnt=cnta[lng];
-  var sla=cnt.split("\n\n");
+  // cnt=cnta[lng];
+  var sla=cnta[lng].split("\n\n");
   // const sna=t.split("\n"); // sentence array
   sla.forEach((v,j)=> {
     if(ll==1){
@@ -694,7 +765,7 @@ function get_content_overview(ll){
   rt.style.setProperty('--ps', 'none');
   rt.style.setProperty('--cr', 'pointer');
   vid.innerHTML=rv;
-  ftr.innerHTML=FTB; 
+  ftr.innerHTML="<p-b><div id=pbt></div><div id=pbw><a id=pbr></a></div></p-b>"+FTB; 
   document.getElementById("lng").innerHTML=FLA[lng];
   }
 
@@ -704,7 +775,7 @@ var jj=0;
 
 function get_recursive(a,p){
   cnt=cnta[lng];
-  var sla=cnt.split("\n\n");
+  var sla=cnta[lng].split("\n\n");
   lv++;
   a
   .filter(a=>a[0]==p)
@@ -734,7 +805,7 @@ function get_mind_map(){
     rt.style.setProperty('--ps', 'none');
     rt.style.setProperty('--cr', 'pointer');
     vid.innerHTML=rv;
-    ftr.innerHTML=FTB; 
+    ftr.innerHTML="<p-b><div id=pbt></div><div id=pbw><a id=pbr></a></div></p-b>"+FTB; 
     document.getElementById("lng").innerHTML=FLA[lng];
     stt.style.bottom="-360px";
     }
@@ -743,7 +814,7 @@ function audio_update() {
   var t=aud.currentTime;
   let d=aud.duration;
   // console.log(t,stai);
-  let da=[9,6,3,1,1,42];
+  let da=[9,6,3,1,1,42]; // duration array for multiple mp3 per slide
   if(i==8) d=da.reduce(array_sum,0);
   if(afn=="a004008_1.mp3"||afn=="a004008_2.mp3"||afn=="a004008_3.mp3") t=t+da[0];
   if(afn=="a004008_4.mp3") t=t+da[0]+da[1];
@@ -786,17 +857,19 @@ function check_answers(){
   }
 
 function get_answers(f){
-  // if(localStorage.getItem("DM_DATA")=="") ansa=["|","|","|","|","|","|","|","|","|","|2","|ساڵ"]; else ansa=JSON.parse(localStorage.getItem("DM_DATA"));
   // edit answer array
   // console.log(ansa);
-  if(ansa[1].length>6) ansa[0]+="|"+ansa[1].split("|")[1]; else ansa[0]+="|"+ansa[0].split("|")[1];
-  if(ansa[3].length>6) ansa[2]+="|"+ansa[3].split("|")[1]; else ansa[2]+="|"+ansa[2].split("|")[1];
-  if(ansa[4].length>6) ansa[4]+="|"+ansa[4].split("|")[1];
+  // if(ansa[0].length>6) ansa[0]+="|"+ansa[0].split("|")[1]; else ansa[0]+="|"+ansa[0].split("|")[1];
+  // if(ansa[1].length>6) ansa[1]+="|"+ansa[3].split("|")[1]; else ansa[2]+="|"+ansa[2].split("|")[1];
+  // if(ansa[2].length>6) ansa[2]+="|"+ansa[3].split("|")[1]; else ansa[2]+="|"+ansa[2].split("|")[1];
+  // if(ansa[3].length>6) ansa[4]+="|"+ansa[4].split("|")[1];
+  // if(ansa[5].length>6) ansa[4]+="|"+ansa[5].split("|")[1];
   if(typeof ansa[6]!=='undefined') ansa[6]+="|"+ar_to_en(ansa[6].split("|")[1]);
   if(typeof ansa[7]!=='undefined') ansa[7]+="|"+ar_to_en(ansa[7].split("|")[1]);
   if(typeof ansa[8]!=='undefined') ansa[8]+="|"+ar_to_en(ansa[8].split("|")[1]);
   if(typeof ansa[9]!=='undefined') ansa[9]+="|"+ar_to_en(ansa[9].split("|")[1]);
   if(typeof ansa[10]!=='undefined') ansa[10]+="|"+time_to_no(ansa[10].split("|")[1]);
+  if(typeof ansa[11]!=='undefined') ansa[11]+="|"+time_to_no(ansa[11].split("|")[1]);
 
   var ans="";
   var qus="";
@@ -806,10 +879,10 @@ function get_answers(f){
   var aa=[9,12,13];
   var cntva=get_content_array();
   var cls=f==1&&i>-1?" class=h":"";
-  fana=[ansa[0],ansa[2],ansa[4]];
+  fana=[ansa[0],ansa[3],ansa[4]];
   // console.log(fana,cntva);
   fana.forEach((v,j)=>{
-    ans=v.split("|")[2];
+    ans=v.split("|")[1];
     qus=cntva[ja[j]];
     var k=j+1;
     var j0=k.toString().padStart(2,"0");
@@ -824,7 +897,7 @@ function get_answers(f){
   }
 
 function get_correct_answers(){ // get array of 
-  const aa=[ansa[0].toLowerCase(),ansa[2].toLowerCase(),ansa[4]];
+  const aa=[ansa[0].toLowerCase(),ansa[3].toLowerCase(),ansa[4]];
   var rv=[0,0,0];
   var g=[0,0,0]; // grade
   var s=""; // string
@@ -832,36 +905,36 @@ function get_correct_answers(){ // get array of
   a=aa[0].split("|");
   if(a[0]=="10408"){
     s="خۆرا";
-    if(a[2].indexOf(s)!==-1) g[0]=1;
+    if(a[1].indexOf(s)!==-1) g[0]=1;
     s="خؤرا";
-    if(a[2].indexOf(s)!==-1) g[0]=1;
+    if(a[1].indexOf(s)!==-1) g[0]=1;
     s="خواردن";
-    if(a[2].indexOf(s)!==-1) g[0]=1;
+    if(a[1].indexOf(s)!==-1) g[0]=1;
     s="food";
-    if(a[2].indexOf(s)!==-1) g[0]=1;
+    if(a[1].indexOf(s)!==-1) g[0]=1;
     s="eating";
-    if(a[2].indexOf(s)!==-1) g[0]=1;
+    if(a[1].indexOf(s)!==-1) g[0]=1;
     s="diet";
-    if(a[2].indexOf(s)!==-1) g[0]=1;
+    if(a[1].indexOf(s)!==-1) g[0]=1;
 
     s="نا";
-    if(a[2].indexOf(s)!==-1) g[1]=1;
+    if(a[1].indexOf(s)!==-1) g[1]=1;
     s="نه‌";
-    if(a[2].indexOf(s)!==-1) g[1]=1;
+    if(a[1].indexOf(s)!==-1) g[1]=1;
 
     s="دروست";
-    if(a[2].indexOf(s)!==-1) g[2]=1;
+    if(a[1].indexOf(s)!==-1) g[2]=1;
     s="شیاو";
-    if(a[2].indexOf(s)!==-1) g[2]=1;
+    if(a[1].indexOf(s)!==-1) g[2]=1;
     s="گونجاو";
-    if(a[2].indexOf(s)!==-1) g[2]=1;
+    if(a[1].indexOf(s)!==-1) g[2]=1;
 
     s="خراپ";
-    if(a[2].indexOf(s)!==-1) g[1]=2;
+    if(a[1].indexOf(s)!==-1) g[1]=2;
     s="unhealthy";
-    if(a[2].indexOf(s)!==-1) g[1]=2;
+    if(a[1].indexOf(s)!==-1) g[1]=2;
     s="bad";
-    if(a[2].indexOf(s)!==-1) g[1]=2;
+    if(a[1].indexOf(s)!==-1) g[1]=2;
 
     var as=g.reduce(array_sum,0);
     rv[0]=as==3?1:0;
@@ -869,41 +942,41 @@ function get_correct_answers(){ // get array of
   // q2
   a=aa[1].split("|");
   if(a[0]=="10503"){
-    if((a[2].indexOf("خۆرا")!==-1 || a[2].indexOf("خواردن")!==-1) && a[2].indexOf("نا")===-1 && a[2].indexOf("دروست")!==-1) rv[1]=1;
+    if((a[1].indexOf("خۆرا")!==-1 || a[1].indexOf("خواردن")!==-1) && a[1].indexOf("نا")===-1 && a[1].indexOf("دروست")!==-1) rv[1]=1;
     s="خۆرا";
-    if(a[2].indexOf(s)!==-1) g[0]=1;
+    if(a[1].indexOf(s)!==-1) g[0]=1;
     s="خؤرا";
-    if(a[2].indexOf(s)!==-1) g[0]=1;
+    if(a[1].indexOf(s)!==-1) g[0]=1;
     s="خواردن";
-    if(a[2].indexOf(s)!==-1) g[0]=1;
+    if(a[1].indexOf(s)!==-1) g[0]=1;
     s="eating";
-    if(a[2].indexOf(s)!==-1) g[0]=1;
+    if(a[1].indexOf(s)!==-1) g[0]=1;
     s="food";
-    if(a[2].indexOf(s)!==-1) g[0]=1;
+    if(a[1].indexOf(s)!==-1) g[0]=1;
     s="diet";
-    if(a[2].indexOf(s)!==-1) g[0]=1;
+    if(a[1].indexOf(s)!==-1) g[0]=1;
 
     s="نا";
-    if(a[2].indexOf(s)===-1) g[1]=1;
+    if(a[1].indexOf(s)===-1) g[1]=1;
     s="نه‌";
-    if(a[2].indexOf(s)===-1) g[1]=1;
+    if(a[1].indexOf(s)===-1) g[1]=1;
     s=" un";
-    if(a[2].indexOf(s)===-1) g[1]=1;
+    if(a[1].indexOf(s)===-1) g[1]=1;
     s=" non";
-    if(a[2].indexOf(s)===-1) g[1]=1;
+    if(a[1].indexOf(s)===-1) g[1]=1;
 
     s="دروست";
-    if(a[2].indexOf(s)!==-1) g[2]=1;
+    if(a[1].indexOf(s)!==-1) g[2]=1;
     s="شیاو";
-    if(a[2].indexOf(s)!==-1) g[2]=1;
+    if(a[1].indexOf(s)!==-1) g[2]=1;
     s="گونجاو";
-    if(a[2].indexOf(s)!==-1) g[2]=1;
+    if(a[1].indexOf(s)!==-1) g[2]=1;
     s="باش";
-    if(a[2].indexOf(s)!==-1) g[2]=1;
+    if(a[1].indexOf(s)!==-1) g[2]=1;
     s="healthy";
-    if(a[2].indexOf(s)!==-1) g[2]=1;
+    if(a[1].indexOf(s)!==-1) g[2]=1;
     s="good";
-    if(a[2].indexOf(s)!==-1) g[2]=1;
+    if(a[1].indexOf(s)!==-1) g[2]=1;
   
     var as=g.reduce(array_sum,0);
     rv[1]=as==3?1:0;
@@ -921,7 +994,6 @@ function audio_ended() {
     return true;
     }
   if(afn.charAt(0)=="n"||afn.charAt(0)=="t") afn=afn.charAt(0);
-  // console.log(i,afn,cnt.split("\n\n").length);
   // console.log(afn);
   var l0=1;
   l0=l0<10?"0"+l0:l0;  
@@ -936,7 +1008,7 @@ function audio_ended() {
     case "a004005.mp3": // treatment
     case "a004006.mp3": // food
     case "a004007.mp3": // info
-      console.log("Continue");
+      // console.log("Continue");
       break;  
     case "a004008_0.mp3": 
     case "a004008_5.mp3": // answers
@@ -963,7 +1035,7 @@ function audio_ended() {
       // aud.play();
       break;
     case "a004008_4.mp3":
-      var d=ansa[7].split("|")[2];
+      var d=ansa[8].split("|")[2];
       if(d>20) d=20;
       d0=d.length==1?"0"+d:d;
       afn="n"+d0+l0+".mp3";
@@ -972,7 +1044,7 @@ function audio_ended() {
       // aud.play();
       break;
     case "n":
-      var d=ansa[10].split("|")[2];
+      var d=ansa[11].split("|")[2];
       d0=d.length==1?"0"+d:d;
       afn="t"+d0+l0+".mp3";
       ps(1,0);
@@ -986,7 +1058,7 @@ function audio_ended() {
       // aud.play();
       break;
     case "a000000.mp3":
-      if(i>cnt.split("\n\n").length-2){
+      if(i>cnta[lng].split("\n\n").length-2){
         console.log("Continue");
         i=8;
         localStorage.setItem("DM_SLD", i);

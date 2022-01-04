@@ -68,12 +68,27 @@ margin:0.5em 0;
 }
 ul{
 margin:0;
+padding-inline-start:0;
 }
 li{
 font-size:var(--tf);
+list-style: none;
+}
+li::before{
+content: "• ";
+color:#444;
+font-size:40px;
+}
+ul ul{
+margin:0;
+padding-inline-start:20px;
 }
 ul ul li{
-list-style-type:disc;
+font-size: var(--lf);
+list-style: none;
+}
+ul ul li::before{
+color: #888;
 }
 label{
 font-size:var(--lf);
@@ -320,6 +335,14 @@ font-size:22px;
 .g{
 stroke:#080;
 stroke-width:3;
+}
+.d{
+color:#ccc;
+opacity:1;
+}
+.d img{
+filter:grayscale(100%);
+opacity:.3;
 }
 line{
 stroke:#ccc;
