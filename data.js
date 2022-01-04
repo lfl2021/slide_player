@@ -413,7 +413,8 @@ https://www.youtube.com/watch?v=9zNRcgsagrs
 تەماتەكە ورد بكە و لەگەڵ ئاو و نیسكەكە تێیان بكە. بیكوڵێنە تا نیسكەكە نەرم دەبێت پاشان ئاگرەكە كەم بكەوە و هێواش بیكوڵێنە بۆ نزیكەى ١ سەعات. پاشان سپێناخەكە ورد بكە و تێى بكە و بیكوڵێنە تا نەرم دەبێت. خەل و خوێ و بیبەرى ڕەشى تێ بكە و تێكى بدە.
 تێبینى: هەرچەندە ئەم وەسفەیە پڕیەتى لە سەوزە، بەڵام هه‌ر باشتر وایە لەگەڵ زەڵاتە بخورێت.
 لەم لینکە، دەتوانیت چۆنیەتى ئامادە کردن بە شێوەى ڤیدیۆ ببینیت و وردەکاری زیاتر بخوێنیتەوە:
-https://www.allrecipes.com/recipe/13978/lentil-soup
+<notes>
+[شۆرباى نیسک](https://www.allrecipes.com/recipe/13978/lentil-soup)
 
 # نۆكاو
 <img_40>
@@ -750,8 +751,11 @@ ___
 * اللحم النباتي
 * حمص بالطحينة
 
-# عدس
+# شوربة عدس
 <img_40>
+<notes>
+<notes>
+[شوربة عدس](https://www.allrecipes.com/recipe/13978/lentil-soup)
 
 # حمص
 <img_40>
@@ -1064,6 +1068,9 @@ Roasted salad: vegetables, potato plus chicken or fish in oven
 
 # Lentil_Soup
 <img_40>
+<notes>
+<notes>
+[Lentil soup](https://www.allrecipes.com/recipe/13978/lentil-soup)
 
 # Chickpea_Soup
 <img_40>
