@@ -131,7 +131,7 @@ function load_page(f){
     case 4:
       if(subs==1){
         id=ansa[0].split("|")[0];
-        console.log(ansa);
+        // console.log(ansa);
         document.getElementById(id).className="d";
         id="2"+id.substr(1);
         document.getElementById(id).disabled=true;
@@ -185,7 +185,7 @@ document.addEventListener("keydown",event=>{
   if(event.key==="m") get_mind_map();
   if(event.key==="t") get_subtitles();
   if(event.key==="j") get_slide_contents();
-  if(event.key==="r") get_related();
+  if(event.key==="r") toggle_related();
 
   if(event.key==="1") aud.playbackRate=1.0;
   if(event.key==="2") aud.playbackRate=1.25;
@@ -230,7 +230,6 @@ function next_slide(f){
   if(i<cnta[0].split("\n\n").length-1) {
     switch (i) {
       case 4:
-        console.log("select best food");
         if(subs==2 && i==4) {subs=0;i++;}
         if(subs==1 && i==4) subs++;
         if(subs==0 && i==4) {
@@ -240,7 +239,6 @@ function next_slide(f){
           }
         break;
       case 6:
-        console.log("select best food");
         if(subs==1 && i==6) {subs=0;i++;}
         if(subs==0 && i==6) subs++;
         break;
@@ -268,7 +266,7 @@ function prev_slide(f){
   }
 
 function goto(n,p) {
-    console.log(n);
+    // console.log(n);
     i=n;
     if(p==0) localStorage.setItem("DM_SLD", i);
     step=0;
@@ -415,7 +413,7 @@ function format_text(t,ii,f,ll,m){ // text, slide no, flag: play or show text, l
     }
   if(m==0) rv+="</div>";
   if(stsa.includes(i)){
-    if(ll==0) rv+=`<button id=cb onclick="cb()">${dica[0][lng]}</button>`;      
+    if(ll==0) rv+=`<button id=cb onclick="cb()" disabled>${dica[0][lng]}</button>`;      
     }
   if(m==0) rv+=`</s-l>`;
   return rv;
@@ -440,12 +438,16 @@ function get_related(){
   rv=rv.split("<notes>")[2];
   rv=rv.replace(/\[(.*?)\]\((.*?)\)/gim, "<a href='$2' target=_blank>$1</a>");
   rv=rv.replaceAll("ک","ك");
-  rv=rv.trim();
-  rv=rv.replaceAll("\n","<br>");
+  rv="<p>"+rv.trim();
+  rv=rv.replaceAll("\n","</p><p>");
   stt.innerHTML=rv;
-  stt.style.bottom="0px";
+  // stt.style.bottom="0px";
   }
-  
+
+function toggle_related(){
+  if(stt.style.bottom=="0px") stt.style.bottom="-360px"; else stt.style.bottom="0px";
+  }
+
 function get_slide_contents(){
   var rv="";
   if(aud.paused) load_page(1);
@@ -734,6 +736,7 @@ function pfs(id){
 function rbc(id){ // radio button clicked
   sid=id;
   document.getElementById("cb").style="opacity:1;";
+  document.getElementById("cb").disabled=false;
   // console.log(id,sidv);
   switch (sid) {
     case 10408:
@@ -1006,11 +1009,12 @@ function get_correct_answers(){ // get array of
 
 function show_related_link(){
   ftr.style.bottom="-80px";
-  if(get_related()!=false) document.getElementById("lng").innerHTML=`<a onclick="get_related()">${dica[11][lng]}</a>`;
+  if(get_related()!=false) document.getElementById("lng").innerHTML=`<a onclick="toggle_related()">${dica[11][lng]}</a>`;
   }
 function audio_ended() {
   if(stsa.includes(i)) {
     document.getElementById("cb").style="opacity:1;";
+    document.getElementById("cb").disabled=false;
     show_related_link();
     return true;
     }
@@ -1080,7 +1084,6 @@ function audio_ended() {
       break;
     case "a000000.mp3":
       if(i>cnta[lng].split("\n\n").length-2){
-        console.log("Continue");
         i=8;
         localStorage.setItem("DM_SLD", i);
         goto(i,0); // go to answers slide

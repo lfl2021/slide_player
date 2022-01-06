@@ -256,6 +256,9 @@ overflow-y:scroll;
 background-color:#fff;
 transition:bottom 0.3s;
 }
+#txt p{
+margin:6px;
+}
 #txt a{
 text-decoration:none;
 }
@@ -333,12 +336,12 @@ text-anchor:middle;
 }
 .r{
 stroke:#f00;
-stroke-width:3;
+stroke-width:2;
 font-size:22px;
 }
 .g{
 stroke:#080;
-stroke-width:3;
+stroke-width:2;
 }
 .d{
 color:#ccc;
