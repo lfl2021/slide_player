@@ -173,7 +173,7 @@ function load_page(f){
   }
 
 document.addEventListener("keydown",event=>{
-  event.preventDefault();
+  if(event.target.id!="txt") event.preventDefault();
   // console.log(event.key, event.keyCode);
   // console.log(event.target.id, event.target.type);
   if(event.target.id!="") return false;
@@ -369,7 +369,7 @@ function format_text(t,ii,f,ll,m){ // text, slide no, flag: play or show text, l
     s=s.replaceAll("** ","");
     s=s.replaceAll("* ","");
     s=s.replaceAll("()","");
-    var cls=f==1&&i>-1?" h":"";
+    var cls=f==1&&i>-1?" h":" h c";
     s=s.replaceAll("<img_ans0>",CK0);
     s=s.replaceAll("<img_ans1>",CK1);
     let img="";
@@ -383,7 +383,7 @@ function format_text(t,ii,f,ll,m){ // text, slide no, flag: play or show text, l
     s=s.replaceAll("<img>",`<img src=${img} id=1${i0}${j0}>`);
     s=s.replaceAll("___",`<input id=3${i0}${j0} type=text onclick="tbf(2${i0}${j0})">`);
     s=s.replaceAll("<ymd_combo>",`<select id=4${i0}${j0}><option>${dica[1][lng]}</option><option>${dica[2][lng]}</option><option>${dica[3][lng]}</option></select>`);
-    cls=f==1&&i>-1?" class=h":"";
+    cls=f==1&&i>-1?" class=h":" class='h c'";
     s=s.replaceAll(" @",` <s${cls}>`);
     s=s.replaceAll("@ ",`</s>`);
     // s=s.replaceAll("_"," ");
@@ -401,6 +401,7 @@ function format_text(t,ii,f,ll,m){ // text, slide no, flag: play or show text, l
       }
     if(fcl==1) rv+=s;
     if(fce==1) rv+=`<em${cls} id=1${i0}${j0}>${s}</em>`;
+    // console.log(f,i,j,cls,s,stai.length);
      // add ul
     // if(j>0 && sna[j].substring(0,1)=="*"  && sna[j-1].substring(0,1)!="*") rv+="<ul>";
     // if(j>0 && sna[j].substring(0,1)!="*"  && sna[j-1].substring(0,1)=="*") rv+="</ul>";
@@ -593,10 +594,12 @@ function ps(f,t){
   hide_menu();
   if(f==0) {aud.pause(); aud.currentTime=0; return false;}
   if(i>14) afn="a000000.mp3";
-  console.log(t);
   if(t>0){
+    step=0;
+    stai=Array.from(sta[i]);
+    // console.log(t,stai.length,steps.length);
     load_page(1);
-    aud.currentTime=0;
+    // aud.currentTime=t;
     var j=0;
     a=Array.from(sta[i]);
     while(t>a[j]){
@@ -869,8 +872,6 @@ function audio_update() {
   let dd=isNaN(d)?"0:00":new Date(d * 1000).toISOString().substr(15,4);
   document.getElementById("pbr").style.width=t/d*100+"%";
   document.getElementById("pbt").innerHTML=tt+" / "+dd;
-  // document.getElementById("time").innerHTML=i+":"+step+":"+t.toFixed(1);
-  // var tav=ta[0]; // time array value
   var tava=[stai[0],0,0]; // time array (time,type: 0 step, 1 check answer,hide step by id)
   if(typeof stai[0]=="string"){
     var tava=stai[0].split(":");
@@ -1216,11 +1217,8 @@ function get_overview(f) {
   }
 
 function get_more(){
-  // aud.playbackRate=1.25;
-  console.log("more");
   // show_menu(0);
   let lm=document.getElementById("more").offsetLeft;
-  console.log(lm)
   document.getElementById("mor").style=`bottom:66px;height:108px;left:${lm}px;border:1px #ccc solid;border-bottom:0;`
   clearTimeout(sto);
   }
