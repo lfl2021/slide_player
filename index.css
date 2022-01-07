@@ -171,8 +171,9 @@ padding:0 10px;
 font-size:22px;
 line-height:34px;
 }
-m-m a{
+a{
 cursor:pointer;
+text-decoration:none;
 }
 c-t{
 display:block;
@@ -226,7 +227,7 @@ z-index:99;
 opacity:1;
 }
 #lng {
-position:absolute;
+position:fixed;
 top:10px;
 right:10px;
 z-index:1;
@@ -258,9 +259,6 @@ transition:bottom 0.3s;
 }
 #txt p{
 margin:6px;
-}
-#txt a{
-text-decoration:none;
 }
 #ftb{
 text-align:center;
@@ -302,6 +300,21 @@ color:#888;
 background-color:#fff;
 padding:0 2px;
 } 
+#mor{
+position:absolute;
+font-family:arial;
+font-size:20px;
+color:#444;
+background-color:#fff;
+padding:0 10px;
+/* border:1px #ccc solid; */
+/* border-bottom:0; */
+width:200px;
+height:0;
+box-shadow:1px 1px 4px rgba(0,0,0,0.2);
+overflow: hidden;
+transition:all 0.3s;
+}    
 .h{
 opacity:0;
 transition:all 0.8s ease;

@@ -1,11 +1,13 @@
 var i=0;
-if(localStorage.getItem("DM_SLD")===null) localStorage.setItem("DM_SLD", i); else i=localStorage.getItem("DM_SLD"); // slide
+if(localStorage.getItem("DM_SLD")===null) localStorage.setItem("DM_SLD", i); else i=parseInt(localStorage.getItem("DM_SLD")); // slide
 var ansa=["||","||","||","||","||","||","|","|","|","|","|","|"];
 if(localStorage.getItem("DM_DATA")===null) localStorage.setItem("DM_DATA", JSON.stringify(ansa)); else ansa=JSON.parse(localStorage.getItem("DM_DATA")); // data
-i=parseInt(i);
 if(i<0) i=0;
 var lng=localStorage.getItem("DM_LNG")===null?0:localStorage.getItem("DM_LNG") // 0 kur 1 ara 2 eng 
 lng=parseInt(lng);
+var spd=1;
+var spt="";
+if(localStorage.getItem("DM_SPD")===null) localStorage.setItem("DM_SPD", spd); else spd=parseFloat(localStorage.getItem("DM_SPD"));
 var dir="rtl";
 // var cnt=cnta[lng];
 var step=0;
@@ -17,6 +19,7 @@ var afn=""; // audio file name
 var afp=0;  // audio file poistion
 var qsa=[0,0];
 var stai=[]; // sta[i]
+var sto; // setTimeOut
 // var ansa=[];//localStorage.getItem("DM_DATA")===null?[]:JSON.parse(localStorage.getItem("DM_DATA")); //cause treatment food age gender dm duration ymd highest blood sugar hba1c
 const aud=document.getElementById("aud");
 const aud2=document.getElementById("aud2");
@@ -25,6 +28,9 @@ const ftr=document.getElementById("ftr");
 const stt=document.getElementById("txt");
 const bp=document.getElementById("bpl");
 var rt=document.querySelector(':root');
+
+var more=`<div id=mor><p> <a onclick="get_slide_contents()">Contents...</a></p><p>Speed: ${spt}</p></div>`;
+const PGB="<p-b><div id=pbt></div><div id=pbw><a id=pbr></a></div></p-b>";
 
 const BPC=`<div id=dimg><img id=title_img src=dm_test.jpg><svg id="vpb" viewBox="0 0 200 200" alt="Play video">
   <circle cx="100" cy="100" r="90" fill="none" stroke-width="15" stroke="#000"></circle>
@@ -64,18 +70,22 @@ function load_page(f){
       } else i=qsa[1];
     }
   var rv="";
+  stai=Array.from(sta[i]);
   var i0=i.toString().padStart(2,"0");
   afn=`a0040${i0}.mp3`;
   var sla=cnta[lng].split("\n\n");
   if(subs==1){
     sla=cnta1[lng].split("\n\n");
-    sta[4]=[0,2.6,4,4.2,4.4,4.6,6.6]
-    sta[6]=[0,2.8,4,4.1,4.2,4.3,4.4,4.5,4.6]
+    // sta[4]=[0,2.6,4,4.2,4.4,4.6,6.6];
+    // sta[6]=[0,2.8,4,4.1,4.2,4.3,4.4,4.5,4.6];
+    if(i==4) stai=Array.from([0,2.6,4,4.2,4.4,4.6,6.6]);
+    if(i==6) stai=Array.from([0,2.8,4,4.1,4.2,4.3,4.4,4.5,4.6]);
     afn=`a0040${i0}_${subs}.mp3`;
     }
   if(subs==2){
     sla=cnta2[lng].split("\n\n");
-    sta[4]=[0,0.2,0.5,0.8,1.1,1.4]
+    if(i==4) stai=Array.from([0,0.2,0.5,0.8,1.1,1.4]);
+    // sta[4]=[0,0.2,0.5,0.8,1.1,1.4]
     afn=`a0040${i0}_${subs}.mp3`;
     }
   // console.log(i,subs,cnta1[lng].split("\n\n")[i]);
@@ -108,7 +118,10 @@ function load_page(f){
   rt.style.setProperty('--ps', 'absolute');
   if(f==0) rt.style.setProperty('--ps', 'inline-block');
   vid.innerHTML=rv;
-  ftr.innerHTML="<p-b><div id=pbt></div><div id=pbw><a id=pbr></a></div></p-b>"+FTB;
+  // let rll=get_related()==false?"":`<p onclick="show_related_link()">Related links...</p>`;
+  spt=spd==1?`<a onclick="pbs(1.25)">Fast</a>`:`<a onclick="pbs(1)">Normal</a>`;
+  var more=`<div id=mor><p> <a onclick="get_slide_contents()">Contents...</a></p><p>Speed: ${spt}</p></div>`;
+  ftr.innerHTML=more+PGB+FTB;
   document.getElementById("lng").innerHTML="";
   if(i==0){
     document.getElementById("vpb").addEventListener("click", play_slides);
@@ -123,7 +136,6 @@ function load_page(f){
   if(qsa[1]=="t") get_subtitles();
   // let taa=sta[i];
   // console.log(i,taa,stai);
-  stai=Array.from(sta[i]);
   // console.log(i,taa,stai);
   // console.log(id,ansa);
   let id=0;
@@ -161,6 +173,7 @@ function load_page(f){
   }
 
 document.addEventListener("keydown",event=>{
+  event.preventDefault();
   // console.log(event.key, event.keyCode);
   // console.log(event.target.id, event.target.type);
   if(event.target.id!="") return false;
@@ -217,8 +230,13 @@ function next_step(ta){
   }
 
 function play_slides(){
-  if(aud.currentTime || !aud.paused) location.reload();
-  load_page(1);
+  if(aud.currentTime>0 || !aud.paused){
+    // location.reload();
+    if(aud.paused) aud.play(); else {aud.pause(); show_menu(1);}
+    return true;
+    }
+
+  if(aud.currentTime==0 && aud.paused) load_page(1);
   var i0=i.toString().padStart(2,"0");
   afn=`a0040${i0}.mp3`;
   if(i==0) document.getElementById("vpb").style="visibility:hidden;";
@@ -290,10 +308,10 @@ function gohome(){
 
 function vid_click(){
   // console.log(this.id);
-  if(ftr.style.bottom=="-80px") {
-    ftr.style.bottom="0px";
+  if(ftr.style.bottom=="-82px") {
+    show_menu(1);
     stt.style.bottom="-360px";
-    setTimeout(()=>{hide_menu();}, 3000);
+    // setTimeout(()=>{hide_menu();}, 3000);
     } else hide_menu();
   if(aud.paused) document.getElementById("bpl").innerHTML=BPL; else document.getElementById("bpl").innerHTML=BPS;
   }
@@ -450,7 +468,9 @@ function toggle_related(){
 
 function get_slide_contents(){
   var rv="";
-  if(aud.paused) load_page(1);
+  hide_menu();
+  aud.pause();
+  // if(aud.paused) load_page(1);
   // stai=sta[i];
   var a=[];
   Array.from(steps).forEach(v=> {
@@ -570,16 +590,18 @@ function file_exists(url){
   }
 
 function ps(f,t){
+  hide_menu();
   if(f==0) {aud.pause(); aud.currentTime=0; return false;}
   if(i>14) afn="a000000.mp3";
+  console.log(t);
   if(t>0){
+    load_page(1);
+    aud.currentTime=0;
     var j=0;
     a=Array.from(sta[i]);
     while(t>a[j]){
       j++;
       }
-    // stai=Array.from(sta[i]).filter((a,k)=>k>j);
-    // stai=Array.from(sta[i]).splice(j);
     // console.log(t,j,stai);
     var i0=i.toString().padStart(2,"0");
     afn=`a0040${i0}.mp3#t=${t}`;  
@@ -596,10 +618,13 @@ function ps(f,t){
   aud.src=afn;
   // aud.currentTime=t;
   // console.log(i,t,f,afn,aud.currentTime);
-  var playPromise = aud.play();
+  spd=parseFloat(localStorage.getItem("DM_SPD"));
+  // console.log(spd,aud.playbackRate)
+  var playPromise=aud.play();
   if (playPromise !== undefined) {
     playPromise.then(_ => {
-      aud.src=afn;
+      // aud.src=afn;
+      aud.playbackRate=parseFloat(spd);
       aud.play();
     })
     .catch(error => {
@@ -853,7 +878,7 @@ function audio_update() {
     tava[1]=parseInt(tava[1]); 
     tava[2]=parseInt(tava[2]); 
     }
-  // console.log(t,ta[0],tava);
+  // console.log(t,tava,stai);
   if(t>tava[0]){
     stai.shift();
     // console.log(t, tava, stai, sta[i]);
@@ -1008,7 +1033,8 @@ function get_correct_answers(){ // get array of
   }
 
 function show_related_link(){
-  ftr.style.bottom="-80px";
+  // ftr.style.bottom="-80px";
+  hide_menu();
   if(get_related()!=false) document.getElementById("lng").innerHTML=`<a onclick="toggle_related()">${dica[11][lng]}</a>`;
   }
 function audio_ended() {
@@ -1190,15 +1216,37 @@ function get_overview(f) {
   }
 
 function get_more(){
-  aud.playbackRate=1.25;
+  // aud.playbackRate=1.25;
   console.log("more");
+  // show_menu(0);
+  let lm=document.getElementById("more").offsetLeft;
+  console.log(lm)
+  document.getElementById("mor").style=`bottom:66px;height:108px;left:${lm}px;border:1px #ccc solid;border-bottom:0;`
+  clearTimeout(sto);
   }
 
+function pbs(v){
+  localStorage.setItem("DM_SPD", v);
+  // spd=parseFloat(v);
+  spd=parseFloat(localStorage.getItem("DM_SPD"));
+  spt=spd==1?`<a onclick="pbs(1.25)">Fast</a>`:`<a onclick="pbs(1)">Normal</a>`;
+  more=`<div id=mor><p> <a onclick="get_slide_contents()">Contents...</a></p><p>Speed: ${spt}</p></div>`;
+  ftr.innerHTML=more+PGB+FTB;
+  aud.playbackRate=parseFloat(spd);
+  hide_menu();
+  }
+  
 function hide_menu(){
-  ftr.style.bottom="-80px";
+  ftr.style.bottom="-82px";
   stt.style.bottom="-360px";
+  document.getElementById("mor").style="height:0px;"
   }
 
+function show_menu(f){
+  ftr.style.bottom="0px";
+  if(f) sto=setTimeout(()=>{hide_menu();}, 3000);
+  }
+  
 function edit_subtitles(){
   stt.contentEditable=true;
   }
