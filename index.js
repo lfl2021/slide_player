@@ -118,6 +118,7 @@ function load_page(f){
   rt.style.setProperty('--ps', 'absolute');
   if(f==0) rt.style.setProperty('--ps', 'inline-block');
   vid.innerHTML=rv;
+  vid.style="height:"+screen.height+"px";
   // let rll=get_related()==false?"":`<p onclick="show_related_link()">Related links...</p>`;
   spt=spd==1?`<a onclick="pbs(1.25)">Fast</a>`:`<a onclick="pbs(1)">Normal</a>`;
   var more=`<div id=mor><p> <a onclick="get_slide_contents()">Contents...</a></p><p>Speed: ${spt}</p></div>`;
@@ -852,6 +853,7 @@ function get_mind_map(){
     rt.style.setProperty('--ps', 'none');
     rt.style.setProperty('--cr', 'pointer');
     vid.innerHTML=rv;
+    vid.style="height:initial;";
     ftr.innerHTML="<p-b><div id=pbt></div><div id=pbw><a id=pbr></a></div></p-b>"+FTB; 
     document.getElementById("lng").innerHTML=FLA[lng];
     stt.style.bottom="-360px";
@@ -1134,7 +1136,7 @@ function get_chart(f,ii,j) {
   const w=window.innerWidth>600?360:window.innerWidth-20;
   const bh=35; // bar width
   const hs=6; // h space
-  const xo=80;
+  const xo=52;
   let a=[],b=[];
   var lvm, vlc;
   var rl=lng==2?"rt":"lt";
