@@ -50,7 +50,9 @@ function load_page(f){
   var qs=window.location.search;
   qs=qs.replaceAll("?","");
   qsa=qs.split("=");
+  if(qsa[0].length>1) location.href="index.html";
   if(typeof qsa[1]!=="undefined"){
+    console.log(qsa);
     if(isNaN(qsa[1])) {
       if(qsa[1]=="o") get_content_overview(0); 
       if(qsa[1]=="c") get_content_overview(1);
