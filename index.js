@@ -20,7 +20,6 @@ var afp=0;  // audio file poistion
 var qsa=[0,0];
 var stai=[]; // sta[i]
 var sto; // setTimeOut
-// var ansa=[];//localStorage.getItem("DM_DATA")===null?[]:JSON.parse(localStorage.getItem("DM_DATA")); //cause treatment food age gender dm duration ymd highest blood sugar hba1c
 const aud=document.getElementById("aud");
 const aud2=document.getElementById("aud2");
 const vid=document.getElementById("vid");
@@ -52,7 +51,6 @@ function load_page(f){
   qsa=qs.split("=");
   if(qsa[0].length>1) location.href="index.html";
   if(typeof qsa[1]!=="undefined"){
-    console.log(qsa);
     if(isNaN(qsa[1])) {
       if(qsa[1]=="o") get_content_overview(0); 
       if(qsa[1]=="c") get_content_overview(1);
@@ -67,8 +65,6 @@ function load_page(f){
   var sla=cnta[lng].split("\n\n");
   if(subs==1){
     sla=cnta1[lng].split("\n\n");
-    // sta[4]=[0,2.6,4,4.2,4.4,4.6,6.6];
-    // sta[6]=[0,2.8,4,4.1,4.2,4.3,4.4,4.5,4.6];
     if(i==4) stai=Array.from([0,2.6,4,4.2,4.4,4.6,6.6]);
     if(i==6) stai=Array.from([0,2.8,4,4.1,4.2,4.3,4.4,4.5,4.6]);
     afn=`a0040${i0}_${subs}.mp3`;
@@ -76,14 +72,12 @@ function load_page(f){
   if(subs==2){
     sla=cnta2[lng].split("\n\n");
     if(i==4) stai=Array.from([0,0.2,0.5,0.8,1.1,1.4]);
-    // sta[4]=[0,0.2,0.5,0.8,1.1,1.4]
     afn=`a0040${i0}_${subs}.mp3`;
     }
   // console.log(i,subs,cnta1[lng].split("\n\n")[i]);
   console.log(i,subs);
   rv=format_text(sla[i],i,f,0,0);
   if(lng==2){
-    // document.body.style="direction:ltr;";
     rt.style.setProperty('--bd', 'ltr');
     var a=document.getElementsByClassName("lt");
     Array.from(a).forEach(v=>{
@@ -126,10 +120,6 @@ function load_page(f){
   if(i>0 && f==0) show_related_link();
   steps=document.getElementsByClassName("h");
   if(qsa[1]=="t") get_subtitles();
-  // let taa=sta[i];
-  // console.log(i,taa,stai);
-  // console.log(i,taa,stai);
-  // console.log(id,ansa);
   let id=0;
   switch (i) {
     case 4:
@@ -1204,9 +1194,6 @@ function get_overview(f) {
     rv+=`<text x=${v[0]+bw/2} y=${v[1]+bh/2} dominant-baseline=middle text-anchor=middle>${dica[j+4][lng]}</text>`;
     rv=rv.replaceAll("<img_ans0>","<a class=r>&#x2715;</a>");
     rv=rv.replaceAll("<img_ans1>","<a class=g>&#x2713;</a>");
-    // var ho=lng==2?4:18;
-    // if(j==1) rv+=`<image${cls} href=ans1.jpg height=26 x=${v[0]+18} y=${v[1]+12} />`;
-    // if(j==3) rv+=`<image${cls} href=ans0.jpg height=20 x=${v[0]+ho} y=${v[1]+15} />`;
     rv+=`</g>`;
     });
   rv+="</svg>";
