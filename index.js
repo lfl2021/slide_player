@@ -59,6 +59,7 @@ function load_page(f){
       } else i=qsa[1];
     }
   var rv="";
+  // console.log(i,sta);
   stai=Array.from(sta[i]);
   var i0=i.toString().padStart(2,"0");
   afn=`a0040${i0}.mp3`;
@@ -1221,7 +1222,7 @@ function pbs(v){
 function hide_menu(){
   ftr.style.bottom="-82px";
   stt.style.bottom="-360px";
-  document.getElementById("mor").style="height:0px;"
+  if(document.getElementById("mor")) document.getElementById("mor").style="height:0px;"
   }
 
 function show_menu(f){
