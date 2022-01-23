@@ -630,6 +630,7 @@ ___
 * نۆتێلا
 * باوه‌نتى
 * گه‌نمه‌شامی
+* چه‌ره‌زات و شیرینی
 * سارده‌مه‌نى
 <notes>
 ئه‌مه‌ش چه‌ند نموونه‌یه‌که‌ له‌ خۆراکى منداڵان
@@ -638,6 +639,8 @@ ___
 یه‌كه‌م: هه‌تا پێت ده‌كرێ منداڵان به‌شدارى پێ بكه‌ له‌ ئاماده‌كردنى خۆراك،‌ ئه‌مانه‌ یان هه‌ر خۆراكێكى دیكه‌،‌ بێ جیاوازى پێ كردنى كچ و كوڕ، له‌ ته‌مه‌نى دووسێ ساڵی و به‌دواوه‌. له‌ خولى په‌روه‌رده‌ كردنى منداڵ باسى سووده‌كانى ئه‌مه‌ ده‌كه‌ین.
 دووه‌م: منداڵ ده‌بێت وا فێر بكرێ كه‌ هه‌موو خۆراكێك بخوا، دووباره‌ى ده‌كه‌مه‌وه‌: هه‌موو خۆراكێك مه‌گه‌ر حه‌ساسیه‌تى پێى هه‌بێ. واته‌ نابێ وه‌كوو ژه‌م خۆراكى ‌جیاواز بۆ منداڵ دروست بكرێ. به‌ڵام ده‌كرێ جاربه‌جاره‌ هه‌ندێك خۆراكیان بۆ دروست بكرێ كه‌ حه‌زیان لێیه‌ وه‌کوو ئه‌م نموونانه‌.
 سێیه‌م: بۆ هاندانى منداڵان بۆ ئاماده‌کردن و خواردنى خۆراکى ته‌ندروست،‌ شێوازى جیاواز به‌کار بێنه‌ بۆ نموونه‌ هونه‌رى جوان کردنى خۆراک.
+<notes>
+[هونه‌رى ڕازاندنه‌وه‌ى خۆراک](https://www.youtube.com/watch?v=T3ihIrEQx0g)
 
 # نۆتێلا
 <img_40>
@@ -668,6 +671,20 @@ ___
 * مه‌نجه‌ڵ
 <img_40>
 <notes>
+<notes>
+[ئامێرى گه‌نمه‌شامى](https://www.youtube.com/watch?v=s3r4cVPaJ1w)
+[مایکرۆوێیڤ](https://www.youtube.com/watch?v=bEAQGEQrZs4)
+[مه‌نجه‌ڵ](https://www.youtube.com/watch?v=gvcEaufuaFI)
+
+# چه‌ره‌زات و شیرینى
+* کونجى و خورما
+<img_40>
+* چه‌ره‌زات و میوه‌ى وشک
+<img_40>
+* ...
+<notes>
+<notes>
+[چه‌ره‌زات و شیرینى](https://www.youtube.com/watch?v=gxfeJ628z_o)
 
 # سارده‌مه‌نى
 * مۆته‌ى شفتی
@@ -991,7 +1008,11 @@ ___
 # وصفات للاطفال
 * نوتيلا
 * باونتي
-* المرطبات
+* قشار
+* مـرطبات
+<notes>
+<notes>
+[فن تزيين الطعام](https://www.youtube.com/watch?v=T3ihIrEQx0g)
 
 # نوتيلا
 <img_40>
@@ -1008,6 +1029,21 @@ ___
 <img_40>
 * قدر
 <img_40>
+<notes>
+<notes>
+[آلة صنع الفشار](https://www.youtube.com/watch?v=s3r4cVPaJ1w)
+[فرن ميكرويف](https://www.youtube.com/watch?v=bEAQGEQrZs4)
+[قدر](https://www.youtube.com/watch?v=gvcEaufuaFI)
+
+# المكسرات والحلوى
+* حلوى السمسم
+<img_40>
+* المكسرات والفاكهة الجافة
+<img_40>
+* ...
+<notes>
+<notes>
+[چه‌ره‌زات و شیرینى](https://www.youtube.com/watch?v=gxfeJ628z_o)
 
 # مرطبات
 * مصاصة البطيخ
@@ -1343,6 +1379,9 @@ No time:
 * Bounty
 * Popcorn
 * Ice cream
+<notes>
+<notes>
+[Food Art](https://www.youtube.com/watch?v=T3ihIrEQx0g)
 
 # Nutella
 <img_40>
@@ -1359,6 +1398,21 @@ No time:
 <img_40>
 * Pot
 <img_40>
+<notes>
+<notes>
+[Popcorn machine](https://www.youtube.com/watch?v=s3r4cVPaJ1w)
+[Microwave oven](https://www.youtube.com/watch?v=bEAQGEQrZs4)
+[Pot](https://www.youtube.com/watch?v=gvcEaufuaFI)
+
+# Nuts and Sweets
+* Sesame bar
+<img_40>
+* Nuts and dried fruit bar
+<img_40>
+* ...
+<notes>
+<notes>
+[Nuts and Sweets Bar](https://www.youtube.com/watch?v=gxfeJ628z_o)
 
 # Ice Cream
 * Watermelon popsicle
@@ -1408,7 +1462,7 @@ const sta=[ // slide time array
 [0.2,1,2,3,4,5,6,7,8,9,10], // 27. 
 [0.2,1,2,3,4,5,6,7,8,9], // 28. 
 [0.2,1,2,3,4,5,6,7,8], // 29. 
-[0.2,1,2,3,4,5,6,7,8,9,10], // 30. 
+[0.2,1,2,3,4,5,5.5,6,6.5,7,7.5,8,8.5,9], // 30. 
 [0.2,1,2,3,4,5,6,7,8,9], // 31. 
 [0.2,1,2,3,4,5,6,7,8,9,10], // 32. 
 [0.2,1,2,3,4,5,6,7,8,9,10], // 33. 
@@ -1416,8 +1470,9 @@ const sta=[ // slide time array
 [0.2,1,2,3,4,5,6,7], // 35. 
 [0.2,1,2,3,4], // 36. 
 [0.2,1,2,3,4,5,6,7],  // 37.
-[0.2,1,2,3,4,5,6],  // 38.   
-[0.2,1,2,3,4]  // 39.   
+[0.2,1,2,3,4,5,6],  // 38. 
+[0.2,1,2,3,4,5,6],  // 39. 
+[0.2,1,2,3,4]  // 40.   
 ];
 
 const cnta1=[
@@ -1711,5 +1766,6 @@ const mmpa=[
 [26,36], //    - children recipes
 [37,37], //      - notella
 [37,38], //      - popcorn
-[37,39] //       - smoothies
+[37,39], //      - nuts and sweets
+[37,40] //       - smoothies
 ];

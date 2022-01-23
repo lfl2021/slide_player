@@ -128,7 +128,7 @@ font-size:22px;
 color:#900;
 }
 #vid {
-/* min-height:100%; */
+padding-bottom:80px;
 }
 s-l {
 position:var(--ps);
