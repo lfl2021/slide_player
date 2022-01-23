@@ -231,25 +231,23 @@ function play_slides(){
   
 function next_slide(f){
   // console.log(i,subs,ansa);
-  if(i<cnta[0].split("\n\n").length-1) {
-    switch (i) {
-      case 4:
-        if(subs==2 && i==4) {subs=0;i++;}
-        if(subs==1 && i==4) subs++;
-        if(subs==0 && i==4) {
-          if(ansa[0].split("|")[0]=="10407") {i++;break;}
-          if(ansa[0].split("|")[0]=="10408") {i++;break;}
-          subs++;
-          }
-        break;
-      case 6:
-        if(subs==1 && i==6) {subs=0;i++;}
-        if(subs==0 && i==6) subs++;
-        break;
-      default:
-        i++;
-        break;
-      }
+  switch (i) {
+    case 4:
+      if(subs==2 && i==4) {subs=0;i++;}
+      if(subs==1 && i==4) subs++;
+      if(subs==0 && i==4) {
+        if(ansa[0].split("|")[0]=="10407") {i++;break;}
+        if(ansa[0].split("|")[0]=="10408") {i++;break;}
+        subs++;
+        }
+      break;
+    case 6:
+      if(subs==1 && i==6) {subs=0;i++;}
+      if(subs==0 && i==6) subs++;
+      break;
+    default:
+      if(i<cnta[0].split("\n\n").length-1) i++;
+      break;
     }
   localStorage.setItem("DM_SLD", i);
   step=0;
