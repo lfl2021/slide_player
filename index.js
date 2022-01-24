@@ -122,7 +122,7 @@ function load_page(f){
   steps=document.getElementsByClassName("h");
   if(qsa[1]=="t") get_subtitles();
   let id=0;
-  switch (i) {
+  switch (i){
     case 4:
       if(subs==1){
         id=ansa[0].split("|")[0];
@@ -175,9 +175,9 @@ document.addEventListener("keydown",event=>{
   if(event.key==="h") gohome();
   
   if(event.key==="l") clf(-1);
-  if(event.key==="k") clf(0);
-  if(event.key==="a") clf(1);
-  if(event.key==="e") clf(2);
+  // if(event.key==="k") clf(0);
+  // if(event.key==="a") clf(1);
+  // if(event.key==="e") clf(2);
 
   if(event.key==="o") get_content_overview(0);
   if(event.key==="c") get_content_overview(1);
@@ -234,7 +234,10 @@ function next_slide(f){
   switch (i) {
     case 4:
       if(subs==2 && i==4) {subs=0;i++;}
-      if(subs==1 && i==4) subs++;
+      if(subs==1 && i==4) {
+        if(ansa[1].split("|")[0]=="10407") {subs=0;i++;break;}
+        subs++;
+        }
       if(subs==0 && i==4) {
         if(ansa[0].split("|")[0]=="10407") {i++;break;}
         if(ansa[0].split("|")[0]=="10408") {i++;break;}
@@ -314,7 +317,7 @@ function vid_click(){
     if(v.type=="radio") ic[0]++;
     if(v.type=="text"){ 
       ic[1]++;
-      if(input_feedback(v.id)) ic[2]++; else break;
+      if(input_validate_feedback(v.id)) ic[2]++; else break;
       }
     }
   // console.log(ic);
@@ -543,11 +546,11 @@ function array_sum(a,c){
   }
 
 function en_to_ar(n) {
-  return n.toString().replace(/\d/g, d=>'٠١٢٣٤٥٦٧٨٩'[d]);
+  return n.toString().trim().replace(/\d/g, d=>'٠١٢٣٤٥٦٧٨٩'[d]);
   }  
 
 function ar_to_en(n){
-  return n.toString().replace(/[\u0660-\u0669]/g, d=>d.charCodeAt()-1632);
+  return n.toString().trim().replace(/[\u0660-\u0669]/g, d=>d.charCodeAt()-1632);
   }
 
 function time_to_no(t){
@@ -619,23 +622,23 @@ function ps(f,t){
   }
 }
 
-function input_feedback(id){ // validate answers
+function input_validate_feedback(id){
   var tb=document.getElementById(id);
-  var s=tb.value;
+  var s=tb.value.trim();
   var v=s.length==0?0:parseInt(ar_to_en(s));
   id=parseInt(id);
   // console.log(id, sid, s, v);
   switch (id){
     case 30408:
       if(sid==10408 && s.length<3){
-        tb.placeholder="لێره‌ هۆکار بنووسه‌";
+        tb.placeholder=dica[11][lng];
         pfs(id);
         return false;
         }
       break;
     case 30503:
       if(sid==10503 && s.length<3){
-        tb.placeholder="لێره‌ چاره‌سه‌رى بنووسه‌";
+        tb.placeholder=dica[12][lng];
         pfs(id);
         return false;
         }
@@ -643,7 +646,7 @@ function input_feedback(id){ // validate answers
     case 30702:
       var y=new Date().getFullYear();
       if(v==0 || v>y || v<y-100){
-        tb.placeholder="ساڵى له‌دایك بوون";
+        tb.placeholder=dica[13][lng];
         pfs(id);
         return false;
         break;
@@ -654,21 +657,35 @@ function input_feedback(id){ // validate answers
       var age=y-parseInt(ar_to_en(document.getElementById(30702).value));
       // console.log(y,age,s,v);
       if(v==0 || v>age){
-        tb.placeholder="ماوەی نەخۆشی";
+        tb.placeholder=dica[14][lng];
         pfs(id);
         return false;
         }
       break;
     case 30709:
       if(s.length<3 || v<100 || v>1000){
-        tb.placeholder="شه‌کره‌ى خوێن";
+        tb.placeholder=dica[15][lng];
         pfs(id);
         return false;
         }
       break;
     case 30711:
       if(s.length<1 || v<4 || v>25){
-        tb.placeholder="فه‌حسى سێ مانگى";
+        tb.placeholder=dica[16][lng];
+        pfs(id);
+        return false;
+        }
+      break;
+    case 30713:
+      if(s.length<1 || v<10 || v>600){
+        tb.placeholder=dica[17][lng];
+        pfs(id);
+        return false;
+        }
+      break;
+    case 30715:
+      if(s.length<1 || v<50 || v>275){
+        tb.placeholder=dica[18][lng];
         pfs(id);
         return false;
         }
@@ -731,6 +748,12 @@ function input_feedback(id){ // validate answers
     case 10711:
       v=document.getElementById(30711)
       ansa[10]=`${v.id}|${v.value}`;
+    case 10713:
+      v=document.getElementById(30713)
+      ansa[12]=`${v.id}|${v.value}`;
+    case 10715:
+      v=document.getElementById(30715)
+      ansa[13]=`${v.id}|${v.value}`;
     }
   localStorage.setItem("DM_DATA", JSON.stringify(ansa));
   }
