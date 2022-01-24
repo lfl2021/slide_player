@@ -105,7 +105,7 @@ function load_page(f){
   if(f==0) rt.style.setProperty('--ps', 'inline-block');
   vid.innerHTML=rv;
   // console.log(vid.offsetHeight,screen.height);
-  if([0,5,14].includes(i)) vid.style="height:"+(screen.height-110)+"px";
+  if([0,5,14].includes(i)) vid.style="height:"+(screen.height-190)+"px";
   spt=spd==1?`<a onclick="pbs(1.25)">Fast</a>`:`<a onclick="pbs(1)">Normal</a>`;
   var more=`<div id=mor><p> <a onclick="get_slide_contents()">Contents...</a></p><p>Speed: ${spt}</p></div>`;
   ftr.innerHTML=more+PGB+FTB;
@@ -467,7 +467,7 @@ function get_slide_contents(){
     if(v.tagName=="svg") vv="[graph]";
     if(v.tagName=="image") vv="[image]";
     if(v.tagName=="IMG") vv="[image]";
-    a.push(vv);
+    if(vv.length>0) a.push(vv);
     });
   // var b=sta[i];
   var b=[];
