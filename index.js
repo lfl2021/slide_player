@@ -451,7 +451,9 @@ function get_related(){
   }
 
 function toggle_related(){
-  if(stt.style.bottom=="0px") stt.style.bottom="-360px"; else stt.style.bottom="0px";
+  if(stt.style.bottom=="0px") stt.style.bottom="-360px"; else {
+    if(get_related()!=false) stt.style.bottom="0px";
+    }
   }
 
 function get_slide_contents(){
@@ -1048,6 +1050,7 @@ function show_related_link(){
   hide_menu();
   if(get_related()!=false) document.getElementById("lng").innerHTML=`<a onclick="toggle_related()">${INF}</a>`;
   }
+
 function audio_ended() {
   if(stsa.includes(i)) {
     document.getElementById("cb").style="opacity:1;";
