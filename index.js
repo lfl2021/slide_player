@@ -105,7 +105,7 @@ function load_page(f){
   if(f==0) rt.style.setProperty('--ps', 'inline-block');
   vid.innerHTML=rv;
   // console.log(vid.offsetHeight,screen.height);
-  if([0,5,14].includes(i)) vid.style="height:"+(screen.height-190)+"px";
+  if([0,3,5,14].includes(i)) vid.style="height:"+(screen.height-190)+"px";
   spt=spd==1?`<a onclick="pbs(1.25)">Fast</a>`:`<a onclick="pbs(1)">Normal</a>`;
   var more=`<div id=mor><p> <a onclick="get_slide_contents()">Contents...</a></p><p>Speed: ${spt}</p></div>`;
   ftr.innerHTML=more+PGB+FTB;
@@ -1247,11 +1247,13 @@ function pbs(v){
 function hide_menu(){
   ftr.style.bottom="-82px";
   stt.style.bottom="-360px";
+  document.getElementById("cb").style.bottom="10px";  
   if(document.getElementById("mor")) document.getElementById("mor").style="height:0px;"
   }
 
 function show_menu(f){
   ftr.style.bottom="0px";
+  document.getElementById("cb").style.bottom="86px";  
   if(f) sto=setTimeout(()=>{hide_menu();}, 3000);
   }
   

@@ -244,7 +244,7 @@ border-radius:5px;
 font-family:amiri;
 font-size:var(--tf);
 opacity:0;
-transition:opacity 0.5s;
+transition:all 0.5s;
 }
 #txt{
 /* direction:ltr; */
