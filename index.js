@@ -1247,14 +1247,14 @@ function pbs(v){
 function hide_menu(){
   ftr.style.bottom="-82px";
   stt.style.bottom="-360px";
-  document.getElementById("cb").style.bottom="10px";  
+  if(document.getElementById("cb")) document.getElementById("cb").style.bottom="10px";  
   if(document.getElementById("mor")) document.getElementById("mor").style="height:0px;"
   }
 
 function show_menu(f){
   ftr.style.bottom="0px";
-  let cbb=document.getElementById("pbt").innerHTML==""?"76px":"88px";
-  document.getElementById("cb").style.bottom=cbb;  
+  let cbb=document.getElementById("pbt").innerHTML==""?"76px":"90px";
+  if(document.getElementById("cb")) document.getElementById("cb").style.bottom=cbb;  
   if(f) sto=setTimeout(()=>{hide_menu();}, 3000);
   }
   
