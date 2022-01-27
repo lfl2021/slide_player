@@ -233,8 +233,12 @@ right:10px;
 z-index:1;
 cursor:pointer;
 }
-#cb,#rl {
-margin:20px;
+#cb{
+position:fixed;
+top:10px;
+left:10px;
+z-index:1;
+/* margin:20px; */
 border:1px #ccc solid;
 border-radius:5px;
 font-family:amiri;
