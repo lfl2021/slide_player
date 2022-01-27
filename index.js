@@ -1253,7 +1253,8 @@ function hide_menu(){
 
 function show_menu(f){
   ftr.style.bottom="0px";
-  document.getElementById("cb").style.bottom="86px";  
+  let cbb=document.getElementById("pbt").innerHTML==""?"76px":"88px";
+  document.getElementById("cb").style.bottom=cbb;  
   if(f) sto=setTimeout(()=>{hide_menu();}, 3000);
   }
   
