@@ -66,13 +66,13 @@ function load_page(f){
   var sla=cnta[lng].split("\n\n");
   if(subs==1){
     sla=cnta1[lng].split("\n\n");
-    if(i==4) stai=Array.from([0,2.6,4,4.2,4.4,4.6,6.6]);
-    if(i==6) stai=Array.from([0,2.8,4,4.1,4.2,4.3,4.4,4.5,4.6]);
+    if(i==4) stai=Array.from([0,2.3,4.0,4.2,4.4,4.6,7.1]);
+    if(i==6) stai=Array.from([0,2.2,2.5,2.8,3.1,3.4,3.7,4.0]);
     afn=`a0040${i0}_${subs}.mp3`;
     }
   if(subs==2){
     sla=cnta2[lng].split("\n\n");
-    if(i==4) stai=Array.from([0,0.2,0.5,0.8,1.1,1.4]);
+    if(i==4) stai=Array.from([0,0.8,1.1,1.4,1.7,2.0]);
     afn=`a0040${i0}_${subs}.mp3`;
     }
   // console.log(i,subs,cnta1[lng].split("\n\n")[i]);
@@ -227,6 +227,7 @@ function play_slides(){
   afn=`a0040${i0}.mp3`;
   if(i==0) document.getElementById("vpb").style="visibility:hidden;";
   ps(1,0);
+  // if(document.body.requestFullscreen) document.body.requestFullscreen();
   }
   
 function next_slide(f){
@@ -427,9 +428,8 @@ function format_text(t,ii,f,ll,m){ // text, slide no, flag: play or show text, l
 
 function get_subtitles(){
   var rv=cnta[lng].split("\n\n")[i];
-  if(subs==1){
-    rv=cnta1[lng].split("\n\n")[i];
-  }
+  if(subs==1) rv=cnta1[lng].split("\n\n")[i];
+  if(subs==2) rv=cnta2[lng].split("\n\n")[i];
   if(rv.indexOf("<notes>")==-1) return false;
   rv=rv.split("<notes>")[1];
   rv=rv.replaceAll("ک","ك");
