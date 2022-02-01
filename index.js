@@ -873,7 +873,7 @@ function audio_update() {
   var t=aud.currentTime;
   let d=aud.duration;
   // console.log(t,stai);
-  let da=[9,6,3,1,1,42]; // duration array for multiple mp3 per slide
+  let da=[7,5,3,1,1,39]; // duration array for multiple mp3 per slide
   if(i==8) d=da.reduce(array_sum,0);
   if(afn=="a004008_1.mp3"||afn=="a004008_2.mp3"||afn=="a004008_3.mp3") t=t+da[0];
   if(afn=="a004008_4.mp3") t=t+da[0]+da[1];
