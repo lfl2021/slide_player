@@ -582,7 +582,7 @@ function file_exists(url){
 function ps(f,t){
   hide_menu();
   if(f==0) {aud.pause(); aud.currentTime=0; return false;}
-  if(i>17) afn="a000000.mp3";
+  if(i>21) afn="a000000.mp3";
   if(t>0){
     step=0;
     stai=Array.from(sta[i]);
