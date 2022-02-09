@@ -859,7 +859,7 @@ const vid=document.getElementById("vid");
 const ft=document.getElementById("ft");
 const bp=document.getElementById("bpl");
 
-const BPC=`<div id=dimg><img id=title_img src=dm_test.jpg><svg id="vpb" viewBox="0 0 200 200" alt="Play video">
+const BPC=`<div id=dimg><img id=title_img src=img/dm_test.jpg><svg id="vpb" viewBox="0 0 200 200" alt="Play video">
   <circle cx="100" cy="100" r="90" fill="none" stroke-width="15" stroke="#000"></circle>
   <polygon points="70, 55 70, 145 145, 100" fill="#000"></polygon></svg></div>`;
 const BPL=`<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0z" fill="none"></path><path d="M8 5v14l11-7z"></path></svg>`;
@@ -916,7 +916,7 @@ document.addEventListener("keydown",event=>{
   if(event.ctrlKey && event.key==="ArrowRight") next_step();
   if(event.ctrlKey && event.key==="ArrowLeft") prev_step();
   if(event.key==="ArrowLeft") prev_slide();
-  // if(event.key==="Escape") document.getElementById("ftb").style.bottom = "-50px";
+  // if(event.key==="Escape") document.getElementById("ftb").style.bottom = "-70px";
   if(event.key===" ") play_slides();
   if(event.key==="p") play_slides();
   if(event.key==="h") gohome();
@@ -954,7 +954,7 @@ function play_slides(){
   if(aud.currentTime || !aud.paused) location.reload();
   load_page(1);
   var i0=i.toString().padStart(2,"0");
-  afn=`a0040${i0}.mp3`;
+  afn=`snd/a0040${i0}.mp3`;
   // var f=afn+".mp3";
   // if(i>13) afn="0.mp3"; 
   // aud.src=f;
@@ -970,7 +970,7 @@ function next_slide(){
   step=0;
   load_page(1);
   var i0=i.toString().padStart(2,"0");
-  afn=`a0040${i0}.mp3`;
+  afn=`snd/a0040${i0}.mp3`;
   // var f=afn+".mp3";
   // if(i>13) afn="0.mp3"; 
   // aud.src=f;
@@ -998,7 +998,7 @@ function goto(n,p) {
     load_page(1);
     if(p==0) location.reload();
     var i0=i.toString().padStart(2,"0");
-    afn=`a0040${i0}.mp3`;
+    afn=`snd/a0040${i0}.mp3`;
     // var f=afn+".mp3";
     // if(i>13) afn="0.mp3"; 
     // aud.src=f;
@@ -1070,8 +1070,8 @@ function format_text(t,ii,f){
     s=s.replaceAll("@@ ","");
     s=s.replaceAll("* ","");
     s=s.replaceAll("()","");
-    s=s.replaceAll("<img>",`<img src=p${i0}${j0}.jpg id=1${i0}${j0}>`);
-    s=s.replaceAll("<img_ans1>",`<img src=ans1.jpg>`);
+    s=s.replaceAll("<img>",`<img src=img/p${i0}${j0}.jpg id=1${i0}${j0}>`);
+    s=s.replaceAll("<img_ans1>",`<img src=img/ans1.jpg>`);
     s=s.replaceAll("___",`<input id=3${i0}${j0} type=text onclick="tbf(2${i0}${j0})">`);
     s=s.replaceAll("<ymd_combo>",`<select id=3${i0}${j0}><option>${dica[1][lng]}</option><option>${dica[2][lng]}</option><option>${dica[3][lng]}</option></select>`);
     var cls=f==1&&i>-1?" class=h":"";
@@ -1165,7 +1165,7 @@ function file_exists(url){
 
 function ps(){
   // var f=`${afn}.mp3`;
-  if(i>13) afn="a000000.mp3";
+  if(i>13) afn="snd/a000000.mp3";
   // aud.src=f;
   aud.src=afn;
   // if(aud.paused) aud.play();
@@ -1270,7 +1270,7 @@ function pfs(id){
   // var audio=new Audio("f"+id+".mp3");
   aud.pause();
   afp=aud.currentTime;
-  aud2.src=`f${id}.mp3`;
+  aud2.src=`snd/f${id}.mp3`;
   aud2.play();
   // audio.play();
 	}
@@ -1365,7 +1365,7 @@ function check_answers(){
   // console.log(fana[qno],fana);
   var qu1=document.getElementById(qa[qno]).innerHTML;
   var a=get_correct_answers(); 
-  qu1=qu1.replaceAll("<img>", `<img src=ans${a[qno]}.jpg>`);
+  qu1=qu1.replaceAll("<img>", `<img src=img/ans${a[qno]}.jpg>`);
   document.getElementById(qa[qno]).innerHTML=qu1;
   qno++;
   }
@@ -1399,7 +1399,7 @@ function get_answers(f){
     var j0=k.toString().padStart(2,"0");
     if(lng<2) k=en_to_ar(k);
     var a=get_correct_answers();
-    var img=f==1?"<img>":`<img src=ans${a[j]}.jpg>`;
+    var img=f==1?"<img>":`<img src=img/ans${a[j]}.jpg>`;
     rv+=`<p id=1${i0}${j0}${cls} onclick="goto(${aa[j]},1)" class=p>${k}. ${qus}<br><a>${ans}</a> ${img}</p><br>`;
     });
   return rv;
@@ -1480,44 +1480,44 @@ function audio_ended() {
   l0=l0<10?"0"+l0:l0;  
   // if(i==7) location.reload();
   switch (afn) {
-    case "a004002.mp3":
+    case "snd/a004002.mp3":
       document.getElementById("cb").style="opacity:1;";
       break;
-    case "a004004.mp3": // cause
-    case "a004005.mp3": // treatment
-    case "a004006.mp3": // food
-    case "a004007.mp3": // info
+    case "snd/a004004.mp3": // cause
+    case "snd/a004005.mp3": // treatment
+    case "snd/a004006.mp3": // food
+    case "snd/a004007.mp3": // info
       console.log("Continue");
       break;  
-    case "a004008_0.mp3": 
-    case "a004008_5.mp3": // answers
+    case "snd/a004008_0.mp3": 
+    case "snd/a004008_5.mp3": // answers
       console.log("Continue");
       const aa=[10801,10802,10803];
       aa.forEach(v=>{
         document.getElementById(v).style="cursor:pointer;";
         });
       break;  
-      case "a004008.mp3":
+      case "snd/a004008.mp3":
       const a=get_correct_answers();
       const s=3-a.reduce(array_sum,0);
-      afn=`a004008_${s}.mp3`;
+      afn=`snd/a004008_${s}.mp3`;
       ps();
       // aud.src=`${afn}.mp3`;
       // aud.play();
       break;
-    case "a004008_1.mp3":
-    case "a004008_2.mp3":
-    case "a004008_3.mp3":
-      afn="a004008_4.mp3";
+    case "snd/a004008_1.mp3":
+    case "snd/a004008_2.mp3":
+    case "snd/a004008_3.mp3":
+      afn="snd/a004008_4.mp3";
       ps();
       // aud.src=`${afn}.mp3`;
       // aud.play();
       break;
-    case "a004008_4.mp3":
+    case "snd/a004008_4.mp3":
       var d=ansa[7].split("|")[2];
       if(d>20) d=20;
       d0=d.length==1?"0"+d:d;
-      afn="n"+d0+l0+".mp3";
+      afn="snd/n"+d0+l0+".mp3";
       ps();
       // aud.src=`${afn}.mp3`;
       // aud.play();
@@ -1525,18 +1525,18 @@ function audio_ended() {
     case "n":
       var d=ansa[10].split("|")[2];
       d0=d.length==1?"0"+d:d;
-      afn="t"+d0+l0+".mp3";
+      afn="snd/t"+d0+l0+".mp3";
       ps();
       // aud.src=`${afn}.mp3`;
       // aud.play();
       break;
     case "t":
-    afn="a004008_5.mp3";
+    afn="snd/a004008_5.mp3";
       ps();
       // aud.src=`${afn}.mp3`;
       // aud.play();
       break;
-    case "a000000.mp3":
+    case "snd/a000000.mp3":
       if(i>21){
         console.log("Continue");
         i=8;
@@ -1613,8 +1613,8 @@ function get_overview(f) {
     rv+=`<rect x=${v[0]} y=${v[1]} width=${bw} height=${bh} />`;
     rv+=`<text x=${v[0]+bw/2} y=${v[1]+bh/2} dominant-baseline=middle text-anchor=middle>${dica[j+4][lng]}</text>`;
     var ho=lng==2?4:18;
-    if(j==1) rv+=`<image${cls} href=ans1.jpg height=26 x=${v[0]+18} y=${v[1]+12} />`;
-    if(j==3) rv+=`<image${cls} href=ans0.jpg height=20 x=${v[0]+ho} y=${v[1]+15} />`;
+    if(j==1) rv+=`<image${cls} href=img/ans1.jpg height=26 x=${v[0]+18} y=${v[1]+12} />`;
+    if(j==3) rv+=`<image${cls} href=img/ans0.jpg height=20 x=${v[0]+ho} y=${v[1]+15} />`;
     rv+=`</g>`;
     });
   rv+="</svg>";
