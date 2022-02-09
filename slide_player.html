@@ -1474,7 +1474,7 @@ function get_correct_answers(){ // get array of
   }
 
 function audio_ended() {
-  if(afn.charAt(0)=="n"||afn.charAt(0)=="t") afn=afn.charAt(0);
+  if(afn.charAt(4)=="n"||afn.charAt(4)=="t") afn=afn.charAt(4);
   // console.log(afn);
   var l0=1;
   l0=l0<10?"0"+l0:l0;  
@@ -1531,7 +1531,7 @@ function audio_ended() {
       // aud.play();
       break;
     case "t":
-    afn="snd/a004008_5.mp3";
+      afn="snd/a004008_5.mp3";
       ps();
       // aud.src=`${afn}.mp3`;
       // aud.play();
