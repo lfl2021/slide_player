@@ -8,7 +8,7 @@
 </head>
 <body>
 <div id=lng></div>
-<div id=vid onclick="vid_click()"></div>
+<div id=vid onclick="vid_click()" ondblclick="vid_dblclick()"></div>
 <div id=txt></div>
 <div id=ftr></div>
 <audio id=aud preload=metadata ontimeupdate="audio_update()" onended="audio_ended()"><source src="" type="audio/mpeg"></audio>
@@ -37,8 +37,8 @@ FEATURES
 * follow up on patients weight, compliance %, why not 100%?
 
 TODO
-* add audio for each slide (14 so far)
-* add htn duration, height and weight, medications, referred by (see dm sheet), family history (slide oon geneitcs?), smoking
+* add audio for each slide (26 so far)
+* add htn duration, medications, referred by (see dm sheet), family history (slide oon geneitcs?), smoking
 * upload local storage data to server
 * check ppt, transo, doc, xoraki tendrust book...
 * add languages: Erbil, Badini, Iraqi Arabic, Persian, Turkish...
@@ -47,6 +47,8 @@ TODO
 * if psych status selected, next ask for details: kham, trs, qalaq...
 
 DONE
+* add seek buttons (5 sec backward and forward) and keyboard shortcuts.
+* add height and weight
 * write script for each slide
 * feedback placeholder text in 3 lang
 * bug: hidden elements are clickable
