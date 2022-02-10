@@ -596,7 +596,7 @@ function seek(s){
 function ps(f,t){
   hide_menu();
   if(f==0) {aud.pause(); aud.currentTime=0; return false;}
-  if(i>23) afn="a000000.mp3";
+  if(i>26) afn="a000000.mp3";
   if(t>0){
     step=0;
     stai=Array.from(sta[i]);
