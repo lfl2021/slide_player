@@ -284,6 +284,24 @@ background-color:#fff;
 opacity:0.6;
 }
 #ftb button:hover {
+background-color:#efefef;
+}
+#log{
+direction:ltr;
+padding:10px;
+border:none;
+background-color:#fff;
+font-size:30px;
+box-shadow:1px 1px 4px rgba(0,0,0,0.4);
+margin:0 auto;
+display:block;
+border-top:100px;
+}
+#log img{
+width:24px;
+}
+#log:hover {
+cursor:pointer;
 background-color:#ddd;
 }
 p-b{
