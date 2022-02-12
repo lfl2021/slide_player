@@ -1537,6 +1537,9 @@ const cnta1=[
 () نیسك <img>
 <notes>
 ئه‌وه‌ خراپترین خۆراك، ئه‌دى كامه‌یان له‌ هه‌موویان باشتره، دووباره‌ ئه‌گه‌ر هه‌مان بڕ بخورێت؟
+
+# تۆمار کردن
+<login>
 `,`
 
 
@@ -1567,6 +1570,9 @@ const cnta1=[
 () الرز <img>
 () العدس <img>
 <notes>
+
+# التسجیل
+<login>
 `,`
 
 
@@ -1597,7 +1603,10 @@ Which of the following food is most harmful for diabetes?
 () Rice <img>
 () Lentil <img>
 <notes>
-    `
+
+# Login
+<login>
+`
 ];
 
 const cnta2=[
